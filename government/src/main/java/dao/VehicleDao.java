@@ -24,7 +24,7 @@ public class VehicleDao {
     public List<Vehicle> GetAllVehiclesInCountry(String countryName) {
         TypedQuery<Vehicle> query
                 = em.createQuery("SELECT v FROM Vehicle v " +
-                "WHERE v.currentLocation.country.name = :countryName", Vehicle.class);
+                "JOIN v.currentLocation l WHERE l.name = :countryName", Vehicle.class);
 
         return query.setParameter("countryName", countryName).getResultList();
     }
