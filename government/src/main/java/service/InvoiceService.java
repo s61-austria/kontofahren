@@ -16,4 +16,8 @@ public class InvoiceService {
     public List<Invoice> getAllInvoices(){
         return  invoiceDao.getAllInvoices();
     }
+
+    public Invoice getInvoiceById(Long id){
+        return invoiceDao.getInvoiceById(id);
+    }
 }

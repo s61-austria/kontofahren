@@ -30,5 +30,4 @@ public class VehicleResource {
                               @PathParam("vehicleType") String vehicleType) {
         return vehicleService.addVehicle(serialNumber, VehicleType.valueOf(vehicleType));
     }
-
 }

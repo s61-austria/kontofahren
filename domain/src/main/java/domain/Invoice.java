@@ -19,7 +19,7 @@ public class Invoice implements Serializable {
     private Date createdOn;
     @Column
     private Date generatedFor;
-    @Column
+    @Enumerated(EnumType.STRING)
     private InvoiceGenerationType generationType;
     @Column
     private double totalPrice;

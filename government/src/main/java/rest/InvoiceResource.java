@@ -23,4 +23,11 @@ public class InvoiceResource {
     public List<Invoice> getAllInvoices(){
         return invoiceService.getAllInvoices();
     }
+
+    @GET
+    @Path("{id}")
+    @Produces("application/json")
+    public Invoice getInvoiceById(@PathParam("id") Long id){
+        return invoiceService.getInvoiceById(id);
+    }
 }

@@ -42,4 +42,10 @@ public class InvoiceDao {
 
         return query.setParameter("id", civilianId).getResultList();
     }
+
+    public Invoice addInvoice(Invoice invoice){
+        em.persist(invoice);
+
+        return invoice;
+    }
 }
