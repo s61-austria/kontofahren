@@ -5,6 +5,7 @@ import domain.enums.VehicleType;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -19,11 +20,11 @@ public class Vehicle implements Serializable {
     private String hardwareSerialNumber;
     @Enumerated(EnumType.STRING)
     private VehicleType vehicleType;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Activity> activities;
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Civilian owner;
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Location currentLocation;
 
     public Vehicle() {}
@@ -73,5 +74,13 @@ public class Vehicle implements Serializable {
 
     public void setOwner(Civilian owner) {
         this.owner = owner;
+    }
+
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
     }
 }
