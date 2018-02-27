@@ -14,18 +14,24 @@ public class VehicleDao {
     @PersistenceContext
     EntityManager em;
 
-    public List<Vehicle> GetAllVehicles() {
+    public List<Vehicle> getAllVehicles() {
         TypedQuery<Vehicle> query
                 = em.createQuery("SELECT v FROM Vehicle v", Vehicle.class);
 
         return query.getResultList();
     }
 
-    public List<Vehicle> GetAllVehiclesInCountry(String countryName) {
+    public List<Vehicle> getAllVehiclesInCountry(String countryName) {
         TypedQuery<Vehicle> query
                 = em.createQuery("SELECT v FROM Vehicle v " +
-                "WHERE v.currentLocation.country.name = :countryName", Vehicle.class);
+                "JOIN v.currentLocation l JOIN l.country c WHERE c.name = :countryName", Vehicle.class);
 
         return query.setParameter("countryName", countryName).getResultList();
+    }
+
+    public Vehicle addVehicle(Vehicle vehicle) {
+        em.persist(vehicle);
+
+        return vehicle;
     }
 }
