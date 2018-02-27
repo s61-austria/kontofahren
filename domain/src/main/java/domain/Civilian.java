@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+@Entity
 public class Civilian extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -14,7 +15,7 @@ public class Civilian extends User implements Serializable {
 
     @ManyToMany
     private List<Vehicle> vehicles;
-    @ManyToOne
+    @OneToMany
     private List<Invoice> invoices;
 
     public Civilian() {

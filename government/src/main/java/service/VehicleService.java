@@ -16,7 +16,7 @@ public class VehicleService {
     VehicleDao vehicleDao;
 
     public List<Vehicle> getAllVehiclesInCountry(String countryName) {
-        return vehicleDao.GetAllVehiclesInCountry(countryName);
+        return vehicleDao.getAllVehiclesInCountry(countryName);
     }
 
     public Vehicle addVehicle(String hardwareSerialNumber, VehicleType vehicleType) {
