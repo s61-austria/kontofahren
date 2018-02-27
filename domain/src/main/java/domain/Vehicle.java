@@ -20,6 +20,8 @@ public class Vehicle implements Serializable {
     private List<Activity> activities;
     @OneToMany
     private Civilian owner;
+    @OneToMany
+    private Location currentLocation;
 
     public Vehicle() {}
 

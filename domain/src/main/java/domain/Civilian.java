@@ -17,6 +17,10 @@ public class Civilian extends User implements Serializable {
     @ManyToOne
     private List<Invoice> invoices;
 
+    public Civilian() {
+        super();
+    }
+
     public Long getId() {
         return id;
     }
