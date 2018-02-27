@@ -3,7 +3,7 @@ package service;
 import dao.VehicleDao;
 import domain.Location;
 import domain.Vehicle;
-import domain.VehicleType;
+import domain.enums.VehicleType;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
