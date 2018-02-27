@@ -2,6 +2,7 @@ package domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,14 +17,21 @@ public class Vehicle implements Serializable {
     private String hardwareSerialNumber;
     @Enumerated(EnumType.STRING)
     private VehicleType vehicleType;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private List<Activity> activities;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Civilian owner;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Location currentLocation;
 
     public Vehicle() {}
+
+    public Vehicle(String hardwareSerialNumber, VehicleType vehicleType, Location currentLocation) {
+        this.hardwareSerialNumber = hardwareSerialNumber;
+        this.vehicleType = vehicleType;
+        this.currentLocation = currentLocation;
+        this.activities = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;

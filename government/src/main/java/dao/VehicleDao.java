@@ -28,4 +28,10 @@ public class VehicleDao {
 
         return query.setParameter("countryName", countryName).getResultList();
     }
+
+    public Vehicle addVehicle(Vehicle vehicle) {
+        em.persist(vehicle);
+
+        return vehicle;
+    }
 }
