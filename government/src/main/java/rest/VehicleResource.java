@@ -17,6 +17,12 @@ public class VehicleResource {
     VehicleService vehicleService;
 
     @GET
+    @Produces("application/json")
+    public List<Vehicle> getAllVehiclesInCountry() {
+        return vehicleService.getAllVehicles();
+    }
+
+    @GET
     @Path("/{countryName}")
     @Produces("application/json")
     public List<Vehicle> getAllVehiclesInCountry(@PathParam("countryName") String countryName) {

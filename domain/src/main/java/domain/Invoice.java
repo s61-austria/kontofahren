@@ -24,9 +24,9 @@ public class Invoice implements Serializable {
     @Column
     private double totalPrice;
 
-    @OneToMany
+    @ManyToOne
     private Civilian civilian;
-    @OneToMany
+    @ManyToOne
     private Vehicle vehicle;
 
     public Invoice(Date createdOn, Date generatedFor, InvoiceGenerationType generationType){

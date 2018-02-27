@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
+@DiscriminatorValue("Civilian")
 public class Civilian extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
