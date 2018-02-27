@@ -16,20 +16,30 @@ public class InvoiceDao {
     @PersistenceContext
     EntityManager em;
 
-    //public List<Invoice> Get
+    public Invoice getInvoiceById(Long id){
+        return em.find(Invoice.class, id);
+    }
 
-/*    public List<Vehicle> GetAllVehicles() {
-        TypedQuery<Vehicle> query
-                = em.createQuery("SELECT v FROM Vehicle v", Vehicle.class);
+    public List<Invoice> getAllInvoices(){
+        TypedQuery<Invoice> query
+                = em.createQuery("SELECT i FROM Invoice i", Invoice.class);
 
         return query.getResultList();
     }
 
-    public List<Vehicle> GetAllVehiclesInCountry(String countryName) {
-        TypedQuery<Vehicle> query
-                = em.createQuery("SELECT v FROM Vehicle v " +
-                "WHERE v.currentLocation.country.name = :countryName", Vehicle.class);
+    public List<Invoice> getAllInvoicesByVehicle(Long vehicleId){
+        TypedQuery<Invoice> query
+                = em.createQuery("SELECT i FROM Invoice i "
+                 + "JOIN i.vehicle v WHERE v.id = :id", Invoice.class);
 
-        return query.setParameter("countryName", countryName).getResultList();
-    }*/
+        return query.setParameter("id", vehicleId).getResultList();
+    }
+
+    public List<Invoice> getAllInvoicesByCivilian(Long civilianId){
+        TypedQuery<Invoice> query
+                = em.createQuery("SELECT i FROM Invoice i "
+                + "JOIN i.civilian c WHERE c.id = :id", Invoice.class);
+
+        return query.setParameter("id", civilianId).getResultList();
+    }
 }

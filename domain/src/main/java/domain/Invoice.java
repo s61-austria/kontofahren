@@ -25,7 +25,7 @@ public class Invoice implements Serializable {
     private double totalPrice;
 
     @OneToMany
-    private Civilian payer;
+    private Civilian civilian;
     @OneToMany
     private Vehicle vehicle;
 
@@ -81,12 +81,12 @@ public class Invoice implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    public Civilian getPayer() {
-        return payer;
+    public Civilian getCivilian() {
+        return civilian;
     }
 
-    public void setPayer(Civilian payer) {
-        this.payer = payer;
+    public void setCivilian(Civilian civilian) {
+        this.civilian = civilian;
     }
 
     public Vehicle getVehicle() {

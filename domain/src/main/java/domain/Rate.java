@@ -1,5 +1,7 @@
 package domain;
 
+import domain.enums.VehicleType;
+
 import javax.persistence.Entity;
 import java.io.Serializable;
 
