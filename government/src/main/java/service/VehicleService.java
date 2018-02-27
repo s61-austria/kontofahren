@@ -15,6 +15,10 @@ public class VehicleService {
     @Inject
     VehicleDao vehicleDao;
 
+    public List<Vehicle> getAllVehicles() {
+        return vehicleDao.getAllVehicles();
+    }
+
     public List<Vehicle> getAllVehiclesInCountry(String countryName) {
         return vehicleDao.getAllVehiclesInCountry(countryName);
     }
