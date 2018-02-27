@@ -75,4 +75,12 @@ public class Vehicle implements Serializable {
     public void setOwner(Civilian owner) {
         this.owner = owner;
     }
+
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Location currentLocation) {
+        this.currentLocation = currentLocation;
+    }
 }
