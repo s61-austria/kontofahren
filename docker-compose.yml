@@ -1,0 +1,25 @@
+version: '3'
+volumes:
+  database:
+  payara:
+services: 
+  db:
+    image: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=anschluss
+      - MYSQL_DATABASE=osterreich
+      - MYSQL_USER=alexander
+      - MYSQL_PASSWORD=anschluss
+    volumes:
+      - database:/var/lib/mysql
+  applicationserver:
+    image: payara/server-full
+    ports:
+      - "8080:8080"
+      - "8181:8181"
+      - "4848:4848"
+    volumes:
+      - payara:/opt/payara41/
