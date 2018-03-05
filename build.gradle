@@ -17,5 +17,6 @@ subprojects {
     }
 
     dependencies {
+        compile 'javax:javaee-api:8.0'
     }
 }

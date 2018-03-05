@@ -3,8 +3,8 @@ package domain;
 import javax.persistence.*;
 
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
-public abstract class User {
+@DiscriminatorValue("CivilServant")
+public class CivilServant extends User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
