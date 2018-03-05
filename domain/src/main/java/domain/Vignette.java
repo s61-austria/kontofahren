@@ -3,9 +3,7 @@ package domain;
 import domain.enums.VehicleType;
 import domain.enums.VignetteType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -13,6 +11,12 @@ import java.io.Serializable;
  */
 @Entity
 public class Vignette implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Enumerated
     private VehicleType vehicleType;
@@ -28,6 +32,10 @@ public class Vignette implements Serializable {
         this.vignetteType = vignetteType;
         this.price = price;
     }
+
+    public void setId(Long id){ this.id = id; }
+
+    public Long getId() { return this.id; }
 
     public void setVehicleType(VehicleType vehicleType){
         this.vehicleType = vehicleType;
