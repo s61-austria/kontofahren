@@ -48,4 +48,10 @@ public class InvoiceDao {
 
         return invoice;
     }
+
+    public Invoice updateInvoice(Invoice invoice){
+        em.merge(invoice);
+
+        return invoice;
+    }
 }
