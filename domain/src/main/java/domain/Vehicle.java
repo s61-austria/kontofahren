@@ -18,6 +18,7 @@ public class Vehicle implements Serializable {
     private Long id;
 
     private String hardwareSerialNumber;
+    private String licensePlate;
     @Enumerated(EnumType.STRING)
     private VehicleType vehicleType;
     @OneToMany(cascade = CascadeType.ALL)
@@ -50,6 +51,14 @@ public class Vehicle implements Serializable {
 
     public void setHardwareSerialNumber(String hardwareSerialNumber) {
         this.hardwareSerialNumber = hardwareSerialNumber;
+    }
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
     }
 
     public VehicleType getVehicleType() {
