@@ -1,10 +1,8 @@
 package domain;
 
 import domain.enums.VehicleType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -16,11 +14,14 @@ public class Rate implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Enumerated
     private VehicleType vt;
+    @Column
     private double kmPrice;
+    @Column
     private double startPrice;
 
-    public Rate(){}
+    public Rate(){ }
 
     public Rate(VehicleType vt, double kmPrice, double startPrice){
         this.vt = vt;

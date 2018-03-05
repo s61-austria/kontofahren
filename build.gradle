@@ -18,5 +18,6 @@ subprojects {
 
     dependencies {
         compile 'javax:javaee-api:8.0'
+        testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
     }
 }
