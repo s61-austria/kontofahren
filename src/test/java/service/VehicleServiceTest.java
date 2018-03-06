@@ -56,10 +56,10 @@ public class VehicleServiceTest {
         vehicles.add(vehicle1);
         vehicles.add(vehicle2);
 
-        Mockito.when(vehicleDaoMock.getAllVehicles())
+        Mockito.when(vehicleDaoMock.allVehicles())
                 .thenReturn(vehicles);
 
-        List<Vehicle> result = vehicleService.getAllVehicles();
+        List<Vehicle> result = vehicleService.allVehicles();
 
         Assert.assertEquals(2, result.size());
         Assert.assertTrue(result.contains(vehicle1));
