@@ -23,8 +23,8 @@ public class VehicleServiceTest {
 
     @Before
     public void setUp() {
-        vehicleService = new VehicleService();
         MockitoAnnotations.initMocks(this);
+        vehicleService = new VehicleService(vehicleDaoMock);
     }
 
     @Test
