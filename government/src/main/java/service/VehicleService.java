@@ -23,7 +23,9 @@ public class VehicleService {
         return vehicleDao.getAllVehiclesInCountry(countryName);
     }
 
-    public Vehicle addVehicle(String hardwareSerialNumber, VehicleType vehicleType) {
-        return vehicleDao.addVehicle(new Vehicle(hardwareSerialNumber, vehicleType, new Location()));
+    public Vehicle addVehicle(String hardwareSerialNumber, VehicleType vehicleType,
+                              String licensePlate) {
+        return vehicleDao.addVehicle(new Vehicle(hardwareSerialNumber, vehicleType,
+                new Location(), licensePlate));
     }
 }

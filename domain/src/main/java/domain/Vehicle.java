@@ -30,11 +30,12 @@ public class Vehicle implements Serializable {
 
     public Vehicle() {}
 
-    public Vehicle(String hardwareSerialNumber, VehicleType vehicleType, Location currentLocation) {
+    public Vehicle(String hardwareSerialNumber, VehicleType vehicleType, Location currentLocation, String licensePlate) {
         this.hardwareSerialNumber = hardwareSerialNumber;
         this.vehicleType = vehicleType;
         this.currentLocation = currentLocation;
         this.activities = new ArrayList<>();
+        this.licensePlate = licensePlate;
     }
 
     public Long getId() {
