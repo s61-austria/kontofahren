@@ -1,7 +1,4 @@
-import rest.InvoiceResource
-import rest.RateResource
-import rest.UserResource
-import rest.VehicleResource
+import rest.*
 import javax.ws.rs.ApplicationPath
 import javax.ws.rs.core.Application
 
@@ -13,5 +10,6 @@ class JAXRSConfig : Application()
         add(UserResource::class.java)
         add(VehicleResource::class.java)
         add(RateResource::class.java)
+        add(VignetteResource::class.java)
     }
 }

@@ -3,14 +3,15 @@ package service
 import dao.RateDao
 import domain.Rate
 import domain.Vehicle
+import domain.Vignette
 import domain.enums.VehicleType
+import domain.enums.VignetteType
 
 import javax.ejb.Stateless
 import javax.inject.Inject
 
 @Stateless
 class RateService @Inject constructor(val rateDao: RateDao) {
-
 
     fun getAllRates() = rateDao.getAllRates() ?: emptyList<Rate>()
 
@@ -20,8 +21,8 @@ class RateService @Inject constructor(val rateDao: RateDao) {
         return rateDao.getRateByVehicle(serialNumber)
     }
 
-    fun addRate(vehicleType: VehicleType, kmPrice: Double, startPrice: Double): Rate {
-        val r = Rate(vehicleType, kmPrice, startPrice)
+    fun addRate(vehicleType: VehicleType, kmPrice: Double, vignetteType: VignetteType): Rate {
+        val r = Rate(vehicleType, kmPrice, vignetteType)
         return rateDao.addRate(r)
     }
 

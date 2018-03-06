@@ -2,6 +2,7 @@ package rest
 
 import domain.Rate
 import domain.enums.VehicleType
+import domain.enums.VignetteType
 import service.RateService
 
 import javax.ejb.Stateless
@@ -37,8 +38,8 @@ class RateResource @Inject constructor(val rateService: RateService){
     @Produces("application/json")
     fun addRate(@FormParam("vehicleType") vehicleType: String,
                 @FormParam("kmPrice") kmPrice: Double,
-                @FormParam("startPrice") startPrice: Double): Rate {
-        return rateService.addRate(VehicleType.valueOf(vehicleType), kmPrice, startPrice)
+                @FormParam("vignette") vignette: String): Rate {
+        return rateService.addRate(VehicleType.valueOf(vehicleType), kmPrice, VignetteType.valueOf(vignette))
     }
 
     @POST
