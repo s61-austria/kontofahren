@@ -1,6 +1,7 @@
 package domain;
 
 import domain.enums.InvoiceGenerationType;
+import domain.enums.InvoiceStatus;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,15 +18,22 @@ public class Invoice implements Serializable {
 
     @Column
     private Date createdOn;
+
     @Column
     private Date generatedFor;
+
     @Enumerated(EnumType.STRING)
     private InvoiceGenerationType generationType;
+
+    @Enumerated(EnumType.STRING)
+    private InvoiceStatus status;
+
     @Column
     private double totalPrice;
 
     @ManyToOne
     private Civilian civilian;
+
     @ManyToOne
     private Vehicle vehicle;
 
@@ -33,6 +41,10 @@ public class Invoice implements Serializable {
         this.createdOn = createdOn;
         this.generatedFor = generatedFor;
         this.generationType = generationType;
+        this.status = InvoiceStatus.OPEN;
+        this.totalPrice = 0.00;
+        this.civilian = null;
+        this.vehicle = null;
     }
 
     public Invoice(){ }
@@ -95,5 +107,13 @@ public class Invoice implements Serializable {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public InvoiceStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(InvoiceStatus status) {
+        this.status = status;
     }
 }
