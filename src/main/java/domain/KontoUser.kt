@@ -5,7 +5,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "KontoUser")
 @Inheritance(strategy = InheritanceType.JOINED)
-abstract class User {
+abstract class KontoUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

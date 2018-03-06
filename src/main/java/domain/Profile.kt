@@ -12,7 +12,7 @@ class Profile {
     var id: Long? = null
 
     @OneToOne
-    val user: User? = null
+    val kontoUser: KontoUser? = null
 
     @ManyToMany
     var vehicles: List<Vehicle> = emptyList()
@@ -25,7 +25,7 @@ class Profile {
         if (!vehicles.contains(vehicle)) {
             vehicles += vehicle
         }
-        throw KontoException("user already owns car")
+        throw KontoException("kontoUser already owns car")
     }
 
     @Throws(KontoException::class)
@@ -33,7 +33,7 @@ class Profile {
         if (vehicles.contains(vehicle)) {
             vehicles -=vehicle
         } else {
-            throw KontoException("user does not own this car " + vehicle.hardwareSerialNumber)
+            throw KontoException("kontoUser does not own this car " + vehicle.hardwareSerialNumber)
         }
     }
 
@@ -42,7 +42,7 @@ class Profile {
         if (!invoices.contains(invoice)) {
             invoices += invoice
         } else {
-            throw KontoException("user already has invoice")
+            throw KontoException("kontoUser already has invoice")
         }
     }
 
