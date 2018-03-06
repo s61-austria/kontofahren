@@ -13,20 +13,16 @@ import javax.inject.Inject
 
 @Stateless
 class VehicleService @Inject constructor(
-        val vehicleDao: VehicleDao,
-        val userDao: UserDao
-){
-    val allVehicles: List<Vehicle>
-        get() = vehicleDao.allVehicles
+        val vehicleDao: VehicleDao
+) {
 
-    fun getAllVehiclesInCountry(countryName: String): List<Vehicle> {
-        return vehicleDao.getAllVehiclesInCountry(countryName)
-    }
+    fun allVehicles(): List<Vehicle> = vehicleDao.allVehicles()
 
-    fun addVehicle(hardwareSerialNumber: String, vehicleType: VehicleType, plate: String): Vehicle {
+    fun getAllVehiclesInCountry(countryName: String): List<Vehicle> =
+            vehicleDao.getAllVehiclesInCountry(countryName)
 
-        return vehicleDao.persistVehicle(Vehicle(hardwareSerialNumber, vehicleType, Location()))
-    }
+    fun addVehicle(hardwareSerialNumber: String, vehicleType: VehicleType, licensePlate: String): Vehicle =
+            vehicleDao.addVehicle(Vehicle(hardwareSerialNumber, vehicleType, Location(), licensePlate))
 
     fun saveVehicle(id: Long, licensePlate: String, newOwnerId: Long): Vehicle {
 
