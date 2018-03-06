@@ -20,6 +20,6 @@ class VehicleService @Inject constructor(
     }
 
     fun addVehicle(hardwareSerialNumber: String, vehicleType: VehicleType, licensePlate: String): Vehicle {
-        return vehicleDao!!.addVehicle(Vehicle(hardwareSerialNumber, vehicleType, Location(), licensePlate))
+        return vehicleDao!!.persistVehicle(Vehicle(hardwareSerialNumber, vehicleType, Location(), licensePlate))
     }
 }

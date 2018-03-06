@@ -4,7 +4,6 @@ import dao.UserDao;
 import dao.VehicleDao;
 import domain.Civilian;
 import domain.Location;
-import domain.User;
 import domain.Vehicle;
 import domain.enums.VehicleType;
 import exceptions.KontoException;
