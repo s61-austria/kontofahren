@@ -19,13 +19,13 @@ public class Invoice implements Serializable {
     private Date createdOn;
     @Column
     private Date generatedFor;
-    @Column
+    @Enumerated(EnumType.STRING)
     private InvoiceGenerationType generationType;
     @Column
     private double totalPrice;
 
     @ManyToOne
-    private Civilian payer;
+    private Civilian civilian;
     @ManyToOne
     private Vehicle vehicle;
 
@@ -81,12 +81,12 @@ public class Invoice implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    public Civilian getPayer() {
-        return payer;
+    public Civilian getCivilian() {
+        return civilian;
     }
 
-    public void setPayer(Civilian payer) {
-        this.payer = payer;
+    public void setCivilian(Civilian civilian) {
+        this.civilian = civilian;
     }
 
     public Vehicle getVehicle() {

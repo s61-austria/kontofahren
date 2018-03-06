@@ -39,5 +39,4 @@ public class VehicleResource {
         return vehicleService.addVehicle(serialNumber, VehicleType.valueOf(vehicleType),
                 licensePlate);
     }
-
 }
