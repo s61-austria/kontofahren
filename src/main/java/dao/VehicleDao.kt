@@ -11,24 +11,17 @@ import javax.persistence.TypedQuery
 class VehicleDao {
 
     @PersistenceContext
-    internal var em: EntityManager? = null
+    lateinit var em: EntityManager
 
-    val allVehicles: List<Vehicle>
-        get() {
-            val query = em!!.createQuery("SELECT v FROM Vehicle v", Vehicle::class.java)
+    fun allVehicles(): List<Vehicle> = em.createQuery("SELECT v FROM Vehicle v", Vehicle::class.java).resultList
 
-            return query.resultList
-        }
-
-    fun getAllVehiclesInCountry(countryName: String): List<Vehicle> {
-        val query = em!!.createQuery("SELECT v FROM Vehicle v " + "JOIN v.currentLocation l JOIN l.country c WHERE c.name = :countryName", Vehicle::class.java)
-
-        return query.setParameter("countryName", countryName).resultList
-    }
+    fun getAllVehiclesInCountry(countryName: String): List<Vehicle> =
+            em.createQuery("SELECT v FROM Vehicle v JOIN v.currentLocation l JOIN l.country c WHERE c.name = :countryName", Vehicle::class.java)
+                    .setParameter("countryName", countryName)
+                    .resultList
 
     fun addVehicle(vehicle: Vehicle): Vehicle {
-        em!!.persist(vehicle)
-
+        em.persist(vehicle)
         return vehicle
     }
 }

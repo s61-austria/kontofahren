@@ -18,12 +18,11 @@ class InvoiceResource @Inject constructor(
 
     @GET
     @Produces("application/json")
-    fun allInvoices() = invoiceService.allInvoices
+    fun allInvoices(): List<Invoice> = invoiceService.allInvoices()
 
     @GET
     @Path("{id}")
     @Produces("application/json")
-    fun getInvoiceById(@PathParam("id") id: Long?): Response {
-        return Response.ok().build()
-    }
+    fun getInvoiceById(@PathParam("id") id: Long?): Response =
+            Response.ok(invoiceService.getInvoiceById(id)).build()
 }
