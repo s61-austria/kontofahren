@@ -1,4 +1,3 @@
 rootProject.name = "KontoFahren"
 
-include(':domain')
 include(':government')
