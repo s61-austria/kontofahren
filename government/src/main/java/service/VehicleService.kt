@@ -19,7 +19,7 @@ class VehicleService @Inject constructor(
         return vehicleDao.getAllVehiclesInCountry(countryName)
     }
 
-    fun addVehicle(hardwareSerialNumber: String, vehicleType: VehicleType): Vehicle {
-        return vehicleDao!!.addVehicle(Vehicle(hardwareSerialNumber, vehicleType, Location()))
+    fun addVehicle(hardwareSerialNumber: String, vehicleType: VehicleType, licensePlate: String): Vehicle {
+        return vehicleDao!!.addVehicle(Vehicle(hardwareSerialNumber, vehicleType, Location(), licensePlate))
     }
 }
