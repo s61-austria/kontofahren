@@ -1,17 +1,26 @@
 package dao
 
 import domain.Invoice
+import domain.Vehicle
+
 import javax.ejb.Stateless
+import javax.inject.Inject
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
+import javax.persistence.TypedQuery
 
 @Stateless
 class InvoiceDao {
 
     @PersistenceContext
-    lateinit var em: EntityManager
+    internal var em: EntityManager? = null
 
-    fun allInvoices() = em.createQuery("SELECT i FROM Invoice i", Invoice::class.java).resultList
+    val allInvoices: List<Invoice>
+        get() {
+            val query = em!!.createQuery("SELECT i FROM Invoice i", Invoice::class.java)
+
+            return query.resultList
+        }
 
     fun getInvoiceById(id: Long?): Invoice {
         return em!!.find(Invoice::class.java, id)
@@ -23,10 +32,10 @@ class InvoiceDao {
         return query.setParameter("id", vehicleId).resultList
     }
 
-    fun getAllInvoicesByCivilian(civilianId: Long?): List<Invoice> {
-        val query = em!!.createQuery("SELECT i FROM Invoice i " + "JOIN i.civilian c WHERE c.id = :id", Invoice::class.java)
+    fun getAllInvoicesByProfile(profileId: Long?): List<Invoice> {
+        val query = em!!.createQuery("SELECT i FROM Invoice i " + "JOIN i.profile c WHERE c.id = :id", Invoice::class.java)
 
-        return query.setParameter("id", civilianId).resultList
+        return query.setParameter("id", profileId).resultList
     }
 
     fun addInvoice(invoice: Invoice): Invoice {

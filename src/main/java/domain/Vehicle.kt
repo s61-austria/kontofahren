@@ -20,22 +20,21 @@ class Vehicle : Serializable {
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
     var activities: List<Activity>? = null
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
-    var owner: Civilian? = null
+    var owner: Profile? = null
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     var currentLocation: Location? = null
 
     constructor() {}
 
-    constructor(hardwareSerialNumber: String, vehicleType: VehicleType, currentLocation: Location, licensePlate: String) {
+    constructor(hardwareSerialNumber: String, vehicleType: VehicleType, currentLocation: Location) {
         this.hardwareSerialNumber = hardwareSerialNumber
         this.vehicleType = vehicleType
         this.currentLocation = currentLocation
         this.activities = ArrayList()
-        this.licensePlate = licensePlate
     }
 
     companion object {
 
-        private const val serialVersionUID = 1L
+        private val serialVersionUID = 1L
     }
 }

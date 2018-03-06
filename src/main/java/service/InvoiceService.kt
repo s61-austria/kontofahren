@@ -11,7 +11,7 @@ class InvoiceService @Inject constructor(
         val invoiceDao: InvoiceDao
 ){
     val allInvoices: List<Invoice>
-        get() = invoiceDao.allInvoices()
+        get() = invoiceDao.allInvoices
 
     fun getInvoiceById(id: Long?): Invoice? {
         return null
