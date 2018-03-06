@@ -32,9 +32,16 @@ class VehicleResource {
     @Produces("application/json")
     fun addVehicle(@PathParam("serialNumber") serialNumber: String,
                    @PathParam("vehicleType") vehicleType: String,
-                   @PathParam("plate") licensePlate: String): Vehicle {
+                   @PathParam("plate") plate: String): Vehicle {
+        return vehicleService!!.addVehicle(serialNumber, VehicleType.valueOf(vehicleType), plate)
+    }
 
-        return vehicleService!!.addVehicle(serialNumber, VehicleType.valueOf(vehicleType),
-                licensePlate)
+    @POST
+    @Path("/save/{id}/{licensePlate}/{ownerId}")
+    @Produces("application/json")
+    fun saveVehicle(@PathParam("id") id: Long?,
+                    @PathParam("licensePlate") licensePlate: String,
+                    @PathParam("ownerId") ownerId: Long): Vehicle {
+        return vehicleService!!.saveVehicle(id!!, licensePlate, ownerId)
     }
 }
