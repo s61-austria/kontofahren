@@ -1,12 +1,12 @@
-package domain;
+package domain
 
-import javax.persistence.*;
+import javax.persistence.*
 
 @Entity
 @DiscriminatorValue("CivilServant")
-public class CivilServant extends User {
+class CivilServant : User() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private val id: Long? = null
 }
