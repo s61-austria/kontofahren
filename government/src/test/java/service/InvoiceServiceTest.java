@@ -26,8 +26,8 @@ public class InvoiceServiceTest {
 
     @Before
     public void setUp(){
-        invoiceService = new InvoiceService();
         MockitoAnnotations.initMocks(this);
+        invoiceService = new InvoiceService(invoiceDaoMock);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class InvoiceServiceTest {
         invoices.add(invoice2);
         invoices.add(invoice3);
 
-        Mockito.when(invoiceDaoMock.getAllInvoices())
+        Mockito.when(invoiceDaoMock.allInvoices())
                 .thenReturn(invoices);
 
         List<Invoice> result = invoiceService.getAllInvoices();
