@@ -30,11 +30,14 @@ public class VehicleResource {
     }
 
     @POST
-    @Path("/add/{serialNumber}/{vehicleType}")
+    @Path("/add/{serialNumber}/{vehicleType}/{plate}")
     @Produces("application/json")
     public Vehicle addVehicle(@PathParam("serialNumber") String serialNumber,
-                              @PathParam("vehicleType") String vehicleType) {
-        return vehicleService.addVehicle(serialNumber, VehicleType.valueOf(vehicleType));
+                              @PathParam("vehicleType") String vehicleType,
+                              @PathParam("plate") String licensePlate) {
+
+        return vehicleService.addVehicle(serialNumber, VehicleType.valueOf(vehicleType),
+                licensePlate);
     }
 
 }
