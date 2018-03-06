@@ -3,6 +3,7 @@ package domain
 import javax.persistence.*
 
 @Entity
+@Table(name = "KontoUser")
 @Inheritance(strategy = InheritanceType.JOINED)
 abstract class User {
 

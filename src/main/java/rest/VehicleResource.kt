@@ -9,7 +9,6 @@ import javax.inject.Inject
 import javax.ws.rs.*
 
 @Path("vehicles")
-@Stateless
 class VehicleResource {
 
     @Inject

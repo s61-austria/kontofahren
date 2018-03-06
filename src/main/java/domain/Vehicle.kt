@@ -7,6 +7,7 @@ import java.io.Serializable
 import java.util.ArrayList
 
 @Entity
+@Table(name = "Vehicle")
 class Vehicle : Serializable {
 
     @Id
