@@ -20,10 +20,11 @@ class InvoiceDao {
                     .setParameter("id", vehicleId)
                     .resultList
 
-    fun getAllInvoicesByCivilian(civilianId: Long): List<Invoice> =
-            em.createQuery("SELECT i FROM Invoice i JOIN i.civilian c WHERE c.id = :id", Invoice::class.java)
-                    .setParameter("id", civilianId)
-                    .resultList
+    fun getAllInvoicesByProfile(profileId: Long?): List<Invoice> {
+        val query = em!!.createQuery("SELECT i FROM Invoice i " + "JOIN i.profile c WHERE c.id = :id", Invoice::class.java)
+
+        return query.setParameter("id", profileId).resultList
+    }
 
     fun addInvoice(invoice: Invoice): Invoice {
         em.persist(invoice)

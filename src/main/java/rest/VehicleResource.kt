@@ -33,4 +33,12 @@ class VehicleResource @Inject constructor(
 
         return Response.ok(vehicleService.addVehicle(serialNumber, VehicleType.valueOf(vehicleType), licensePlate)).build()
     }
+    @POST
+    @Path("/save/{id}/{licensePlate}/{ownerId}")
+    @Produces("application/json")
+    fun saveVehicle(@PathParam("id") id: Long,
+                    @PathParam("licensePlate") licensePlate: String,
+                    @PathParam("ownerId") ownerId: Long): Vehicle {
+        return vehicleService.saveVehicle(id, licensePlate, ownerId)
+    }
 }

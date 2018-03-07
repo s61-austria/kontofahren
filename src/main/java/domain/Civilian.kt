@@ -5,7 +5,7 @@ import java.io.Serializable
 
 @Entity
 @DiscriminatorValue("Civilian")
-class Civilian : User(), Serializable {
+class Civilian : KontoUser(), Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

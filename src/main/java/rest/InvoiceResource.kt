@@ -23,6 +23,6 @@ class InvoiceResource @Inject constructor(
     @GET
     @Path("{id}")
     @Produces("application/json")
-    fun getInvoiceById(@PathParam("id") id: Long?): Response =
+    fun getInvoiceById(@PathParam("id") id: Long): Response =
             Response.ok(invoiceService.getInvoiceById(id)).build()
 }

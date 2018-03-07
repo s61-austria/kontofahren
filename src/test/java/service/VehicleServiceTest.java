@@ -1,5 +1,6 @@
 package service;
 
+import dao.UserDao;
 import dao.VehicleDao;
 import domain.Vehicle;
 import org.junit.Assert;
@@ -18,13 +19,16 @@ public class VehicleServiceTest {
     @Mock
     VehicleDao vehicleDaoMock;
 
+    @Mock
+    UserDao userDaoMock;
+
     @InjectMocks
     VehicleService vehicleService;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        vehicleService = new VehicleService(vehicleDaoMock);
+        vehicleService = new VehicleService(vehicleDaoMock, userDaoMock);
     }
 
     @Test
