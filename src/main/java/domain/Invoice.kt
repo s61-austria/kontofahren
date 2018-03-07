@@ -9,6 +9,7 @@ import java.util.Date
 
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
+@Table(name = "Invoice")
 class Invoice : Serializable {
 
     @Id
@@ -25,7 +26,7 @@ class Invoice : Serializable {
     @Column
     var totalPrice: Double = 0.toDouble()
     @ManyToOne
-    var civilian: Civilian? = null
+    var profile: Profile? = null
     @ManyToOne
     var vehicle: Vehicle? = null
 
@@ -39,6 +40,6 @@ class Invoice : Serializable {
 
     companion object {
 
-        const val serialVersionUID = 1L
+        val serialVersionUID = 1L
     }
 }
