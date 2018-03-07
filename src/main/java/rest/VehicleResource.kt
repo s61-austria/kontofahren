@@ -7,34 +7,30 @@ import service.VehicleService
 import javax.ejb.Stateless
 import javax.inject.Inject
 import javax.ws.rs.*
+import javax.ws.rs.core.Response
 
 @Path("vehicles")
-@Stateless
-class VehicleResource {
+class VehicleResource @Inject constructor(
+        val vehicleService: VehicleService
+) {
 
-    @Inject
-    internal var vehicleService: VehicleService? = null
-
-    val allVehiclesInCountry: List<Vehicle>
-        @GET
-        @Produces("application/json")
-        get() = vehicleService!!.allVehicles
+    @GET
+    @Produces("application/json")
+    fun allVehiclesInCountry(): List<Vehicle> = vehicleService.allVehicles()
 
     @GET
     @Path("/{countryName}")
     @Produces("application/json")
-    fun getAllVehiclesInCountry(@PathParam("countryName") countryName: String): List<Vehicle> {
-        return vehicleService!!.getAllVehiclesInCountry(countryName)
-    }
+    fun getAllVehiclesInCountry(@PathParam("countryName") countryName: String): List<Vehicle> =
+            vehicleService.getAllVehiclesInCountry(countryName)
 
     @POST
     @Path("/add/{serialNumber}/{vehicleType}/{plate}")
     @Produces("application/json")
     fun addVehicle(@PathParam("serialNumber") serialNumber: String,
                    @PathParam("vehicleType") vehicleType: String,
-                   @PathParam("plate") licensePlate: String): Vehicle {
+                   @PathParam("plate") licensePlate: String): Response {
 
-        return vehicleService!!.addVehicle(serialNumber, VehicleType.valueOf(vehicleType),
-                licensePlate)
+        return Response.ok(vehicleService.addVehicle(serialNumber, VehicleType.valueOf(vehicleType), licensePlate)).build()
     }
 }
