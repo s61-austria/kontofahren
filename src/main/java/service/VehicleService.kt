@@ -13,7 +13,8 @@ import javax.inject.Inject
 
 @Stateless
 class VehicleService @Inject constructor(
-        val vehicleDao: VehicleDao
+        val vehicleDao: VehicleDao,
+        val userDao: UserDao
 ) {
 
     fun allVehicles(): List<Vehicle> = vehicleDao.allVehicles()
@@ -22,7 +23,7 @@ class VehicleService @Inject constructor(
             vehicleDao.getAllVehiclesInCountry(countryName)
 
     fun addVehicle(hardwareSerialNumber: String, vehicleType: VehicleType, licensePlate: String): Vehicle =
-            vehicleDao.addVehicle(Vehicle(hardwareSerialNumber, vehicleType, Location(), licensePlate))
+            vehicleDao.persistVehicle(Vehicle(hardwareSerialNumber, vehicleType, Location(), licensePlate))
 
     fun saveVehicle(id: Long, licensePlate: String, newOwnerId: Long): Vehicle {
 

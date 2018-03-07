@@ -27,11 +27,12 @@ class Vehicle : Serializable {
 
     constructor() {}
 
-    constructor(hardwareSerialNumber: String, vehicleType: VehicleType, currentLocation: Location) {
+    constructor(hardwareSerialNumber: String, vehicleType: VehicleType, currentLocation: Location, plate: String) {
         this.hardwareSerialNumber = hardwareSerialNumber
         this.vehicleType = vehicleType
         this.currentLocation = currentLocation
         this.activities = ArrayList()
+        this.licensePlate = plate
     }
 
     companion object {
