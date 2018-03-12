@@ -4,7 +4,7 @@ import javax.persistence.*
 
 @Entity
 @DiscriminatorValue("CivilServant")
-class CivilServant : User() {
+class CivilServant : KontoUser() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
