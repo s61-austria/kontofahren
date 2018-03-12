@@ -9,11 +9,11 @@ import java.io.Serializable
 import java.util.*
 
 @Entity
+@Table(name = "rate")
 class Rate : Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null
+    var id: String = UUID.randomUUID().toString()
 
     @Enumerated(EnumType.STRING)
     var vehicleType: VehicleType? = null
@@ -21,8 +21,6 @@ class Rate : Serializable {
     var kmPrice: Double = 0.toDouble()
     @Enumerated(EnumType.STRING)
     var vignetteType: VignetteType? = null
-
-    constructor() {}
 
     constructor(vehicleType: VehicleType, kmPrice: Double, vignetteType: VignetteType) {
         this.vehicleType = vehicleType

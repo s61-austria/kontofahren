@@ -8,10 +8,7 @@ import java.util.*
 
 import javax.ejb.Stateless
 import javax.inject.Inject
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.Produces
+import javax.ws.rs.*
 import javax.ws.rs.core.Response
 
 @Path("invoices")
@@ -66,4 +63,12 @@ class InvoiceResource @Inject constructor(
     @Produces("application/json")
     fun allInvoicesByState(@PathParam("state") state: String): List<Invoice> =
             invoiceService.allInvoicesByState(InvoiceState.valueOf(state))
+
+    @POST
+    @Path("/state/change/")
+    @Produces("application/json")
+    @Consumes("application/x-www-form-urlencoded")
+    fun updateInvoiceState(@FormParam("invoiceId") invoiceId: String,
+                           @FormParam("state") state: String) : Response =
+            Response.ok(invoiceService.updateInvoiceState(invoiceId, InvoiceState.valueOf(state))).build();
 }

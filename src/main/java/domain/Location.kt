@@ -1,13 +1,14 @@
 package domain
 
+import java.util.*
 import javax.persistence.*
 
 @Entity
+@Table(name = "location")
 class Location {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private val id: Long? = null
+    private val id: String = UUID.randomUUID().toString()
 
     @ManyToOne
     private val country: Country? = null

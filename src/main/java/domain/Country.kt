@@ -1,16 +1,14 @@
 package domain
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import java.util.*
+import javax.persistence.*
 
 @Entity
+@Table(name = "country")
 class Country {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private val id: Long? = null
+    private val id: String = UUID.randomUUID().toString()
 
     private val name: String? = null
 }

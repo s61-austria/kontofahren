@@ -1,6 +1,7 @@
 package service;
 
 import dao.InvoiceDao;
+import dao.UserDao;
 import domain.Invoice;
 import domain.enums.InvoiceGenerationType;
 import org.junit.Assert;
@@ -11,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import javax.persistence.GeneratedValue;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,21 +21,24 @@ public class InvoiceServiceTest {
     @Mock
     InvoiceDao invoiceDaoMock;
 
+    @Mock
+    UserDao userDaoMock;
+
     @InjectMocks
     InvoiceService invoiceService;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
-        invoiceService = new InvoiceService(invoiceDaoMock);
+        invoiceService = new InvoiceService(invoiceDaoMock, userDaoMock);
     }
 
     @Test
-    public void getAllInvoices(){
+    public void testGetAllInvoices() {
         List<Invoice> invoices = new ArrayList<>();
-        Invoice invoice1 = new Invoice();
-        Invoice invoice2 = new Invoice();
-        Invoice invoice3 = new Invoice();
+        Invoice invoice1 = new Invoice(new Date(), new Date(), InvoiceGenerationType.MANUAL);
+        Invoice invoice2 = new Invoice(new Date(), new Date(), InvoiceGenerationType.MANUAL);
+        Invoice invoice3 = new Invoice(new Date(), new Date(), InvoiceGenerationType.AUTO);
 
         invoices.add(invoice1);
         invoices.add(invoice2);
@@ -53,19 +56,38 @@ public class InvoiceServiceTest {
     }
 
     @Test
-    public void getInvoiceById(){
+    public void testGetInvoiceById() {
         Invoice invoice = new Invoice(new Date(), new Date(), InvoiceGenerationType.MANUAL);
-        invoice.setId(1L);
+        invoice.setId("testid");
         invoice.setTotalPrice(100.00);
 
-        Mockito.when(invoiceDaoMock.getInvoiceById(""))
+        Mockito.when(invoiceDaoMock.getInvoiceById("testid"))
                 .thenReturn(invoice);
 
-        Invoice result = invoiceService.getInvoiceById("");
+        Invoice result = invoiceService.getInvoiceById("testid");
 
         Assert.assertEquals(invoice.getId(), result.getId());
         Assert.assertEquals(invoice.getCreatedOn(), result.getCreatedOn());
         Assert.assertEquals(invoice.getGeneratedFor(), result.getGeneratedFor());
         Assert.assertEquals(invoice.getGenerationType(), result.getGenerationType());
+    }
+
+    @Test
+    public void testGetInvoicesByVehicle() {
+        List<Invoice> invoices = new ArrayList<>();
+        Invoice invoice1 = new Invoice(new Date(), new Date(), InvoiceGenerationType.MANUAL);
+        Invoice invoice2 = new Invoice(new Date(), new Date(), InvoiceGenerationType.AUTO);
+
+        invoices.add(invoice1);
+        invoices.add(invoice2);
+
+        Mockito.when(invoiceDaoMock.allInvoicesByVehicle("vehicleId"))
+                .thenReturn(invoices);
+
+        List<Invoice> result = invoiceService.allInvoicesByVehicle("vehicleId");
+
+        Assert.assertEquals(2, result.size());
+        Assert.assertTrue(result.contains(invoice1));
+        Assert.assertTrue(result.contains(invoice2));
     }
 }

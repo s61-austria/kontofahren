@@ -1,12 +1,12 @@
 package domain
 
+import java.util.*
 import javax.persistence.*
 
 @Entity
-@DiscriminatorValue("CivilServant")
+@DiscriminatorValue("civilServant")
 class CivilServant : KontoUser() {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private val id: Long? = null
+    private val id: String = UUID.randomUUID().toString()
 }

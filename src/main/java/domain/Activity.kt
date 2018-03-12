@@ -2,13 +2,14 @@ package domain
 
 import javax.persistence.*
 import java.io.Serializable
+import java.util.*
 
 @Entity
+@Table(name = "activity")
 class Activity : Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private val id: Long? = null
+    private val id: String = UUID.randomUUID().toString()
 
     companion object {
 

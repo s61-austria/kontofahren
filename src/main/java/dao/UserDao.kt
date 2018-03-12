@@ -24,7 +24,7 @@ class UserDao {
         return kontoUser
     }
 
-    fun getUserById(id: Long): KontoUser {
+    fun getUserById(id: String): KontoUser {
         val query = em!!.createQuery("SELECT u FROM KontoUser u WHERE u.id = :id", KontoUser::class.java)
 
         return query.singleResult
