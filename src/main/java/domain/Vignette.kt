@@ -15,12 +15,6 @@ class Vignette : Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null
 
-    /*@Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(unique = true)
-    val uuid: UUID? = null*/
-
     @Enumerated(EnumType.STRING)
     var vehicleType: VehicleType? = null
     @Enumerated(EnumType.STRING)
@@ -31,7 +25,6 @@ class Vignette : Serializable {
     constructor() {}
 
     constructor(vehicleType: VehicleType, vignetteType: VignetteType, price: Double) {
-        //this.id = UUID.randomUUID();
         this.vehicleType = vehicleType
         this.vignetteType = vignetteType
         this.price = price
