@@ -38,7 +38,7 @@ class VehicleResource @Inject constructor(
     @Produces("application/json")
     fun saveVehicle(@PathParam("id") id: Long,
                     @PathParam("licensePlate") licensePlate: String,
-                    @PathParam("ownerId") ownerId: Long): Vehicle {
+                    @PathParam("ownerId") ownerId: String): Vehicle {
         return vehicleService.saveVehicle(id, licensePlate, ownerId)
     }
 }

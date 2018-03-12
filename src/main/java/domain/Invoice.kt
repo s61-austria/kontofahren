@@ -5,16 +5,15 @@ import domain.enums.InvoiceState
 
 import javax.persistence.*
 import java.io.Serializable
-import java.util.Date
+import java.util.*
 
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
-@Table(name = "Invoice")
+@Table(name = "invoice")
 class Invoice : Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null
+    var id: String = UUID.randomUUID().toString()
     @Column
     var createdOn: Date? = null
     @Column
@@ -22,7 +21,7 @@ class Invoice : Serializable {
     @Enumerated(EnumType.STRING)
     var generationType: InvoiceGenerationType? = null
     @Enumerated(EnumType.STRING)
-    var state: InvoiceState? = null
+    var state: InvoiceState = InvoiceState.OPEN
     @Column
     var totalPrice: Double = 0.toDouble()
     @ManyToOne
@@ -35,8 +34,6 @@ class Invoice : Serializable {
         this.generatedFor = generatedFor
         this.generationType = generationType
     }
-
-    constructor() {}
 
     companion object {
 

@@ -4,15 +4,14 @@ import domain.enums.VehicleType
 
 import javax.persistence.*
 import java.io.Serializable
-import java.util.ArrayList
+import java.util.*
 
 @Entity
-@Table(name = "Vehicle")
+@Table(name = "vehicle")
 class Vehicle : Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null
+    var id: String = UUID.randomUUID().toString()
 
     var hardwareSerialNumber: String? = null
     var licensePlate: String? = null
@@ -24,8 +23,6 @@ class Vehicle : Serializable {
     var owner: Profile? = null
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     var currentLocation: Location? = null
-
-    constructor() {}
 
     constructor(hardwareSerialNumber: String, vehicleType: VehicleType, currentLocation: Location, plate: String) {
         this.hardwareSerialNumber = hardwareSerialNumber
