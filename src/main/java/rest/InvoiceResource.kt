@@ -67,6 +67,7 @@ class InvoiceResource @Inject constructor(
     @POST
     @Path("/state/change/")
     @Produces("application/json")
+    @Consumes("application/x-www-form-urlencoded")
     fun updateInvoiceState(@FormParam("invoiceId") invoiceId: String,
                            @FormParam("state") state: String) : Response =
             Response.ok(invoiceService.updateInvoiceState(invoiceId, InvoiceState.valueOf(state))).build();
