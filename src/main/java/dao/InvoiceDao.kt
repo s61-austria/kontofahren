@@ -45,11 +45,6 @@ class InvoiceDao {
             .setParameter("state", state)
             .resultList
 
-    fun allInvoicesByCivilian(civilianId: String): List<Invoice> = em
-            .createQuery("SELECT i FROM Invoice i JOIN i.profile p WHERE p.id = :id", Invoice::class.java)
-            .setParameter("id", civilianId)
-            .resultList;
-
     fun addInvoice(invoice: Invoice): Invoice {
         em.persist(invoice)
         return invoice
