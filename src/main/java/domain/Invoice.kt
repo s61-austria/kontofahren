@@ -13,7 +13,7 @@ class Invoice : Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null
+    var id: String? = null
     @Column
     var createdOn: Date? = null
     @Column

@@ -55,13 +55,13 @@ public class InvoiceServiceTest {
     @Test
     public void getInvoiceById(){
         Invoice invoice = new Invoice(new Date(), new Date(), InvoiceGenerationType.MANUAL);
-        invoice.setId(1L);
+        invoice.setId("testid");
         invoice.setTotalPrice(100.00);
 
-        Mockito.when(invoiceDaoMock.getInvoiceById(1L))
+        Mockito.when(invoiceDaoMock.getInvoiceById("testid"))
                 .thenReturn(invoice);
 
-        Invoice result = invoiceService.getInvoiceById(1L);
+        Invoice result = invoiceService.getInvoiceById("testid");
 
         Assert.assertEquals(invoice.getId(), result.getId());
         Assert.assertEquals(invoice.getCreatedOn(), result.getCreatedOn());
