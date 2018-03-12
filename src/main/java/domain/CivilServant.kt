@@ -4,7 +4,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@DiscriminatorValue("CivilServant")
+@DiscriminatorValue("civilServant")
 class CivilServant : KontoUser() {
 
     @Id

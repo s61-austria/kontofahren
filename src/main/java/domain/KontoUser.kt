@@ -4,7 +4,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "KONTOUSER")
+@Table(name = "kontouser")
 @Inheritance(strategy = InheritanceType.JOINED)
 abstract class KontoUser {
 

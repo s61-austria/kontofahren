@@ -5,6 +5,7 @@ import java.io.Serializable
 import java.util.*
 
 @Entity
+@Table(name = "activity")
 class Activity : Serializable {
 
     @Id

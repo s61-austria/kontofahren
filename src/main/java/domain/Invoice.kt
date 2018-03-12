@@ -9,7 +9,7 @@ import java.util.*
 
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
-@Table(name = "INVOICE")
+@Table(name = "invoice")
 class Invoice : Serializable {
 
     @Id

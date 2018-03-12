@@ -5,7 +5,7 @@ import java.io.Serializable
 import java.util.*
 
 @Entity
-@DiscriminatorValue("Civilian")
+@DiscriminatorValue("civilian")
 class Civilian : KontoUser(), Serializable {
 
     @Id

@@ -7,7 +7,7 @@ import java.io.Serializable
 import java.util.*
 
 @Entity
-@Table(name = "VEHICLE")
+@Table(name = "vehicle")
 class Vehicle : Serializable {
 
     @Id

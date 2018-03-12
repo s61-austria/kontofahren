@@ -8,6 +8,7 @@ import java.io.Serializable
 import java.util.*
 
 @Entity
+@Table(name = "rate")
 class Rate : Serializable {
 
     @Id
