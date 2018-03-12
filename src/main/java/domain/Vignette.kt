@@ -20,8 +20,6 @@ class Vignette : Serializable {
     @Column
     var price: Double = 0.toDouble()
 
-    constructor() {}
-
     constructor(vehicleType: VehicleType, vignetteType: VignetteType, price: Double) {
         this.id = UUID.randomUUID().toString();
         this.vehicleType = vehicleType

@@ -35,8 +35,6 @@ class Invoice : Serializable {
         this.generationType = generationType
     }
 
-    constructor() {}
-
     companion object {
 
         val serialVersionUID = 1L

@@ -20,8 +20,6 @@ class Rate : Serializable {
     @Enumerated(EnumType.STRING)
     var vignetteType: VignetteType? = null
 
-    constructor() {}
-
     constructor(vehicleType: VehicleType, kmPrice: Double, vignetteType: VignetteType) {
         this.id = UUID.randomUUID().toString()
         this.vehicleType = vehicleType

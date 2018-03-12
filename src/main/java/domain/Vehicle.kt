@@ -24,8 +24,6 @@ class Vehicle : Serializable {
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     var currentLocation: Location? = null
 
-    constructor() {}
-
     constructor(hardwareSerialNumber: String, vehicleType: VehicleType, currentLocation: Location, plate: String) {
         this.hardwareSerialNumber = hardwareSerialNumber
         this.vehicleType = vehicleType
