@@ -2,6 +2,7 @@ package domain
 
 import domain.enums.VehicleType
 import domain.enums.VignetteType
+import org.hibernate.annotations.GenericGenerator
 
 import javax.persistence.*
 import java.io.Serializable
@@ -10,8 +11,14 @@ import java.util.*
 @Entity
 class Vignette : Serializable {
 
+    //@Id
+    //var id: UUID ?= null
+
     @Id
-    var id: String ?= null
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(unique = true)
+    val uuid: UUID? = null
 
     @Enumerated(EnumType.STRING)
     var vehicleType: VehicleType? = null
@@ -23,7 +30,7 @@ class Vignette : Serializable {
     constructor() {}
 
     constructor(vehicleType: VehicleType, vignetteType: VignetteType, price: Double) {
-        this.id = UUID.randomUUID().toString();
+        //this.id = UUID.randomUUID();
         this.vehicleType = vehicleType
         this.vignetteType = vignetteType
         this.price = price
