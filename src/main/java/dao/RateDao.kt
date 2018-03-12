@@ -24,10 +24,6 @@ class RateDao {
             .setParameter("rateId", rateId)
             .singleResult
 
-    fun getRateByVehicle(serialNumber: String): Rate {
-        return Rate()
-    }
-
     fun addRate(rate: Rate): Rate {
         em.persist(rate)
         return rate

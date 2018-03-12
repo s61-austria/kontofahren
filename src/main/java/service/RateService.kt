@@ -17,10 +17,6 @@ class RateService @Inject constructor(val rateDao: RateDao) {
 
     fun getRateById(rateId: String) = rateDao.getRateById(rateId)
 
-    fun getRateByVehicle(serialNumber: String): Rate {
-        return rateDao.getRateByVehicle(serialNumber)
-    }
-
     fun addRate(vehicleType: VehicleType, kmPrice: Double, vignetteType: VignetteType): Rate {
         val r = Rate(vehicleType, kmPrice, vignetteType)
 

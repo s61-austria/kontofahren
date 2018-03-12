@@ -2,6 +2,7 @@ package domain
 
 import domain.enums.VehicleType
 import domain.enums.VignetteType
+import org.hibernate.annotations.GenericGenerator
 
 import javax.persistence.*
 import java.io.Serializable
@@ -22,7 +23,6 @@ class Rate : Serializable {
     var vignetteType: VignetteType? = null
 
     constructor(vehicleType: VehicleType, kmPrice: Double, vignetteType: VignetteType) {
-        this.id = UUID.randomUUID().toString()
         this.vehicleType = vehicleType
         this.kmPrice = kmPrice
         this.vignetteType = vignetteType
