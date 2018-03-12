@@ -36,9 +36,9 @@ public class InvoiceServiceTest {
     @Test
     public void testGetAllInvoices() {
         List<Invoice> invoices = new ArrayList<>();
-        Invoice invoice1 = new Invoice();
-        Invoice invoice2 = new Invoice();
-        Invoice invoice3 = new Invoice();
+        Invoice invoice1 = new Invoice(new Date(), new Date(), InvoiceGenerationType.MANUAL);
+        Invoice invoice2 = new Invoice(new Date(), new Date(), InvoiceGenerationType.MANUAL);
+        Invoice invoice3 = new Invoice(new Date(), new Date(), InvoiceGenerationType.AUTO);
 
         invoices.add(invoice1);
         invoices.add(invoice2);
@@ -75,8 +75,8 @@ public class InvoiceServiceTest {
     @Test
     public void testGetInvoicesByVehicle() {
         List<Invoice> invoices = new ArrayList<>();
-        Invoice invoice1 = new Invoice();
-        Invoice invoice2 = new Invoice();
+        Invoice invoice1 = new Invoice(new Date(), new Date(), InvoiceGenerationType.MANUAL);
+        Invoice invoice2 = new Invoice(new Date(), new Date(), InvoiceGenerationType.AUTO);
 
         invoices.add(invoice1);
         invoices.add(invoice2);
