@@ -33,8 +33,9 @@ class RateDao {
         return rate
     }
 
-    fun updateRate(rate: Rate) {
+    fun updateRate(rate: Rate) : Rate {
         em.merge(rate)
+        return rate;
     }
 
 }

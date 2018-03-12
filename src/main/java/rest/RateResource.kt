@@ -39,19 +39,19 @@ class RateResource @Inject constructor(val rateService: RateService){
     fun addRate(@FormParam("vehicleType") vehicleType: String,
                 @FormParam("kmPrice") kmPrice: Double,
                 @FormParam("vignette") vignette: String): Rate {
-        return rateService.addRate(VehicleType.valueOf(vehicleType), kmPrice, VignetteType.valueOf(vignette))
+        return rateService.addRate(VehicleType.valueOf(vehicleType), kmPrice,
+                VignetteType.valueOf(vignette))
     }
 
-    @POST
+    @PUT
     @Path("/update")
     @Consumes("application/x-www-form-urlencoded")
     @Produces("application/json")
     fun updateRate(@FormParam("rateId") rateId: String,
                    @FormParam("vehicleType") vehicleType: String,
                    @FormParam("kmPrice") kmPrice: Double,
-                   @FormParam("startPrice") startPrice: Double): Rate {
-        return rateService.updateRate(rateId, VehicleType.valueOf(vehicleType), kmPrice, startPrice)
+                   @FormParam("vignette") vignette: String): Rate {
+        return rateService.updateRate(rateId, VehicleType.valueOf(vehicleType), kmPrice,
+                VignetteType.valueOf(vignette))
     }
-
-
 }

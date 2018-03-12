@@ -7,12 +7,10 @@ import domain.KontoUser
 import domain.Profile
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
-import java.sql.Timestamp
 import java.util.*
 
 import javax.ejb.Stateless
 import javax.inject.Inject
-import javax.swing.text.html.parser.Parser
 
 @Stateless
 class InvoiceService @Inject constructor(
