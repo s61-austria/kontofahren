@@ -25,7 +25,7 @@ class VehicleService @Inject constructor(
     fun addVehicle(hardwareSerialNumber: String, vehicleType: VehicleType, licensePlate: String): Vehicle =
             vehicleDao.persistVehicle(Vehicle(hardwareSerialNumber, vehicleType, Location(), licensePlate))
 
-    fun saveVehicle(id: Long, licensePlate: String, newOwnerId: Long): Vehicle {
+    fun saveVehicle(id: Long, licensePlate: String, newOwnerId: String): Vehicle {
 
         val vehicle = vehicleDao.getVehicleById(id)
         //if licenseplate changed
