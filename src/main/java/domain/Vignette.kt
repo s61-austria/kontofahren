@@ -11,14 +11,15 @@ import java.util.*
 @Entity
 class Vignette : Serializable {
 
-    //@Id
-    //var id: UUID ?= null
-
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null
+
+    /*@Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(unique = true)
-    val uuid: UUID? = null
+    val uuid: UUID? = null*/
 
     @Enumerated(EnumType.STRING)
     var vehicleType: VehicleType? = null
