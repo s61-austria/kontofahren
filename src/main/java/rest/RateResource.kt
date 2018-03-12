@@ -12,7 +12,6 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("rates")
-@Stateless
 class RateResource @Inject constructor(val rateService: RateService){
 
     @GET
