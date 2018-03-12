@@ -31,4 +31,11 @@ class InvoiceService @Inject constructor(
     fun allInvoicesGeneratedBy(type: InvoiceGenerationType): List<Invoice> = invoiceDao.allInvoicesGeneratedBy(type)
 
     fun allInvoicesByState(state: InvoiceState): List<Invoice> = invoiceDao.allInvoicesByStatus(state)
+
+    fun updateInvoiceState(invoiceId: String, state: InvoiceState): Invoice {
+        val invoice = invoiceDao.getInvoiceById(invoiceId)
+        invoice.state = state;
+
+        return invoiceDao.updateInvoice(invoice);
+    }
 }
