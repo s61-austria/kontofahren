@@ -7,7 +7,7 @@ import javax.persistence.*
 class Location {
 
     @Id
-    private val id: String? = UUID.randomUUID().toString()
+    private val id: String = UUID.randomUUID().toString()
 
     @ManyToOne
     private val country: Country? = null

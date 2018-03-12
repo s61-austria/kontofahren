@@ -9,7 +9,7 @@ import javax.persistence.*
 class Profile {
 
     @Id
-    var id: String? = UUID.randomUUID().toString()
+    var id: String = UUID.randomUUID().toString()
 
     @OneToOne
     val kontoUser: KontoUser? = null

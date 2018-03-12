@@ -8,5 +8,5 @@ import javax.persistence.*
 class CivilServant : KontoUser() {
 
     @Id
-    private val id: String? = UUID.randomUUID().toString()
+    private val id: String = UUID.randomUUID().toString()
 }

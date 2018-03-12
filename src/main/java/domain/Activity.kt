@@ -8,7 +8,7 @@ import java.util.*
 class Activity : Serializable {
 
     @Id
-    private val id: String? = UUID.randomUUID().toString()
+    private val id: String = UUID.randomUUID().toString()
 
     constructor(){
 

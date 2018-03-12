@@ -9,5 +9,5 @@ import javax.persistence.Id
 @Entity
 class Region {
     @Id
-    private val id: String? = UUID.randomUUID().toString()
+    private val id: String = UUID.randomUUID().toString()
 }

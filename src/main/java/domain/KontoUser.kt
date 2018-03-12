@@ -9,7 +9,7 @@ import javax.persistence.*
 abstract class KontoUser {
 
     @Id
-    private val id: String? = UUID.randomUUID().toString()
+    private val id: String = UUID.randomUUID().toString()
 
 
     private val userName: String? = null

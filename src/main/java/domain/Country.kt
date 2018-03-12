@@ -10,7 +10,7 @@ import javax.persistence.Id
 class Country {
 
     @Id
-    private val id: String? = UUID.randomUUID().toString()
+    private val id: String = UUID.randomUUID().toString()
 
     private val name: String? = null
 }

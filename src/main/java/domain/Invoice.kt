@@ -13,7 +13,7 @@ import java.util.*
 class Invoice : Serializable {
 
     @Id
-    var id: String? = UUID.randomUUID().toString()
+    var id: String = UUID.randomUUID().toString()
     @Column
     var createdOn: Date? = null
     @Column
@@ -21,7 +21,7 @@ class Invoice : Serializable {
     @Enumerated(EnumType.STRING)
     var generationType: InvoiceGenerationType? = null
     @Enumerated(EnumType.STRING)
-    var state: InvoiceState? = InvoiceState.OPEN
+    var state: InvoiceState = InvoiceState.OPEN
     @Column
     var totalPrice: Double = 0.toDouble()
     @ManyToOne

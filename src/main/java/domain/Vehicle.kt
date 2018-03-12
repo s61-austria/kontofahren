@@ -11,7 +11,7 @@ import java.util.*
 class Vehicle : Serializable {
 
     @Id
-    var id: String? = UUID.randomUUID().toString()
+    var id: String = UUID.randomUUID().toString()
 
     var hardwareSerialNumber: String? = null
     var licensePlate: String? = null
