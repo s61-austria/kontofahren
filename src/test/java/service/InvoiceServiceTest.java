@@ -1,6 +1,7 @@
 package service;
 
 import dao.InvoiceDao;
+import dao.UserDao;
 import domain.Invoice;
 import domain.enums.InvoiceGenerationType;
 import org.junit.Assert;
@@ -20,13 +21,16 @@ public class InvoiceServiceTest {
     @Mock
     InvoiceDao invoiceDaoMock;
 
+    @Mock
+    UserDao userDaoMock;
+
     @InjectMocks
     InvoiceService invoiceService;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        invoiceService = new InvoiceService(invoiceDaoMock);
+        invoiceService = new InvoiceService(invoiceDaoMock, userDaoMock);
     }
 
     @Test
