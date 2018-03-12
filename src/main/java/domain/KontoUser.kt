@@ -1,15 +1,15 @@
 package domain
 
+import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "KontoUser")
+@Table(name = "KONTOUSER")
 @Inheritance(strategy = InheritanceType.JOINED)
 abstract class KontoUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private val id: Long? = null
+    private val id: String? = UUID.randomUUID().toString()
 
 
     private val userName: String? = null

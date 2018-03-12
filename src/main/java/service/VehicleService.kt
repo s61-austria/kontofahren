@@ -35,7 +35,7 @@ class VehicleService @Inject constructor(
         //change owner if changed.
         val prevOwner: Profile = vehicle.owner ?: return vehicle
 
-        if (prevOwner.id != newOwnerId) {
+        if (prevOwner.id!!.equals(newOwnerId)) {
             val newOwner = userDao.getUserById(newOwnerId).profile ?: throw KontoException("KEIN OWNER")
             try {
                 prevOwner.removeVehicle(vehicle)

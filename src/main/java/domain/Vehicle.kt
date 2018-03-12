@@ -4,15 +4,14 @@ import domain.enums.VehicleType
 
 import javax.persistence.*
 import java.io.Serializable
-import java.util.ArrayList
+import java.util.*
 
 @Entity
-@Table(name = "Vehicle")
+@Table(name = "VEHICLE")
 class Vehicle : Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null
+    var id: String? = UUID.randomUUID().toString()
 
     var hardwareSerialNumber: String? = null
     var licensePlate: String? = null

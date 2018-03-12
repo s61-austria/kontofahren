@@ -2,14 +2,14 @@ package domain
 
 import javax.persistence.*
 import java.io.Serializable
+import java.util.*
 
 @Entity
 @DiscriminatorValue("Civilian")
 class Civilian : KontoUser(), Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null
+    var id: String? = UUID.randomUUID().toString()
 
     @ManyToMany
     var vehicles: List<Vehicle>? = null

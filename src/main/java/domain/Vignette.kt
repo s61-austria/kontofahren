@@ -11,7 +11,7 @@ import java.util.*
 class Vignette : Serializable {
 
     @Id
-    var id: String ?= null
+    var id: String ?= UUID.randomUUID().toString()
 
     @Enumerated(EnumType.STRING)
     var vehicleType: VehicleType? = null

@@ -1,5 +1,6 @@
 package domain
 
+import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -7,6 +8,5 @@ import javax.persistence.*
 class CivilServant : KontoUser() {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private val id: Long? = null
+    private val id: String? = UUID.randomUUID().toString()
 }

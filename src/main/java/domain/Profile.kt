@@ -1,6 +1,7 @@
 package domain
 
 import exceptions.KontoException
+import java.util.*
 
 import javax.persistence.*
 
@@ -8,8 +9,7 @@ import javax.persistence.*
 class Profile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null
+    var id: String? = UUID.randomUUID().toString()
 
     @OneToOne
     val kontoUser: KontoUser? = null
