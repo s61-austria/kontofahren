@@ -19,10 +19,9 @@ class VehicleDao {
             .setParameter("countryName", countryName)
             .resultList
 
-    fun getVehicleById(id: Long): Vehicle {
-        val query = em!!.createQuery<Vehicle>("SELECT v FROM Vehicle v WHERE v.id = :id", Vehicle::class.java)
-        return query.singleResult
-    }
+    fun getVehicleById(id: String) = em.createQuery<Vehicle>("SELECT v FROM Vehicle v WHERE v.id = :id", Vehicle::class.java)
+        .singleResult
+
 
     fun persistVehicle(vehicle: Vehicle): Vehicle {
         em!!.persist(vehicle)

@@ -16,7 +16,6 @@ class VehicleService @Inject constructor(
     val vehicleDao: VehicleDao,
     val userDao: UserDao
 ) {
-
     fun allVehicles(): List<Vehicle> = vehicleDao.allVehicles()
 
     fun getAllVehiclesInCountry(countryName: String): List<Vehicle> =
@@ -26,7 +25,7 @@ class VehicleService @Inject constructor(
         vehicleDao.persistVehicle(Vehicle(
             hardwareSerialNumber, vehicleType = vehicleType, licensePlate = licensePlate))
 
-    fun saveVehicle(id: Long, licensePlate: String, newOwnerId: String): Vehicle {
+    fun saveVehicle(id: String, licensePlate: String, newOwnerId: String): Vehicle {
 
         val vehicle = vehicleDao.getVehicleById(id)
         //if licenseplate changed
