@@ -83,6 +83,7 @@ dependencies {
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compile group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
     compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
+    compile group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
     compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.2.14.Final'
     providedCompile group: 'javax', name: 'javaee-api', version: '8.0'
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
