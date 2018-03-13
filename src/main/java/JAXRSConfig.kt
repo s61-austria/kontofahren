@@ -1,10 +1,13 @@
-import rest.*
+import rest.InvoiceResource
+import rest.RateResource
+import rest.UserResource
+import rest.VehicleResource
+import rest.VignetteResource
 import javax.ws.rs.ApplicationPath
 import javax.ws.rs.core.Application
 
 @ApplicationPath("api")
-class JAXRSConfig : Application()
-{
+class JAXRSConfig : Application() {
     override fun getClasses(): MutableSet<Class<*>> = HashSet<Class<*>>().apply {
         add(InvoiceResource::class.java)
         add(UserResource::class.java)
