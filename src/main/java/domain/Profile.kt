@@ -1,9 +1,13 @@
 package domain
 
 import exceptions.KontoException
-import java.util.*
-
-import javax.persistence.*
+import java.util.* // ktlint-disable no-wildcard-imports
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.ManyToMany
+import javax.persistence.OneToMany
+import javax.persistence.OneToOne
+import javax.persistence.Table
 
 @Entity
 @Table(name = "profile")
@@ -32,7 +36,7 @@ class Profile {
     @Throws(KontoException::class)
     fun removeVehicle(vehicle: Vehicle) {
         if (vehicles.contains(vehicle)) {
-            vehicles -=vehicle
+            vehicles -= vehicle
         } else {
             throw KontoException("kontoUser does not own this car " + vehicle.hardwareSerialNumber)
         }

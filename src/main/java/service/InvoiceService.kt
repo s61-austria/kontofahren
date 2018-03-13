@@ -3,26 +3,25 @@ package service
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Invoice
-import domain.KontoUser
 import domain.Profile
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
-import java.util.*
+import java.util.* // ktlint-disable no-wildcard-imports
 
 import javax.ejb.Stateless
 import javax.inject.Inject
 
 @Stateless
 class InvoiceService @Inject constructor(
-        val invoiceDao: InvoiceDao,
-        val userDao: UserDao
-){
+    val invoiceDao: InvoiceDao,
+    val userDao: UserDao
+) {
 
-    fun allInvoices(): List<Invoice> = invoiceDao.allInvoices();
+    fun allInvoices(): List<Invoice> = invoiceDao.allInvoices()
 
     fun getInvoiceById(id: String): Invoice = invoiceDao.getInvoiceById(id)
 
-    fun allInvoicesByVehicle(id: String): List<Invoice> = invoiceDao.allInvoicesByVehicle(id);
+    fun allInvoicesByVehicle(id: String): List<Invoice> = invoiceDao.allInvoicesByVehicle(id)
 
     fun allInvoicesByCivilian(id: String): List<Invoice> {
         val profile = userDao.getUserById(id) as Profile
@@ -39,8 +38,8 @@ class InvoiceService @Inject constructor(
 
     fun updateInvoiceState(invoiceId: String, state: InvoiceState): Invoice {
         val invoice = invoiceDao.getInvoiceById(invoiceId)
-        invoice.state = state;
+        invoice.state = state
 
-        return invoiceDao.updateInvoice(invoice);
+        return invoiceDao.updateInvoice(invoice)
     }
 }

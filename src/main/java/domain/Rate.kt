@@ -2,11 +2,14 @@ package domain
 
 import domain.enums.VehicleType
 import domain.enums.VignetteType
-import org.hibernate.annotations.GenericGenerator
-
-import javax.persistence.*
 import java.io.Serializable
-import java.util.*
+import java.util.* // ktlint-disable no-wildcard-imports
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
 @Table(name = "rate")
