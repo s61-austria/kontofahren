@@ -2,7 +2,6 @@ package service
 
 import dao.UserDao
 import dao.VehicleDao
-import domain.Location
 import domain.Profile
 import domain.Vehicle
 import domain.enums.VehicleType
@@ -24,7 +23,8 @@ class VehicleService @Inject constructor(
         vehicleDao.getAllVehiclesInCountry(countryName)
 
     fun addVehicle(hardwareSerialNumber: String, vehicleType: VehicleType, licensePlate: String): Vehicle =
-        vehicleDao.persistVehicle(Vehicle(hardwareSerialNumber, vehicleType, Location(), licensePlate))
+        vehicleDao.persistVehicle(Vehicle(
+            hardwareSerialNumber, vehicleType = vehicleType, licensePlate = licensePlate))
 
     fun saveVehicle(id: Long, licensePlate: String, newOwnerId: String): Vehicle {
 

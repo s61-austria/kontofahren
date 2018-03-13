@@ -1,18 +1,15 @@
 package domain
 
-import java.util.* // ktlint-disable no-wildcard-imports
+import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.Id
-import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
 @Table(name = "location")
-class Location {
-
+data class Location(
+    val country: Country
+) {
     @Id
     private val id: String = UUID.randomUUID().toString()
-
-    @ManyToOne
-    private val country: Country? = null
 }

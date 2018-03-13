@@ -1,7 +1,7 @@
 package domain
 
 import exceptions.KontoException
-import java.util.* // ktlint-disable no-wildcard-imports
+import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.ManyToMany
@@ -11,13 +11,13 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "profile")
-class Profile {
+data class Profile(
+    @OneToOne
+    val kontoUser: KontoUser
+) {
 
     @Id
     var id: String = UUID.randomUUID().toString()
-
-    @OneToOne
-    val kontoUser: KontoUser? = null
 
     @ManyToMany
     var vehicles: List<Vehicle> = emptyList()
@@ -49,10 +49,5 @@ class Profile {
         } else {
             throw KontoException("kontoUser already has invoice")
         }
-    }
-
-    companion object {
-
-        private val serialVersionUID = 1L
     }
 }
