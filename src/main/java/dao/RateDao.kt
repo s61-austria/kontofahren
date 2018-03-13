@@ -1,13 +1,10 @@
 package dao
 
 import domain.Rate
-import domain.Vehicle
 
 import javax.ejb.Stateless
-import javax.inject.Inject
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
-import javax.persistence.TypedQuery
 
 @Stateless
 class RateDao {
@@ -16,22 +13,21 @@ class RateDao {
     lateinit var em: EntityManager
 
     fun getAllRates() = em
-            .createQuery("SELECT r FROM Rate r", Rate::class.java)
-            .resultList
+        .createQuery("SELECT r FROM Rate r", Rate::class.java)
+        .resultList
 
     fun getRateById(rateId: String) = em
-            .createQuery("SELECT r FROM Rate r WHERE r.id = :rateId", Rate::class.java)
-            .setParameter("rateId", rateId)
-            .singleResult
+        .createQuery("SELECT r FROM Rate r WHERE r.id = :rateId", Rate::class.java)
+        .setParameter("rateId", rateId)
+        .singleResult
 
     fun addRate(rate: Rate): Rate {
         em.persist(rate)
         return rate
     }
 
-    fun updateRate(rate: Rate) : Rate {
+    fun updateRate(rate: Rate): Rate {
         em.merge(rate)
-        return rate;
+        return rate
     }
-
 }

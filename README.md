@@ -1,5 +1,7 @@
 # OSTERREICH
 
+[![Build Status](https://travis-ci.org/s61-austria/kontofahren.svg?branch=master)](https://travis-ci.org/s61-austria/kontofahren)
+
 ## Setup
 
 ### Docker

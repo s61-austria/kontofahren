@@ -1,7 +1,12 @@
 package domain
 
-import java.util.*
-import javax.persistence.*
+import java.util.* // ktlint-disable no-wildcard-imports
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Inheritance
+import javax.persistence.InheritanceType
+import javax.persistence.OneToOne
+import javax.persistence.Table
 
 @Entity
 @Table(name = "kontouser")
@@ -17,6 +22,4 @@ abstract class KontoUser {
 
     @OneToOne
     val profile: Profile? = null
-
-
 }

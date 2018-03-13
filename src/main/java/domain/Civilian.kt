@@ -1,8 +1,12 @@
 package domain
 
-import javax.persistence.*
 import java.io.Serializable
-import java.util.*
+import java.util.* // ktlint-disable no-wildcard-imports
+import javax.persistence.DiscriminatorValue
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.ManyToMany
+import javax.persistence.OneToMany
 
 @Entity
 @DiscriminatorValue("civilian")

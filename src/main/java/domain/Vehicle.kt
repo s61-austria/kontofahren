@@ -1,10 +1,16 @@
 package domain
 
 import domain.enums.VehicleType
-
-import javax.persistence.*
 import java.io.Serializable
-import java.util.*
+import java.util.* // ktlint-disable no-wildcard-imports
+import javax.persistence.CascadeType
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.Id
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
+import javax.persistence.Table
 
 @Entity
 @Table(name = "vehicle")

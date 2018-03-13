@@ -1,8 +1,10 @@
 package domain
 
-import javax.persistence.*
 import java.io.Serializable
-import java.util.*
+import java.util.UUID // ktlint-disable no-wildcard-imports
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
 @Table(name = "activity")

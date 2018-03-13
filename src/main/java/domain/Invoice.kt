@@ -2,10 +2,16 @@ package domain
 
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
-
-import javax.persistence.*
 import java.io.Serializable
-import java.util.*
+import java.util.* // ktlint-disable no-wildcard-imports
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.Id
+import javax.persistence.ManyToOne
+import javax.persistence.NamedQuery
+import javax.persistence.Table
 
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
