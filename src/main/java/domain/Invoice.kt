@@ -2,9 +2,9 @@ package domain
 
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
-import java.io.Serializable
-import java.util.* // ktlint-disable no-wildcard-imports
-import javax.persistence.Column
+import utils.now
+import java.util.Date
+import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -16,33 +16,23 @@ import javax.persistence.Table
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
 @Table(name = "invoice")
-class Invoice : Serializable {
-
-    @Id
-    var id: String = UUID.randomUUID().toString()
-    @Column
-    var createdOn: Date? = null
-    @Column
-    var generatedFor: Date? = null
+data class Invoice(
     @Enumerated(EnumType.STRING)
-    var generationType: InvoiceGenerationType? = null
+    var generationType: InvoiceGenerationType,
     @Enumerated(EnumType.STRING)
-    var state: InvoiceState = InvoiceState.OPEN
-    @Column
-    var totalPrice: Double = 0.toDouble()
+    var state: InvoiceState = InvoiceState.OPEN,
     @ManyToOne
-    var profile: Profile? = null
+    var profile: Profile? = null,
     @ManyToOne
     var vehicle: Vehicle? = null
+) {
 
-    constructor(createdOn: Date, generatedFor: Date, generationType: InvoiceGenerationType) {
-        this.createdOn = createdOn
-        this.generatedFor = generatedFor
-        this.generationType = generationType
-    }
+    @Id
+    val id: String = UUID.randomUUID().toString()
 
-    companion object {
+    val createdOn: Date = now()
 
-        val serialVersionUID = 1L
-    }
+    var generatedFor: Date? = null
+
+    var totalPrice: Double = 0.toDouble()
 }

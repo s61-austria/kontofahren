@@ -2,7 +2,6 @@ package service
 
 import dao.UserDao
 import dao.VehicleDao
-import domain.Location
 import domain.Vehicle
 import domain.enums.VehicleType
 import org.junit.Assert
@@ -17,16 +16,14 @@ import java.util.* // ktlint-disable no-wildcard-imports
 class VehicleServiceTest {
     val vehicle1 = Vehicle(
         "dwadawdaw",
-        VehicleType.LKW,
-        Location(),
-        "haha ja"
+        vehicleType = VehicleType.LKW,
+        licensePlate = "haha ja"
     )
 
     val vehicle2 = Vehicle(
         "dawwa",
-        VehicleType.MOTOR,
-        Location(),
-        "haha nee"
+        vehicleType = VehicleType.MOTOR,
+        licensePlate = "haha nee"
         )
     @Mock
     internal var vehicleDaoMock: VehicleDao? = null
