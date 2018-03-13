@@ -31,14 +31,14 @@ allOpen {
     annotation("javax.ejb.Stateless")
     annotation("javax.persistence.Entity")
     annotation("javax.ejb.Singleton")
-    annotation("util.Open")
+    annotation("utils.Open")
 }
 
 noArg {
     annotation("javax.ejb.Stateless")
     annotation("javax.persistence.Entity")
     annotation("javax.ejb.Singleton")
-    annotation("util.Open")
+    annotation("utils.Open")
 }
 
 sourceCompatibility = 1.8

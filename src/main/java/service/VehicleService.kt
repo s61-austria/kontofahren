@@ -7,10 +7,12 @@ import domain.Profile
 import domain.Vehicle
 import domain.enums.VehicleType
 import exceptions.KontoException
+import utils.Open
 import javax.ejb.Stateless
 import javax.inject.Inject
 
 @Stateless
+@Open
 class VehicleService @Inject constructor(
     val vehicleDao: VehicleDao,
     val userDao: UserDao
