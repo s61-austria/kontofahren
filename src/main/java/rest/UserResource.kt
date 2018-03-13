@@ -11,7 +11,7 @@ import javax.ws.rs.Produces
 
 class UserResource @Inject constructor(
     val userService: UserService
-) {
+) : BaseResource() {
 
     @GET
     @Produces("application/json")

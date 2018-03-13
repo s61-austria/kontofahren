@@ -16,7 +16,7 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.Response
 
 @Path("rates")
-class RateResource @Inject constructor(val rateService: RateService) {
+class RateResource @Inject constructor(val rateService: RateService) : BaseResource() {
 
     @GET
     @Produces("application/json")

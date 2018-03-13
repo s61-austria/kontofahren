@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response
 @Path("invoices")
 class InvoiceResource @Inject constructor(
     val invoiceService: InvoiceService
-) {
+) : BaseResource() {
 
     @GET
     @Produces("application/json")

@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response
 @Path("vehicles")
 class VehicleResource @Inject constructor(
     val vehicleService: VehicleService
-) {
+) : BaseResource() {
 
     @GET
     @Produces("application/json")

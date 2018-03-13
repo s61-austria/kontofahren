@@ -13,7 +13,7 @@ import javax.ws.rs.Path
 import javax.ws.rs.Produces
 
 @Path("vignettes")
-class VignetteResource @Inject constructor(val vignetteService: VignetteService) {
+class VignetteResource @Inject constructor(val vignetteService: VignetteService) : BaseResource() {
 
     @GET
     @Produces("application/json")
