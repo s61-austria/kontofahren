@@ -1,7 +1,7 @@
 package domain
 
 import java.io.Serializable
-import java.util.* // ktlint-disable no-wildcard-imports
+import java.util.UUID // ktlint-disable no-wildcard-imports
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Table

@@ -7,14 +7,11 @@ import domain.Vehicle
 import domain.enums.VehicleType
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import utils.Open
-import java.util.*
-
+import java.util.* // ktlint-disable no-wildcard-imports
 
 //todo re-anble tests
 class VehicleServiceTest {
