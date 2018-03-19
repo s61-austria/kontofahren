@@ -4,9 +4,8 @@ import domain.Rate
 import domain.enums.VehicleType
 import domain.enums.VignetteType
 import service.RateService
+import utils.decode
 import javax.inject.Inject
-import javax.ws.rs.Consumes
-import javax.ws.rs.FormParam
 import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.PUT
@@ -33,29 +32,34 @@ class RateResource @Inject constructor(val rateService: RateService) : BaseResou
 
     @POST
     @Produces("application/json")
-    fun addRate(): Response {
-        val vehicle = rateService.addRate(
-            VehicleType.valueOf( params.getFirst("vehicleType")),
-            params.getFirst("kmPrice").toDouble(),
-            VignetteType.valueOf(params.getFirst("vignette"))
+    fun addRate(message: String): Response {
+        val rateObject:Rate = decode(message, Rate::class.java)
+
+        val rate:Rate = rateService.addRate(
+            rateObject.vehicleType,
+            rateObject.kmPrice,
+            rateObject.vignetteType
         )
 
-        return Response.ok(vehicle).build()
+        return Response.ok(rate).build()
     }
 
     @PUT
     @Path("/{id}")
     @Produces("application/json")
     fun updateRate(
-        @PathParam("id") id: String
+        @PathParam("id") id: String,
+        message: String
     ): Response {
-        val vehicle = rateService.updateRate(
+        val rateObject:Rate = decode(message, Rate::class.java)
+
+        val rate = rateService.updateRate(
             id,
-            VehicleType.valueOf(params.getFirst("vehicleType")),
-            params.getFirst("kmPrice").toDouble(),
-            VignetteType.valueOf(params.getFirst("vignette"))
+            rateObject.vehicleType,
+            rateObject.kmPrice,
+            rateObject.vignetteType
         )
 
-        return Response.ok(vehicle).build()
+        return Response.ok(rate).build()
     }
 }
