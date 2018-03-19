@@ -49,8 +49,8 @@ class VehicleResource @Inject constructor(
         @PathParam("id") id: String
     ): Response {
         val vehicle = vehicleService.vehicleDao.getVehicleById(id) ?: return Response.status(404).build()
-        val licensePlate:String = params.getFirst("licensePlate") ?: return Response.notModified().build()
-        val ownerId:String = params.getFirst("ownerId") ?: return Response.notModified().build()
+        val licensePlate: String = params.getFirst("licensePlate") ?: return Response.notModified().build()
+        val ownerId: String = params.getFirst("ownerId") ?: return Response.notModified().build()
 
         if (licensePlate.isEmpty()) return Response.notModified().build()
         if (ownerId.isEmpty()) return Response.notModified().build()
