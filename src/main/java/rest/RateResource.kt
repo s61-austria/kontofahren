@@ -20,46 +20,42 @@ class RateResource @Inject constructor(val rateService: RateService) : BaseResou
 
     @GET
     @Produces("application/json")
-    fun getAllRates() = rateService.getAllRates()
-
-    @GET
-    @Path("/vehicle/{serialNumber}")
-    @Produces("application/json")
-    fun getRateByVehicle(@PathParam("serialNumber") serialNumber: String): Response {
-        return Response.ok(rateService.getRateById(serialNumber)).build()
+    fun getAllRates() : Response {
+        return Response.ok(rateService.getAllRates()).build()
     }
 
     @GET
-    @Path("/id/{id}")
+    @Path("/{id}")
     @Produces("application/json")
-    fun getRateById(@PathParam("id") rateId: String): Rate {
-        return rateService.getRateById(rateId)
+    fun getRateById(@PathParam("id") rateId: String): Response {
+        return Response.ok(rateService.getRateById(rateId)).build()
     }
 
     @POST
-    @Path("/add")
-    @Consumes("application/x-www-form-urlencoded")
     @Produces("application/json")
-    fun addRate(
-        @FormParam("vehicleType") vehicleType: String,
-        @FormParam("kmPrice") kmPrice: Double,
-        @FormParam("vignette") vignette: String
-    ): Rate {
-        return rateService.addRate(VehicleType.valueOf(vehicleType), kmPrice,
-            VignetteType.valueOf(vignette))
+    fun addRate(): Response {
+        val vehicle = rateService.addRate(
+            VehicleType.valueOf( params.getFirst("vehicleType")),
+            params.getFirst("kmPrice").toDouble(),
+            VignetteType.valueOf(params.getFirst("vignette"))
+        )
+
+        return Response.ok(vehicle).build()
     }
 
     @PUT
-    @Path("/update")
-    @Consumes("application/x-www-form-urlencoded")
+    @Path("/{id}")
     @Produces("application/json")
     fun updateRate(
-        @FormParam("rateId") rateId: String,
-        @FormParam("vehicleType") vehicleType: String,
-        @FormParam("kmPrice") kmPrice: Double,
-        @FormParam("vignette") vignette: String
-    ): Rate {
-        return rateService.updateRate(rateId, VehicleType.valueOf(vehicleType), kmPrice,
-            VignetteType.valueOf(vignette))
+        @PathParam("id") id: String
+    ): Response {
+        val vehicle = rateService.updateRate(
+            id,
+            VehicleType.valueOf(params.getFirst("vehicleType")),
+            params.getFirst("kmPrice").toDouble(),
+            VignetteType.valueOf(params.getFirst("vignette"))
+        )
+
+        return Response.ok(vehicle).build()
     }
 }
