@@ -10,21 +10,24 @@ import javax.persistence.PersistenceContext
 class VehicleDao {
 
     @PersistenceContext
-    lateinit var em: EntityManager
+    lateinit var entityManager: EntityManager
 
-    fun allVehicles(): List<Vehicle> = em.createQuery("SELECT v FROM Vehicle v", Vehicle::class.java).resultList
+    fun allVehicles(): List<Vehicle> = entityManager.createQuery(
+        "SELECT v FROM Vehicle v", Vehicle::class.java).resultList
 
     fun getAllVehiclesInCountry(countryName: String): List<Vehicle> =
-        em.createQuery("SELECT v FROM Vehicle v JOIN v.currentLocation l JOIN l.country c WHERE c.name = :countryName", Vehicle::class.java)
+        entityManager.createQuery(
+            "SELECT v FROM Vehicle v JOIN v.currentLocation l " +
+                "JOIN l.country c WHERE c.name = :countryName", Vehicle::class.java)
             .setParameter("countryName", countryName)
             .resultList
 
-    fun getVehicleById(id: String) = em.createQuery<Vehicle>("SELECT v FROM Vehicle v WHERE v.id = :id", Vehicle::class.java)
+    fun getVehicleById(id: String) = entityManager.createQuery<Vehicle>(
+        "SELECT v FROM Vehicle v WHERE v.id = :id", Vehicle::class.java)
         .singleResult
 
-
     fun persistVehicle(vehicle: Vehicle): Vehicle {
-        em!!.persist(vehicle)
+        entityManager.persist(vehicle)
 
         return vehicle
     }
