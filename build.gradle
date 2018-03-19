@@ -79,6 +79,7 @@ task ktlintFormat(type: JavaExec, group: "formatting") {
 }
 
 dependencies {
+    compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.26'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compile group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
