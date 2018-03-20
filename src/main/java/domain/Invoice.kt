@@ -18,16 +18,17 @@ import javax.persistence.TemporalType
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
 @Table(name = "invoice")
-class Invoice {
+class Invoice(
     @Enumerated(EnumType.STRING)
-    lateinit var generationType: InvoiceGenerationType
+    val generationType: InvoiceGenerationType,
     @ManyToOne
-    lateinit var profile: Profile
+    val profile: Profile? = null,
     @ManyToOne
-    lateinit var vehicle: Vehicle
+    val vehicle: Vehicle? = null,
     @Temporal(TemporalType.DATE)
-    lateinit var generatedFor: Date
-    var kilometers: Double = 0.0
+    val generatedFor: Date,
+    val kilometers: Double
+) {
 
     @Id
     val id: String = UUID.randomUUID().toString()

@@ -24,7 +24,8 @@ class VehicleServiceTest {
         "dawwa",
         vehicleType = VehicleType.MOTOR,
         licensePlate = "haha nee"
-        )
+    )
+
     @Mock
     internal var vehicleDaoMock: VehicleDao? = null
 

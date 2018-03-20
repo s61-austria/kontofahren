@@ -73,13 +73,14 @@ class InvoiceService @Inject constructor(
             totalMeters += getTotalDistanceOfActivity(it)
         }
 
-        val invoice = Invoice().apply {
-            generationType = InvoiceGenerationType.AUTO
-            profile = rider
-            this.vehicle = vehicle
-            generatedFor = expirationDate
-            kilometers = totalMeters / 1000
-            totalPrice = vehicle.rate!!.kmPrice * kilometers
+        val invoice = Invoice(
+            InvoiceGenerationType.AUTO,
+            rider,
+            vehicle,
+            expirationDate,
+            totalMeters / 1000
+        ).apply {
+            totalPrice = vehicle.rate!!.kmPrice * this.kilometers
         }
 
         invoiceDao.addInvoice(invoice)

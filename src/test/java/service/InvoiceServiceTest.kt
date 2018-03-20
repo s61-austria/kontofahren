@@ -18,20 +18,9 @@ import java.util.ArrayList
 
 class InvoiceServiceTest {
 
-    val invoice1 = Invoice().apply {
-        generationType = MANUAL
-        generatedFor = now()
-    }
-
-    val invoice2 = Invoice().apply {
-        generationType = MANUAL
-        generatedFor = now()
-    }
-
-    val invoice3 = Invoice().apply {
-        generationType = AUTO
-        generatedFor = now()
-    }
+    private val invoice1 = Invoice(MANUAL, null, null, now(), 0.0)
+    private val invoice2 = Invoice(MANUAL, null, null, now(), 0.0)
+    private val invoice3 = Invoice(AUTO, null, null, now(), 0.0)
 
     @Mock
     private var invoiceDaoMock: InvoiceDao? = null
@@ -75,10 +64,10 @@ class InvoiceServiceTest {
         val invoice = invoice1
         invoice.totalPrice = 100.00
 
-        Mockito.`when`(invoiceDaoMock!!.getInvoiceById("any"))
+        Mockito.`when`(invoiceDaoMock!!.getInvoiceById("testid"))
                 .thenReturn(invoice)
 
-        val result = invoiceService.getInvoiceById("any")
+        val result = invoiceService.getInvoiceById("testid")
 
         Assert.assertEquals(invoice.id, result.id)
         Assert.assertEquals(invoice.createdOn, result.createdOn)
