@@ -6,13 +6,13 @@ import domain.Vehicle
 import domain.enums.VehicleType
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import java.util.* // ktlint-disable no-wildcard-imports
 
-//todo re-anble tests
 class VehicleServiceTest {
     val vehicle1 = Vehicle(
         "dwadawdaw",
@@ -40,6 +40,7 @@ class VehicleServiceTest {
         vehicleService = VehicleService(vehicleDaoMock!!, userDaoMock!!)
     }
 
+    @Test
     fun getAllVehiclesInCountryTest() {
         val country = "Nederland"
         val vehicles = ArrayList<Vehicle>()
@@ -57,6 +58,7 @@ class VehicleServiceTest {
         Assert.assertTrue(result.contains(vehicle2))
     }
 
+    @Test
     fun getAllVehicles() {
         val vehicles = ArrayList<Vehicle>()
 
