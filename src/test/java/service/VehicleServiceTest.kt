@@ -1,7 +1,6 @@
 package service
 
 import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.doThrow
 import com.nhaarman.mockito_kotlin.mock
 import dao.UserDao
 import dao.VehicleDao
@@ -9,11 +8,9 @@ import domain.KontoUser
 import domain.Profile
 import domain.Vehicle
 import domain.enums.VehicleType
-import exceptions.KontoException
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import kotlin.collections.ArrayList
 
 class VehicleServiceTest {
     lateinit var vehicleService: VehicleService
