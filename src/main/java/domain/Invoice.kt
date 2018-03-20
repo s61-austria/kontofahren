@@ -12,27 +12,29 @@ import javax.persistence.Id
 import javax.persistence.ManyToOne
 import javax.persistence.NamedQuery
 import javax.persistence.Table
+import javax.persistence.Temporal
+import javax.persistence.TemporalType
 
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
 @Table(name = "invoice")
 data class Invoice(
     @Enumerated(EnumType.STRING)
-    var generationType: InvoiceGenerationType,
-    @Enumerated(EnumType.STRING)
-    var state: InvoiceState = InvoiceState.OPEN,
+    val generationType: InvoiceGenerationType,
     @ManyToOne
-    var profile: Profile? = null,
+    val profile: Profile,
     @ManyToOne
-    var vehicle: Vehicle? = null
+    val vehicle: Vehicle,
+    @Temporal(TemporalType.DATE)
+    val generatedFor: Date,
+    val kilometers: Double
 ) {
 
     @Id
     val id: String = UUID.randomUUID().toString()
-
+    @Enumerated(EnumType.STRING)
+    var state: InvoiceState = InvoiceState.OPEN
+    @Temporal(TemporalType.DATE)
     val createdOn: Date = now()
-
-    var generatedFor: Date? = null
-
-    var totalPrice: Double = 0.toDouble()
+    var totalPrice: Double = vehicle.rate.kmPrice * kilometers
 }

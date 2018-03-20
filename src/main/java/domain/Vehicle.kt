@@ -20,9 +20,10 @@ data class Vehicle(
     @Enumerated(EnumType.STRING)
     var vehicleType: VehicleType,
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
-    var owner: Profile? = null
+    var owner: Profile? = null,
+    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
+    var rate: Rate
 ) {
-
     @Id
     var id: String = UUID.randomUUID().toString()
 
