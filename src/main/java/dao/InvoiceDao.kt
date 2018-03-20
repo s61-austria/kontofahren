@@ -3,7 +3,7 @@ package dao
 import domain.Invoice
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
-import java.util.* // ktlint-disable no-wildcard-imports
+import java.util.Date
 import javax.ejb.Stateless
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
@@ -14,13 +14,16 @@ class InvoiceDao {
     @PersistenceContext
     lateinit var em: EntityManager
 
-    fun getInvoiceById(id: String): Invoice = em.find(Invoice::class.java, id)
+    fun getInvoiceByUuid(uuid: String): Invoice = em
+        .createQuery("SELECT i FROM Invoice i WHERE i.uuid = :uuid", Invoice::class.java)
+        .setParameter("uuid", uuid)
+        .singleResult
 
-    fun allInvoices(): List<Invoice> = em.createNamedQuery("Invoice.allInvoices").resultList as List<Invoice>
+    fun allInvoices(): List<Invoice> = em.createNamedQuery("Invoice.allInvoices", Invoice::class.java).resultList
 
     fun allInvoicesByVehicle(vehicleId: String): List<Invoice> = em
-        .createQuery("SELECT i FROM Invoice i JOIN i.vehicle v WHERE v.id = :id", Invoice::class.java)
-        .setParameter("id", vehicleId)
+        .createQuery("SELECT i FROM Invoice i JOIN i.vehicle v WHERE v.uuid = :uuid", Invoice::class.java)
+        .setParameter("uuid", vehicleId)
         .resultList
 
     fun allInvoicesCreatedBetweenDates(start: Date, end: Date): List<Invoice> = em

@@ -7,13 +7,14 @@ import java.util.Date
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.ManyToOne
 import javax.persistence.NamedQuery
 import javax.persistence.Table
-import javax.persistence.Enumerated
-import javax.persistence.ManyToOne
-import javax.persistence.EnumType
 
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
@@ -31,11 +32,11 @@ data class Invoice(
 ) {
 
     @Id
-    @GeneratedValue
-    var id: Long = -1
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0
 
     @Column(unique = true)
-    val uuid: String = UUID.randomUUID().toString()
+    var uuid: String = UUID.randomUUID().toString()
 
     val createdOn: Date = now()
 
