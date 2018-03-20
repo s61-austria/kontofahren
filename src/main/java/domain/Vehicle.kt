@@ -22,7 +22,7 @@ data class Vehicle(
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     var owner: Profile? = null,
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
-    var rate: Rate
+    var rate: Rate? = null
 ) {
     @Id
     var id: String = UUID.randomUUID().toString()

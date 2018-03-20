@@ -3,6 +3,7 @@ package service
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Invoice
+import domain.Profile
 import domain.enums.InvoiceGenerationType.AUTO
 import domain.enums.InvoiceGenerationType.MANUAL
 import org.junit.Assert
@@ -12,27 +13,35 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import utils.now
 
 import java.util.ArrayList
 
 class InvoiceServiceTest {
 
-    val invoice1 = Invoice(
+    val invoice1 = Invoice().apply {
         generationType = MANUAL
-    )
+        generatedFor = now()
+    }
 
-    val invoice2 = Invoice(
+    val invoice2 = Invoice().apply {
         generationType = MANUAL
-    )
+        generatedFor = now()
+    }
 
-    val invoice3 = Invoice(
+    val invoice3 = Invoice().apply {
         generationType = AUTO
-    )
-    @Mock
-    internal var invoiceDaoMock: InvoiceDao? = null
+        generatedFor = now()
+    }
 
     @Mock
-    internal var userDaoMock: UserDao? = null
+    private var invoiceDaoMock: InvoiceDao? = null
+
+    @Mock
+    private var userDaoMock: UserDao? = null
+
+    @Mock
+    private var vehicleService: VehicleService? = null
 
     @InjectMocks
     lateinit var invoiceService: InvoiceService
@@ -40,7 +49,7 @@ class InvoiceServiceTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        invoiceService = InvoiceService(invoiceDaoMock!!, userDaoMock!!)
+        invoiceService = InvoiceService(invoiceDaoMock!!, userDaoMock!!, vehicleService!!)
     }
 
     @Test
