@@ -5,6 +5,7 @@ import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
+import javax.persistence.ManyToMany
 import javax.persistence.Table
 
 @Entity
@@ -13,8 +14,11 @@ import javax.persistence.Table
 data class KontoUser(
     val userName: String,
     val password: String,
-    val profile: Profile
+    val profile: Profile?
 ) {
     @Id
     private val id: String = UUID.randomUUID().toString()
+
+    @ManyToMany(mappedBy = "users")
+    val groups: MutableSet<KontoGroup> = mutableSetOf()
 }
