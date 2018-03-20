@@ -24,10 +24,10 @@ class InvoiceResource @Inject constructor(
     fun allInvoices(): List<Invoice> = invoiceService.allInvoices()
 
     @GET
-    @Path("{id}")
+    @Path("{uuid}")
     @Produces("application/json")
-    fun getInvoiceById(@PathParam("id") id: String): Response =
-        Response.ok(invoiceService.getInvoiceById(id)).build()
+    fun getInvoiceById(@PathParam("uuid") uuid: String): Response =
+        Response.ok(invoiceService.getInvoiceByUuid(uuid)).build()
 
     @GET
     @Path("/vehicle/{id}")

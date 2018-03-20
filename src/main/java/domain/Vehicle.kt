@@ -7,7 +7,10 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.persistence.Table
@@ -24,12 +27,16 @@ data class Vehicle(
 ) {
 
     @Id
-    var id: String = UUID.randomUUID().toString()
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0
+
+    @Column(unique = true)
+    var uuid: String = UUID.randomUUID().toString()
 
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
     var activities: List<Activity> = emptyList()
 
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
-    @Column(nullable = true)
+    @JoinColumn(nullable = true)
     var currentLocation: Location? = null
 }

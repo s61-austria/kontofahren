@@ -13,7 +13,7 @@ class RateService @Inject constructor(val rateDao: RateDao) {
 
     fun getAllRates() = rateDao.getAllRates() ?: emptyList<Rate>()
 
-    fun getRateById(rateId: String) = rateDao.getRateById(rateId)
+    fun getRateByUuid(rateId: String) = rateDao.getRateByUuid(rateId)
 
     fun addRate(vehicleType: VehicleType, kmPrice: Double, vignetteType: VignetteType): Rate {
         val r = Rate(vehicleType, kmPrice = kmPrice, vignetteType = vignetteType)
@@ -22,7 +22,7 @@ class RateService @Inject constructor(val rateDao: RateDao) {
     }
 
     fun updateRate(rateId: String, vehicleType: VehicleType, kmPrice: Double, vignetteType: VignetteType): Rate {
-        var r = rateDao.getRateById(rateId)
+        val r = rateDao.getRateByUuid(rateId)
         r.vehicleType = vehicleType
         r.kmPrice = kmPrice
         r.vignetteType = vignetteType
