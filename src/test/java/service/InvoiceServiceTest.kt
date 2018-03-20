@@ -1,10 +1,15 @@
 package service
 
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Invoice
+import domain.KontoUser
+import domain.Profile
 import domain.enums.InvoiceGenerationType.AUTO
 import domain.enums.InvoiceGenerationType.MANUAL
+import domain.enums.InvoiceState
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -12,35 +17,46 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-
-import java.util.ArrayList
+import utils.now
+import java.sql.Timestamp
+import java.util.*
 
 class InvoiceServiceTest {
-
-    val invoice1 = Invoice(
-        generationType = MANUAL
-    )
-
-    val invoice2 = Invoice(
-        generationType = MANUAL
-    )
-
-    val invoice3 = Invoice(
-        generationType = AUTO
-    )
-    @Mock
-    internal var invoiceDaoMock: InvoiceDao? = null
-
-    @Mock
-    internal var userDaoMock: UserDao? = null
-
-    @InjectMocks
     lateinit var invoiceService: InvoiceService
 
+    val invoice1 = Invoice(generationType = AUTO)
+
+    val invoice2 = Invoice(generationType = MANUAL)
+
+    val invoice3 = Invoice(generationType = AUTO).apply {
+        state = InvoiceState.CLOSED
+    }
+
+    //val user1 = KontoUser("Henk", "Maatwerk4Fun", Profile(user1))
+
     @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        invoiceService = InvoiceService(invoiceDaoMock!!, userDaoMock!!)
+    fun setup() {
+        val invoiceMock = mock<InvoiceDao>() {
+            on { allInvoices() } doReturn ArrayList<Invoice>().apply {
+                add(invoice1)
+                add(invoice2)
+                add(invoice3)
+            }
+            on { getInvoiceById(invoice1.id) } doReturn invoice1
+            on { allInvoicesGeneratedBy(AUTO) } doReturn ArrayList<Invoice>().apply {
+                add(invoice1)
+                add(invoice3)
+            }
+            on { allInvoicesByStatus(InvoiceState.CLOSED) } doReturn ArrayList<Invoice>().apply {
+                add(invoice3)
+            }
+        }
+
+        val userMock = mock<UserDao>() {
+            on {  }
+        }
+
+        invoiceService = InvoiceService(invoiceMock, userMock);
     }
 
     @Test
