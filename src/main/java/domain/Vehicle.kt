@@ -13,7 +13,13 @@ data class Vehicle(
     var vehicleType: VehicleType,
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     var owner: Profile? = null
-) :Base() {
+) {
+
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0
+
+    @Column(unique = true)
+    var uuid: String = UUID.randomUUID().toString()
 
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
     var activities: List<Activity> = emptyList()

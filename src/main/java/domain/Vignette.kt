@@ -13,6 +13,12 @@ data class Vignette(
     @Enumerated(EnumType.STRING)
     var vignetteType: VignetteType,
     var price: Double
-) :Base() {
+) {
+
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0
+
+    @Column(unique = true)
+    var uuid: String = UUID.randomUUID().toString()
 
 }

@@ -5,15 +5,7 @@ import domain.enums.InvoiceState
 import utils.now
 import java.util.Date
 import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.NamedQuery
-import javax.persistence.Table
-import javax.persistence.Enumerated
-import javax.persistence.ManyToOne
-import javax.persistence.EnumType
+import javax.persistence.*
 
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
@@ -28,7 +20,13 @@ data class Invoice(
     var owner: Profile? = null,
     @ManyToOne
     var vehicle: Vehicle? = null
-) : Base() {
+) {
+
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0
+
+    @Column(unique = true)
+    var uuid: String = UUID.randomUUID().toString()
 
     val createdOn: Date = now()
 

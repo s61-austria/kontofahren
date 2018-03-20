@@ -13,6 +13,11 @@ data class Rate(
     @Enumerated(EnumType.STRING)
     var vignetteType: VignetteType,
     var kmPrice: Double = 0.toDouble()
-) :Base() {
+) {
 
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0
+
+    @Column(unique = true)
+    var uuid: String = UUID.randomUUID().toString()
 }

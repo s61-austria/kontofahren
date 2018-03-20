@@ -9,7 +9,13 @@ import javax.persistence.*
 data class Profile(
     @OneToOne
     val kontoUser: KontoUser
-) :Base() {
+) {
+
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0
+
+    @Column(unique = true)
+    var uuid: String = UUID.randomUUID().toString()
 
     @ManyToMany
     var vehicles: List<Vehicle> = emptyList()
