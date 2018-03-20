@@ -30,7 +30,7 @@ class InvoiceDao {
         .resultList
 
     fun allInvoicesForBetweenDates(start: Date, end: Date): List<Invoice> = em
-        .createQuery("SELECT i FROM Invoice i WHERE i.generatedFor BETWEEN :start AND :end", Invoice::class.java)
+        .createQuery("SELECT i FROM Invoice i WHERE i.expires BETWEEN :start AND :end", Invoice::class.java)
         .setParameter("start", start)
         .setParameter("end", end)
         .resultList
