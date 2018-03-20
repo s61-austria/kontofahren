@@ -1,14 +1,15 @@
 package domain
 
-import java.util.*
-import javax.persistence.*
+import java.util.UUID
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
 @Table(name = "country")
-class Country {
-
+data class Country(
+    var name: String = ""
+) {
     @Id
-    private val id: String = UUID.randomUUID().toString()
-
-    private val name: String? = null
+    var id: String = UUID.randomUUID().toString()
 }

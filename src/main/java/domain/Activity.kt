@@ -1,18 +1,13 @@
 package domain
 
-import javax.persistence.*
-import java.io.Serializable
-import java.util.*
+import java.util.UUID
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
 @Table(name = "activity")
-class Activity : Serializable {
-
+data class Activity(
     @Id
-    private val id: String = UUID.randomUUID().toString()
-
-    companion object {
-
-        private const val serialVersionUID = 1L
-    }
-}
+    var id: String = UUID.randomUUID().toString()
+)

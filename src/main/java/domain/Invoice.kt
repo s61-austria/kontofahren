@@ -2,41 +2,44 @@ package domain
 
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
-
-import javax.persistence.*
-import java.io.Serializable
-import java.util.*
+import utils.now
+import java.util.Date
+import java.util.UUID
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.NamedQuery
+import javax.persistence.Table
+import javax.persistence.Enumerated
+import javax.persistence.ManyToOne
+import javax.persistence.EnumType
 
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
 @Table(name = "invoice")
-class Invoice : Serializable {
+data class Invoice(
 
-    @Id
-    var id: String = UUID.randomUUID().toString()
-    @Column
-    var createdOn: Date? = null
-    @Column
-    var generatedFor: Date? = null
     @Enumerated(EnumType.STRING)
-    var generationType: InvoiceGenerationType? = null
+    var generationType: InvoiceGenerationType,
     @Enumerated(EnumType.STRING)
-    var state: InvoiceState = InvoiceState.OPEN
-    @Column
-    var totalPrice: Double = 0.toDouble()
+    var state: InvoiceState = InvoiceState.OPEN,
     @ManyToOne
-    var profile: Profile? = null
+    var owner: Profile? = null,
     @ManyToOne
     var vehicle: Vehicle? = null
+) {
 
-    constructor(createdOn: Date, generatedFor: Date, generationType: InvoiceGenerationType) {
-        this.createdOn = createdOn
-        this.generatedFor = generatedFor
-        this.generationType = generationType
-    }
+    @Id
+    @GeneratedValue
+    var id: Long = -1
 
-    companion object {
+    @Column(unique = true)
+    val uuid: String = UUID.randomUUID().toString()
 
-        val serialVersionUID = 1L
-    }
+    val createdOn: Date = now()
+
+    var expires: Date? = null
+
+    var totalPrice: Double = 0.toDouble()
 }

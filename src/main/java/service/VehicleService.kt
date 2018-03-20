@@ -2,30 +2,30 @@ package service
 
 import dao.UserDao
 import dao.VehicleDao
-import domain.*
-import domain.Location
+import domain.Profile
 import domain.Vehicle
 import domain.enums.VehicleType
 import exceptions.KontoException
-
+import utils.Open
 import javax.ejb.Stateless
 import javax.inject.Inject
 
 @Stateless
+@Open
 class VehicleService @Inject constructor(
-        val vehicleDao: VehicleDao,
-        val userDao: UserDao
+    val vehicleDao: VehicleDao,
+    val userDao: UserDao
 ) {
-
     fun allVehicles(): List<Vehicle> = vehicleDao.allVehicles()
 
     fun getAllVehiclesInCountry(countryName: String): List<Vehicle> =
-            vehicleDao.getAllVehiclesInCountry(countryName)
+        vehicleDao.getAllVehiclesInCountry(countryName)
 
     fun addVehicle(hardwareSerialNumber: String, vehicleType: VehicleType, licensePlate: String): Vehicle =
-            vehicleDao.persistVehicle(Vehicle(hardwareSerialNumber, vehicleType, Location(), licensePlate))
+        vehicleDao.persistVehicle(Vehicle(
+            hardwareSerialNumber, vehicleType = vehicleType, licensePlate = licensePlate))
 
-    fun saveVehicle(id: Long, licensePlate: String, newOwnerId: String): Vehicle {
+    fun saveVehicle(id: String, licensePlate: String, newOwnerId: String): Vehicle {
 
         val vehicle = vehicleDao.getVehicleById(id)
         //if licenseplate changed
@@ -41,11 +41,9 @@ class VehicleService @Inject constructor(
                 prevOwner.removeVehicle(vehicle)
                 newOwner.addVehicle(vehicle)
                 vehicle.owner = newOwner
-
             } catch (e: KontoException) {
                 e.printStackTrace()
             }
-
         }
         return vehicleDao.persistVehicle(vehicle)
     }

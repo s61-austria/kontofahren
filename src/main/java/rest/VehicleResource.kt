@@ -1,44 +1,71 @@
 package rest
 
-import domain.Vehicle
 import domain.enums.VehicleType
 import service.VehicleService
-
-import javax.ejb.Stateless
 import javax.inject.Inject
-import javax.ws.rs.*
+import javax.ws.rs.Consumes
+import javax.ws.rs.GET
+import javax.ws.rs.POST
+import javax.ws.rs.PUT
+import javax.ws.rs.Path
+import javax.ws.rs.PathParam
+import javax.ws.rs.Produces
 import javax.ws.rs.core.Response
 
 @Path("vehicles")
 class VehicleResource @Inject constructor(
-        val vehicleService: VehicleService
-) {
+    val vehicleService: VehicleService
+) : BaseResource() {
 
     @GET
     @Produces("application/json")
-    fun allVehiclesInCountry(): List<Vehicle> = vehicleService.allVehicles()
+    fun allVehiclesInCountry(): Response {
+        val vehicles = vehicleService.allVehicles()
+
+        return Response.ok(vehicles).build()
+    }
 
     @GET
     @Path("/{countryName}")
     @Produces("application/json")
-    fun getAllVehiclesInCountry(@PathParam("countryName") countryName: String): List<Vehicle> =
-            vehicleService.getAllVehiclesInCountry(countryName)
+    fun getAllVehiclesInCountry(@PathParam("countryName") countryName: String): Response {
+        val vehicles = vehicleService.getAllVehiclesInCountry(countryName)
 
-    @POST
-    @Path("/add/{serialNumber}/{vehicleType}/{plate}")
-    @Produces("application/json")
-    fun addVehicle(@PathParam("serialNumber") serialNumber: String,
-                   @PathParam("vehicleType") vehicleType: String,
-                   @PathParam("plate") licensePlate: String): Response {
-
-        return Response.ok(vehicleService.addVehicle(serialNumber, VehicleType.valueOf(vehicleType), licensePlate)).build()
+        return Response.ok(vehicles).build()
     }
+
     @POST
-    @Path("/save/{id}/{licensePlate}/{ownerId}")
     @Produces("application/json")
-    fun saveVehicle(@PathParam("id") id: Long,
-                    @PathParam("licensePlate") licensePlate: String,
-                    @PathParam("ownerId") ownerId: String): Vehicle {
-        return vehicleService.saveVehicle(id, licensePlate, ownerId)
+    @Consumes("application/json")
+    fun addVehicle(): Response {
+        val vehicle = vehicleService.addVehicle(
+            params.getFirst("serialNumber"),
+            VehicleType.valueOf(params.getFirst("vehicleType")),
+            params.getFirst("licensePlate")
+        )
+
+        return Response.ok(vehicle).build()
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Produces("application/json")
+    fun saveVehicle(
+        @PathParam("id") id: String
+    ): Response {
+        val vehicle = vehicleService.vehicleDao.getVehicleById(id) ?: return Response.status(404).build()
+        val licensePlate: String = params.getFirst("licensePlate") ?: return Response.notModified().build()
+        val ownerId: String = params.getFirst("ownerId") ?: return Response.notModified().build()
+
+        if (licensePlate.isEmpty()) return Response.notModified().build()
+        if (ownerId.isEmpty()) return Response.notModified().build()
+
+        val vehicle2 = vehicleService.saveVehicle(
+            vehicle.id,
+            licensePlate,
+            ownerId
+        )
+
+        return Response.ok(vehicle2).build()
     }
 }

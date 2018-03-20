@@ -16,21 +16,21 @@ import org.mockito.Mockito
 class RateServiceTest {
     lateinit var rateService: RateService
 
-    var rate1 = Rate(VehicleType.LKW, 10.0, VignetteType.ONE_YEAR).apply {
+    var rate1 = Rate(VehicleType.LKW, kmPrice = 10.0, vignetteType = VignetteType.ONE_YEAR).apply {
         id = "randomId"
     }
 
     @Before
     fun setUp() {
         var rateDao = mock<RateDao> {
-            on {addRate(any()) } doReturn rate1
-            on {getRateById(rate1.id!!)} doReturn rate1
+            on { addRate(any()) } doReturn rate1
+            on { getRateById(rate1.id!!) } doReturn rate1
         }.apply {
             Mockito.`when`(this.updateRate(com.nhaarman.mockito_kotlin.any()))
-                    .then({ i -> i.arguments[0] })
+                .then({ i -> i.arguments[0] })
         }
 
-        rateService = RateService(rateDao);
+        rateService = RateService(rateDao)
     }
 
     @Test

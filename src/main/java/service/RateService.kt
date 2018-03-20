@@ -2,8 +2,6 @@ package service
 
 import dao.RateDao
 import domain.Rate
-import domain.Vehicle
-import domain.Vignette
 import domain.enums.VehicleType
 import domain.enums.VignetteType
 
@@ -18,17 +16,17 @@ class RateService @Inject constructor(val rateDao: RateDao) {
     fun getRateById(rateId: String) = rateDao.getRateById(rateId)
 
     fun addRate(vehicleType: VehicleType, kmPrice: Double, vignetteType: VignetteType): Rate {
-        val r = Rate(vehicleType, kmPrice, vignetteType)
+        val r = Rate(vehicleType, kmPrice = kmPrice, vignetteType = vignetteType)
 
         return rateDao.addRate(r)
     }
 
     fun updateRate(rateId: String, vehicleType: VehicleType, kmPrice: Double, vignetteType: VignetteType): Rate {
-        var r = rateDao.getRateById(rateId);
+        val r = rateDao.getRateById(rateId)
         r.vehicleType = vehicleType
         r.kmPrice = kmPrice
         r.vignetteType = vignetteType
 
-        return rateDao.updateRate(r);
+        return rateDao.updateRate(r)
     }
 }
