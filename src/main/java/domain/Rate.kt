@@ -15,6 +15,4 @@ data class Rate(
     var kmPrice: Double = 0.toDouble()
 ) :Base() {
 
-    @Column(unique = true)
-    var uuid: String = UUID.randomUUID().toString()
 }

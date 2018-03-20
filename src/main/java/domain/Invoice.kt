@@ -30,9 +30,6 @@ data class Invoice(
     var vehicle: Vehicle? = null
 ) : Base() {
 
-    @Column(unique = true)
-    var uuid: String = UUID.randomUUID().toString()
-
     val createdOn: Date = now()
 
     var expires: Date? = null

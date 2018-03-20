@@ -12,6 +12,4 @@ data class Location(
     val country: Country
 ) : Base() {
 
-    @Column(unique = true)
-    var uuid: String = UUID.randomUUID().toString()
 }

@@ -9,6 +9,7 @@ import javax.persistence.Table
 @Entity
 @Table(name = "activity")
 data class Activity(
-    @Column(unique = true)
-    var uuid: String = UUID.randomUUID().toString()
-) : Base()
+    var name: String = "string"
+) : Base(){
+
+}

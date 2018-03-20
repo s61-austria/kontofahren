@@ -12,6 +12,4 @@ data class KontoUser(
     val profile: Profile
 ) : Base() {
 
-    @Column(unique = true)
-    var uuid: String = UUID.randomUUID().toString()
 }

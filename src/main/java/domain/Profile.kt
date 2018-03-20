@@ -11,9 +11,6 @@ data class Profile(
     val kontoUser: KontoUser
 ) :Base() {
 
-    @Column(unique = true)
-    var uuid: String = UUID.randomUUID().toString()
-
     @ManyToMany
     var vehicles: List<Vehicle> = emptyList()
 

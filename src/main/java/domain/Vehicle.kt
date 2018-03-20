@@ -15,9 +15,6 @@ data class Vehicle(
     var owner: Profile? = null
 ) :Base() {
 
-    @Column(unique = true)
-    var uuid: String = UUID.randomUUID().toString()
-
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
     var activities: List<Activity> = emptyList()
 

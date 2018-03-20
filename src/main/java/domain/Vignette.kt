@@ -15,6 +15,4 @@ data class Vignette(
     var price: Double
 ) :Base() {
 
-    @Column(unique = true)
-    var uuid: String = UUID.randomUUID().toString()
 }

@@ -12,6 +12,4 @@ data class Region(
     val name: String
 ) :Base() {
 
-    @Column(unique = true)
-    var uuid: String = UUID.randomUUID().toString()
 }
