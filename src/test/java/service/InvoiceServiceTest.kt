@@ -5,6 +5,7 @@ import dao.UserDao
 import domain.Invoice
 import domain.enums.InvoiceGenerationType.AUTO
 import domain.enums.InvoiceGenerationType.MANUAL
+import domain.enums.InvoiceState
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -18,9 +19,9 @@ import java.util.ArrayList
 
 class InvoiceServiceTest {
 
-    private val invoice1 = Invoice(MANUAL, null, null, now(), 0.0)
-    private val invoice2 = Invoice(MANUAL, null, null, now(), 0.0)
-    private val invoice3 = Invoice(AUTO, null, null, now(), 0.0)
+    private val invoice1 = Invoice(MANUAL, InvoiceState.OPEN, null, null, now(), 0.0)
+    private val invoice2 = Invoice(MANUAL, InvoiceState.OPEN, null, null, now(), 0.0)
+    private val invoice3 = Invoice(AUTO, InvoiceState.OPEN, null, null, now(), 0.0)
 
     @Mock
     private var invoiceDaoMock: InvoiceDao? = null
@@ -49,7 +50,7 @@ class InvoiceServiceTest {
         invoices.add(invoice3)
 
         Mockito.`when`(invoiceDaoMock!!.allInvoices())
-                .thenReturn(invoices)
+            .thenReturn(invoices)
 
         val result = invoiceService.allInvoices()
 
@@ -65,7 +66,7 @@ class InvoiceServiceTest {
         invoice.totalPrice = 100.00
 
         Mockito.`when`(invoiceDaoMock!!.getInvoiceById("testid"))
-                .thenReturn(invoice)
+            .thenReturn(invoice)
 
         val result = invoiceService.getInvoiceById("testid")
 
@@ -83,7 +84,7 @@ class InvoiceServiceTest {
         invoices.add(invoice2)
 
         Mockito.`when`(invoiceDaoMock!!.allInvoicesByVehicle("vehicleId"))
-                .thenReturn(invoices)
+            .thenReturn(invoices)
 
         val result = invoiceService.allInvoicesByVehicle("vehicleId")
 

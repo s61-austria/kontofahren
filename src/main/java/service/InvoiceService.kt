@@ -75,6 +75,7 @@ class InvoiceService @Inject constructor(
 
         val invoice = Invoice(
             InvoiceGenerationType.AUTO,
+            InvoiceState.OPEN,
             rider,
             vehicle,
             expirationDate,

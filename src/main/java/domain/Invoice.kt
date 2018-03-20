@@ -5,9 +5,11 @@ import domain.enums.InvoiceState
 import utils.now
 import java.util.Date
 import java.util.UUID
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.ManyToOne
 import javax.persistence.NamedQuery
@@ -22,6 +24,8 @@ data class Invoice(
 
     @Enumerated(EnumType.STRING)
     val generationType: InvoiceGenerationType,
+    @Enumerated(EnumType.STRING)
+    var state: InvoiceState = InvoiceState.OPEN,
     @ManyToOne
     val profile: Profile? = null,
     @ManyToOne
