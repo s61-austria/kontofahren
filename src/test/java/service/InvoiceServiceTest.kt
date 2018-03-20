@@ -72,9 +72,9 @@ class InvoiceServiceTest {
 
         val result = invoiceService.getInvoiceById("testid")
 
-        Assert.assertEquals(invoice.id, result.id)
+        Assert.assertEquals(invoice.uuid, result.uuid)
         Assert.assertEquals(invoice.createdOn, result.createdOn)
-        Assert.assertEquals(invoice.generatedFor, result.generatedFor)
+        Assert.assertEquals(invoice.expires, result.expires)
         Assert.assertEquals(invoice.generationType, result.generationType)
     }
 
