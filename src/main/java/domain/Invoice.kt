@@ -5,7 +5,15 @@ import domain.enums.InvoiceState
 import utils.now
 import java.util.Date
 import java.util.UUID
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.NamedQuery
+import javax.persistence.Table
+import javax.persistence.Enumerated
+import javax.persistence.ManyToOne
+import javax.persistence.EnumType
 
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
@@ -22,7 +30,8 @@ data class Invoice(
     var vehicle: Vehicle? = null
 ) {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     var id: Long = -1
 
     @Column(unique = true)
