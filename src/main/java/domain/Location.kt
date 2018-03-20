@@ -1,6 +1,6 @@
 package domain
 
-import java.util.*
+import java.util.* // ktlint-disable no-wildcard-imports
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.ManyToOne

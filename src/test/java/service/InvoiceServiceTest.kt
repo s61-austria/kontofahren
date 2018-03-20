@@ -3,7 +3,6 @@ package service
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Invoice
-import domain.Profile
 import domain.enums.InvoiceGenerationType.AUTO
 import domain.enums.InvoiceGenerationType.MANUAL
 import org.junit.Assert

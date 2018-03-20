@@ -37,4 +37,3 @@ fun measureGeoDistance(l1: Location, l2: Location): Double {
     // Distance in meters
     return d * 1000
 }
-

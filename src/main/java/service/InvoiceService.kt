@@ -50,8 +50,8 @@ class InvoiceService @Inject constructor(
     }
 
     fun generateVehiclesInvoices(country: Country, month: Date) {
-        val vehicles:List<Vehicle> = vehicleService.allVehicles()
-        val monthSeconds: Long = 60*60*24*30
+        val vehicles: List<Vehicle> = vehicleService.allVehicles()
+        val monthSeconds: Long = 60 * 60 * 24 * 30
         val millisInSecond: Long = 1000
         val expirationDate = Date(month.time + monthSeconds * millisInSecond)
 
@@ -60,8 +60,7 @@ class InvoiceService @Inject constructor(
         }
     }
 
-    fun generateVehicleInvoice(vehicle: Vehicle, country: Country,
-                                  month: Date, expirationDate: Date) {
+    fun generateVehicleInvoice(vehicle: Vehicle, country: Country, month: Date, expirationDate: Date) {
         var totalMeters = 0.0
         val rider: Profile = vehicle.owner!!
 

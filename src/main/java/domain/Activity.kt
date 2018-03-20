@@ -1,7 +1,7 @@
 package domain
 
 import utils.now
-import java.util.*
+import java.util.* // ktlint-disable no-wildcard-imports
 import javax.persistence.CascadeType
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -18,7 +18,7 @@ data class Activity(
     val country: Country,
     @ManyToOne
     val rider: Profile
-){
+) {
     @Id
     var id: String = UUID.randomUUID().toString()
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
