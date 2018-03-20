@@ -16,7 +16,7 @@ import javax.persistence.Table
 @Table(name = "profile")
 data class Profile(
     @OneToOne
-    val kontoUser: KontoUser
+    val kontoUser: KontoUser?
 ) {
 
     @Id
