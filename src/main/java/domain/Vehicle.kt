@@ -2,7 +2,18 @@ package domain
 
 import domain.enums.VehicleType
 import java.util.UUID
-import javax.persistence.*
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
+import javax.persistence.Table
 
 @Entity
 @Table(name = "vehicle")
@@ -15,7 +26,8 @@ data class Vehicle(
     var owner: Profile? = null
 ) {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0
 
     @Column(unique = true)

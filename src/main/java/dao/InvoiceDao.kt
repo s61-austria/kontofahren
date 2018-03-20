@@ -3,7 +3,7 @@ package dao
 import domain.Invoice
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
-import java.util.* // ktlint-disable no-wildcard-imports
+import java.util.Date
 import javax.ejb.Stateless
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
@@ -19,7 +19,7 @@ class InvoiceDao {
         .setParameter("uuid", uuid)
         .singleResult
 
-    fun allInvoices(): List<Invoice> = em.createNamedQuery("Invoice.allInvoices").resultList as List<Invoice>
+    fun allInvoices(): List<Invoice> = em.createNamedQuery("Invoice.allInvoices", Invoice::class.java).resultList
 
     fun allInvoicesByVehicle(vehicleId: String): List<Invoice> = em
         .createQuery("SELECT i FROM Invoice i JOIN i.vehicle v WHERE v.uuid = :uuid", Invoice::class.java)

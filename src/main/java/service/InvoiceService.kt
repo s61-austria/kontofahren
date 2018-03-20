@@ -3,11 +3,9 @@ package service
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Invoice
-import domain.Profile
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
-import java.util.* // ktlint-disable no-wildcard-imports
-
+import java.util.Date
 import javax.ejb.Stateless
 import javax.inject.Inject
 
@@ -24,7 +22,7 @@ class InvoiceService @Inject constructor(
     fun allInvoicesByVehicle(id: String): List<Invoice> = invoiceDao.allInvoicesByVehicle(id)
 
     fun allInvoicesByCivilian(id: String): List<Invoice> {
-        val profile = userDao.getUserByUuid(id) as Profile
+        val profile = userDao.getUserByUuid(id)?.profile ?: return emptyList()
         return profile.invoices
     }
 
