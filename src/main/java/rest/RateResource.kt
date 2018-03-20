@@ -22,10 +22,10 @@ class RateResource @Inject constructor(val rateService: RateService) : BaseResou
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{uuid}")
     @Produces("application/json")
-    fun getRateById(@PathParam("id") rateId: String): Response {
-        return Response.ok(rateService.getRateById(rateId)).build()
+    fun getRateById(@PathParam("uuid") rateId: String): Response {
+        return Response.ok(rateService.getRateByUuid(rateId)).build()
     }
 
     @POST

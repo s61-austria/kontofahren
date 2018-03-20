@@ -2,22 +2,17 @@ package domain
 
 import exceptions.KontoException
 import java.util.UUID
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.ManyToMany
-import javax.persistence.OneToMany
-import javax.persistence.OneToOne
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "profile")
 data class Profile(
     @OneToOne
     val kontoUser: KontoUser
-) {
+) :Base() {
 
-    @Id
-    var id: String = UUID.randomUUID().toString()
+    @Column(unique = true)
+    var uuid: String = UUID.randomUUID().toString()
 
     @ManyToMany
     var vehicles: List<Vehicle> = emptyList()

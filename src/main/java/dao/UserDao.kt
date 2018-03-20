@@ -8,8 +8,9 @@ import javax.persistence.PersistenceContext
 
 @Stateless
 class UserDao {
+
     @PersistenceContext
-    internal var em: EntityManager? = null
+    lateinit var em: EntityManager
 
     val allKontoUsers: List<KontoUser>
         get() {
@@ -24,9 +25,9 @@ class UserDao {
         return kontoUser
     }
 
-    fun getUserById(id: String): KontoUser {
-        val query = em!!.createQuery("SELECT u FROM KontoUser u WHERE u.id = :id", KontoUser::class.java)
+    fun getUserByUuid(userId: String) = em
+        .createQuery("SELECT k FROM KontoUser k WHERE k.uuid = :userId", KontoUser::class.java)
+        .setParameter("userId", userId)
+        .singleResult
 
-        return query.singleResult
-    }
 }

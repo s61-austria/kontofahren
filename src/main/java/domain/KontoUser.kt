@@ -1,11 +1,7 @@
 package domain
 
 import java.util.UUID
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Inheritance
-import javax.persistence.InheritanceType
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "kontouser")
@@ -14,7 +10,8 @@ data class KontoUser(
     val userName: String,
     val password: String,
     val profile: Profile
-) {
-    @Id
-    private val id: String = UUID.randomUUID().toString()
+) : Base() {
+
+    @Column(unique = true)
+    var uuid: String = UUID.randomUUID().toString()
 }

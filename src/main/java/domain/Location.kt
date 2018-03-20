@@ -1,6 +1,7 @@
 package domain
 
 import java.util.UUID
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Table
@@ -9,7 +10,8 @@ import javax.persistence.Table
 @Table(name = "location")
 data class Location(
     val country: Country
-) {
-    @Id
-    private val id: String = UUID.randomUUID().toString()
+) : Base() {
+
+    @Column(unique = true)
+    var uuid: String = UUID.randomUUID().toString()
 }

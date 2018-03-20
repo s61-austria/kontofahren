@@ -67,10 +67,10 @@ class InvoiceServiceTest {
         val invoice = invoice1
         invoice.totalPrice = 100.00
 
-        Mockito.`when`(invoiceDaoMock!!.getInvoiceById("testid"))
+        Mockito.`when`(invoiceDaoMock!!.getInvoiceByUuid("testid"))
                 .thenReturn(invoice)
 
-        val result = invoiceService.getInvoiceById("testid")
+        val result = invoiceService.getInvoiceByUuid("testid")
 
         Assert.assertEquals(invoice.id, result.id)
         Assert.assertEquals(invoice.createdOn, result.createdOn)
