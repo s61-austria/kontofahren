@@ -15,18 +15,11 @@ import domain.enums.VehicleType
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
-import utils.now
-import java.sql.Timestamp
-import java.util.*
+import java.util.Date
 import kotlin.collections.ArrayList
 
 class InvoiceServiceTest {
     lateinit var invoiceService: InvoiceService
-
 
     val user1 = KontoUser("Henk", "Maatwerk4Fun", null)
     val date1 = Date(2018, 1, 1)
@@ -55,7 +48,6 @@ class InvoiceServiceTest {
         state = InvoiceState.CLOSED
         vehicle = vehicle1
     }
-
 
     @Before
     fun setup() {
