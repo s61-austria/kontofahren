@@ -90,7 +90,7 @@ class InvoiceService @Inject constructor(
 
         invoiceDao.addInvoice(invoice)
 
-        return invoice;
+        return invoice
     }
 
     fun getTotalDistanceOfActivity(activity: Activity): Double {
