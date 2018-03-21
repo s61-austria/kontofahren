@@ -4,25 +4,17 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import dao.InvoiceDao
 import dao.UserDao
-import domain.Activity
-import domain.Country
 import domain.Invoice
 import domain.KontoUser
-import domain.Location
 import domain.Profile
-import domain.Rate
 import domain.Vehicle
 import domain.enums.InvoiceGenerationType.AUTO
 import domain.enums.InvoiceGenerationType.MANUAL
 import domain.enums.InvoiceState
 import domain.enums.VehicleType
-import domain.enums.VignetteType
-import junit.framework.Assert.assertEquals
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
-import utils.now
 import java.util.Date
 import kotlin.collections.ArrayList
 
@@ -58,9 +50,40 @@ class InvoiceServiceTest {
     }
 
     @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        invoiceService = InvoiceService(invoiceDaoMock!!, userDaoMock!!)
+    fun setup() {
+        val invoiceMock = mock<InvoiceDao>() {
+            on { allInvoices() } doReturn ArrayList<Invoice>().apply {
+                add(invoice1)
+                add(invoice2)
+                add(invoice3)
+            }
+            on { getInvoiceByUuid(invoice1.uuid) } doReturn invoice1
+            on { allInvoicesGeneratedBy(AUTO) } doReturn ArrayList<Invoice>().apply {
+                add(invoice1)
+                add(invoice3)
+            }
+            on { allInvoicesByStatus(InvoiceState.CLOSED) } doReturn ArrayList<Invoice>().apply {
+                add(invoice3)
+            }
+            on { allInvoicesByVehicle(vehicle1.uuid) } doReturn ArrayList<Invoice>().apply {
+                add(invoice2)
+                add(invoice3)
+            }
+            on { allInvoicesCreatedBetweenDates(date1, date2) } doReturn ArrayList<Invoice>().apply {
+                add(invoice1)
+                add(invoice2)
+                add(invoice3)
+            }
+            on { updateInvoice(invoice1) } doReturn invoice1b
+        }
+
+        val userMock = mock<UserDao>() {
+            on { getUserByUuid(user2.uuid) } doReturn user2
+        }
+
+        val vehicleServiceMock = mock<VehicleService>()
+
+        invoiceService = InvoiceService(invoiceMock, userMock, vehicleServiceMock)
     }
 
     @Test
@@ -125,42 +148,5 @@ class InvoiceServiceTest {
 
         Assert.assertEquals(invoice1.uuid, result.uuid)
         Assert.assertSame(invoice1b, result)
-    }
-
-    @Test
-    fun testCalculateInvoices() {
-        val profile1 = Profile(KontoUser("", "", null))
-        val country = Country("Nederland")
-        val location1 = Location(country,
-            51.457065, 5.476294, now())
-        val location2 = Location(country,
-            51.456346, 5.477750, now())
-        val location3 = Location(country,
-            51.453946, 5.480196, now())
-        val activity1 = Activity(country, profile1).apply {
-            locations = arrayListOf(location1, location2)
-        }
-        val activity2 = Activity(country, profile1).apply {
-            locations = arrayListOf(location1, location2, location3)
-        }
-        val rate = Rate(VehicleType.LKW, VignetteType.TEN_DAYS, 0.1)
-        val vehicle1 = Vehicle("1234",
-            "TF-09-PP", VehicleType.LKW, profile1, rate).apply {
-            activities = arrayListOf(activity1)
-        }
-        val vehicle2 = Vehicle("12345",
-            "TF-09-XYZ", VehicleType.LKW, profile1, rate).apply {
-            activities = arrayListOf(activity2)
-        }
-        val vehicles = arrayListOf<Vehicle>(vehicle1, vehicle2)
-
-        Mockito.`when`(vehicleServiceMock!!.allVehicles()).thenReturn(vehicles)
-
-        val results = invoiceService.generateVehiclesInvoices(country, now())
-
-        assertEquals(2, results.size)
-
-        assertEquals(0.128, results[0].kilometers, 0.001)
-        assertEquals(0.445, results[1].kilometers, 0.001)
     }
 }

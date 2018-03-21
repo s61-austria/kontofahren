@@ -30,10 +30,10 @@ data class Invoice(
     @ManyToOne
     val profile: Profile? = null,
     @ManyToOne
-    val vehicle: Vehicle? = null,
+    var vehicle: Vehicle? = null,
     @Temporal(TemporalType.DATE)
-    val expires: Date,
-    val kilometers: Double
+    val expires: Date = now(),
+    val kilometers: Double = 0.0
 ) {
 
     @Id
