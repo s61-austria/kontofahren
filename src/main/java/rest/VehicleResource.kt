@@ -48,12 +48,12 @@ class VehicleResource @Inject constructor(
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/{uuid}")
     @Produces("application/json")
     fun saveVehicle(
-        @PathParam("id") id: String
+        @PathParam("uuid") uuid: String
     ): Response {
-        val vehicle = vehicleService.vehicleDao.getVehicleById(id) ?: return Response.status(404).build()
+        val vehicle = vehicleService.vehicleDao.getVehicleByUuid(uuid) ?: return Response.status(404).build()
         val licensePlate: String = params.getFirst("licensePlate") ?: return Response.notModified().build()
         val ownerId: String = params.getFirst("ownerId") ?: return Response.notModified().build()
 
@@ -61,7 +61,7 @@ class VehicleResource @Inject constructor(
         if (ownerId.isEmpty()) return Response.notModified().build()
 
         val vehicle2 = vehicleService.saveVehicle(
-            vehicle.id,
+            vehicle.uuid,
             licensePlate,
             ownerId
         )

@@ -1,5 +1,7 @@
 package service
 
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Activity
@@ -16,91 +18,113 @@ import domain.enums.InvoiceState
 import domain.enums.VehicleType
 import domain.enums.VignetteType
 import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
 import utils.now
-
-import java.util.ArrayList
+import java.util.Date
+import kotlin.collections.ArrayList
 
 class InvoiceServiceTest {
-
-    private val invoice1 = Invoice(MANUAL, InvoiceState.OPEN, null, null, now(), 0.0)
-    private val invoice2 = Invoice(MANUAL, InvoiceState.OPEN, null, null, now(), 0.0)
-    private val invoice3 = Invoice(AUTO, InvoiceState.OPEN, null, null, now(), 0.0)
-
-    @Mock
-    private var invoiceDaoMock: InvoiceDao? = null
-
-    @Mock
-    private var userDaoMock: UserDao? = null
-
-    @Mock
-    private var vehicleServiceMock: VehicleService? = null
-
-    @InjectMocks
     lateinit var invoiceService: InvoiceService
+
+    val user1 = KontoUser("Henk", "Maatwerk4Fun", null)
+    val date1 = Date(2018, 1, 1)
+    val date2 = Date(2019, 1, 1)
+
+    val invoice1 = Invoice(generationType = AUTO)
+    val invoice1b = Invoice(generationType = AUTO).apply {
+        uuid = invoice1.uuid
+        state = InvoiceState.PAID
+    }
+
+    val profile1 = Profile(user1)
+    val profile2 = Profile(null).apply {
+        addInvoice(invoice1)
+    }
+
+    val user2 = KontoUser("Ingrid", "Maatwerk5Fun", profile2)
+
+    val vehicle1 = Vehicle("103-13231432-238", "12-AB-390", VehicleType.PKW, profile1)
+
+    val invoice2 = Invoice(generationType = MANUAL).apply {
+        vehicle = vehicle1
+    }
+
+    val invoice3 = Invoice(generationType = AUTO).apply {
+        state = InvoiceState.CLOSED
+        vehicle = vehicle1
+    }
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        invoiceService = InvoiceService(invoiceDaoMock!!, userDaoMock!!, vehicleServiceMock!!)
+        invoiceService = InvoiceService(invoiceDaoMock!!, userDaoMock!!)
     }
 
     @Test
-    fun testGetAllInvoices() {
-        val invoices = ArrayList<Invoice>()
+    fun testAllInvoices() {
+        var result = invoiceService.allInvoices()
 
-        invoices.add(invoice1)
-        invoices.add(invoice2)
-        invoices.add(invoice3)
-
-        Mockito.`when`(invoiceDaoMock!!.allInvoices())
-            .thenReturn(invoices)
-
-        val result = invoiceService.allInvoices()
-
-        assertEquals(3, result.size.toLong())
-        assertTrue(result.contains(invoice1))
-        assertTrue(result.contains(invoice2))
-        assertTrue(result.contains(invoice3))
+        Assert.assertTrue(result.contains(invoice1))
+        Assert.assertTrue(result.contains(invoice2))
+        Assert.assertTrue(result.contains(invoice3))
     }
 
     @Test
     fun testGetInvoiceById() {
-        val invoice = invoice1
-        invoice.totalPrice = 100.00
+        var result = invoiceService.getInvoiceByUuid(invoice1.uuid)
 
-        Mockito.`when`(invoiceDaoMock!!.getInvoiceById("testid"))
-            .thenReturn(invoice)
-
-        val result = invoiceService.getInvoiceById("testid")
-
-        assertEquals(invoice.uuid, result.uuid)
-        assertEquals(invoice.createdOn, result.createdOn)
-        assertEquals(invoice.expires, result.expires)
-        assertEquals(invoice.generationType, result.generationType)
+        Assert.assertEquals(invoice1.uuid, result.uuid)
+        Assert.assertSame(invoice1, result)
     }
 
     @Test
-    fun testGetInvoicesByVehicle() {
-        val invoices = ArrayList<Invoice>()
+    fun testAllInvoicesByVehicle() {
+        var result = invoiceService.allInvoicesByVehicle(vehicle1.uuid)
 
-        invoices.add(invoice1)
-        invoices.add(invoice2)
+        Assert.assertTrue(result.contains(invoice2))
+        Assert.assertTrue(result.contains(invoice3))
+    }
 
-        Mockito.`when`(invoiceDaoMock!!.allInvoicesByVehicle("vehicleId"))
-            .thenReturn(invoices)
+    @Test
+    fun testAllInvoicesByCivilian() {
+        var result = invoiceService.allInvoicesByCivilian(user2.uuid)
 
-        val result = invoiceService.allInvoicesByVehicle("vehicleId")
+        Assert.assertTrue(result.contains(invoice1))
+    }
 
-        assertEquals(2, result.size.toLong())
-        assertTrue(result.contains(invoice1))
-        assertTrue(result.contains(invoice2))
+    @Test
+    fun testAllInvoicesCreatedBetweenDates() {
+        var result = invoiceService.allInvoicesCreatedBetweenDates(date1.time.toString(), date2.time.toString())
+
+        Assert.assertTrue(result.contains(invoice1))
+        Assert.assertTrue(result.contains(invoice2))
+        Assert.assertTrue(result.contains(invoice3))
+    }
+
+    @Test
+    fun testAllInvoicesGeneratedBy() {
+        var result = invoiceService.allInvoicesGeneratedBy(AUTO)
+
+        Assert.assertTrue(result.contains(invoice1))
+        Assert.assertTrue(result.contains(invoice3))
+    }
+
+    @Test
+    fun testAllInvoicesBystate() {
+        var result = invoiceService.allInvoicesByState(InvoiceState.CLOSED)
+
+        Assert.assertTrue(result.contains(invoice3))
+    }
+
+    @Test
+    fun testUpdateInvoiceState() {
+        var result = invoiceService.updateInvoiceState(invoiceId = invoice1.uuid, state = InvoiceState.PAID)
+
+        Assert.assertEquals(invoice1.uuid, result.uuid)
+        Assert.assertSame(invoice1b, result)
     }
 
     @Test

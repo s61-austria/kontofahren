@@ -25,9 +25,9 @@ class VehicleService @Inject constructor(
         vehicleDao.persistVehicle(Vehicle(
             hardwareSerialNumber, vehicleType = vehicleType, licensePlate = licensePlate))
 
-    fun saveVehicle(id: String, licensePlate: String, newOwnerId: String): Vehicle {
+    fun saveVehicle(uuid: String, licensePlate: String, newOwnerId: String): Vehicle {
 
-        val vehicle = vehicleDao.getVehicleById(id)
+        val vehicle = vehicleDao.getVehicleByUuid(uuid)
         //if licenseplate changed
         if (vehicle.licensePlate !== licensePlate) {
             vehicle.licensePlate = licensePlate
@@ -35,8 +35,8 @@ class VehicleService @Inject constructor(
         //change owner if changed.
         val prevOwner: Profile = vehicle.owner ?: return vehicle
 
-        if (prevOwner.id!!.equals(newOwnerId)) {
-            val newOwner = userDao.getUserById(newOwnerId).profile ?: throw KontoException("KEIN OWNER")
+        if (prevOwner.id.equals(newOwnerId)) {
+            val newOwner = userDao.getUserByUuid(newOwnerId)?.profile ?: throw KontoException("KEIN OWNER")
             try {
                 prevOwner.removeVehicle(vehicle)
                 newOwner.addVehicle(vehicle)
