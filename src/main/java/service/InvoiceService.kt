@@ -49,18 +49,22 @@ class InvoiceService @Inject constructor(
         return invoiceDao.updateInvoice(invoice)
     }
 
-    fun generateVehiclesInvoices(country: Country, month: Date) {
+    fun generateVehiclesInvoices(country: Country, month: Date): List<Invoice> {
+        var invoices = arrayListOf<Invoice>()
         val vehicles: List<Vehicle> = vehicleService.allVehicles()
         val monthSeconds: Long = 60 * 60 * 24 * 30
         val millisInSecond: Long = 1000
         val expirationDate = Date(month.time + monthSeconds * millisInSecond)
 
         vehicles.forEach {
-            generateVehicleInvoice(it, country, month, expirationDate)
+            val invoice = generateVehicleInvoice(it, country, month, expirationDate)
+            invoices.add(invoice)
         }
+
+        return invoices
     }
 
-    fun generateVehicleInvoice(vehicle: Vehicle, country: Country, month: Date, expirationDate: Date) {
+    fun generateVehicleInvoice(vehicle: Vehicle, country: Country, month: Date, expirationDate: Date): Invoice {
         var totalMeters = 0.0
         val rider: Profile = vehicle.owner!!
 
@@ -85,6 +89,8 @@ class InvoiceService @Inject constructor(
         }
 
         invoiceDao.addInvoice(invoice)
+
+        return invoice;
     }
 
     fun getTotalDistanceOfActivity(activity: Activity): Double {

@@ -22,9 +22,9 @@ class RateServiceTest {
 
     @Before
     fun setUp() {
-        var rateDao = mock<RateDao> {
+        val rateDao = mock<RateDao> {
             on { addRate(any()) } doReturn rate1
-            on { getRateById(rate1.id!!) } doReturn rate1
+            on { getRateById(rate1.id) } doReturn rate1
         }.apply {
             Mockito.`when`(this.updateRate(com.nhaarman.mockito_kotlin.any()))
                 .then({ i -> i.arguments[0] })
@@ -35,14 +35,14 @@ class RateServiceTest {
 
     @Test
     fun testAddRate() {
-        var result = rateService.addRate(rate1.vehicleType!!, rate1.kmPrice, rate1.vignetteType!!)
+        val result = rateService.addRate(rate1.vehicleType, rate1.kmPrice, rate1.vignetteType)
 
         assertSame(rate1, result)
     }
 
     @Test
     fun testUpdateRate() {
-        var result = rateService.updateRate(rate1.id!!, VehicleType.MOTOR, 15.0, VignetteType.TEN_DAYS)
+        val result = rateService.updateRate(rate1.id, VehicleType.MOTOR, 15.0, VignetteType.TEN_DAYS)
 
         assertEquals(VehicleType.MOTOR, result.vehicleType)
         assertEquals(15.0, result.kmPrice)

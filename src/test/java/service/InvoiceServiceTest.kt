@@ -2,10 +2,21 @@ package service
 
 import dao.InvoiceDao
 import dao.UserDao
+import domain.Activity
+import domain.Country
 import domain.Invoice
+import domain.KontoUser
+import domain.Location
+import domain.Profile
+import domain.Rate
+import domain.Vehicle
 import domain.enums.InvoiceGenerationType.AUTO
 import domain.enums.InvoiceGenerationType.MANUAL
 import domain.enums.InvoiceState
+import domain.enums.VehicleType
+import domain.enums.VignetteType
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -30,7 +41,7 @@ class InvoiceServiceTest {
     private var userDaoMock: UserDao? = null
 
     @Mock
-    private var vehicleService: VehicleService? = null
+    private var vehicleServiceMock: VehicleService? = null
 
     @InjectMocks
     lateinit var invoiceService: InvoiceService
@@ -38,7 +49,7 @@ class InvoiceServiceTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        invoiceService = InvoiceService(invoiceDaoMock!!, userDaoMock!!, vehicleService!!)
+        invoiceService = InvoiceService(invoiceDaoMock!!, userDaoMock!!, vehicleServiceMock!!)
     }
 
     @Test
@@ -54,10 +65,10 @@ class InvoiceServiceTest {
 
         val result = invoiceService.allInvoices()
 
-        Assert.assertEquals(3, result.size.toLong())
-        Assert.assertTrue(result.contains(invoice1))
-        Assert.assertTrue(result.contains(invoice2))
-        Assert.assertTrue(result.contains(invoice3))
+        assertEquals(3, result.size.toLong())
+        assertTrue(result.contains(invoice1))
+        assertTrue(result.contains(invoice2))
+        assertTrue(result.contains(invoice3))
     }
 
     @Test
@@ -70,10 +81,10 @@ class InvoiceServiceTest {
 
         val result = invoiceService.getInvoiceById("testid")
 
-        Assert.assertEquals(invoice.uuid, result.uuid)
-        Assert.assertEquals(invoice.createdOn, result.createdOn)
-        Assert.assertEquals(invoice.expires, result.expires)
-        Assert.assertEquals(invoice.generationType, result.generationType)
+        assertEquals(invoice.uuid, result.uuid)
+        assertEquals(invoice.createdOn, result.createdOn)
+        assertEquals(invoice.expires, result.expires)
+        assertEquals(invoice.generationType, result.generationType)
     }
 
     @Test
@@ -88,8 +99,43 @@ class InvoiceServiceTest {
 
         val result = invoiceService.allInvoicesByVehicle("vehicleId")
 
-        Assert.assertEquals(2, result.size.toLong())
-        Assert.assertTrue(result.contains(invoice1))
-        Assert.assertTrue(result.contains(invoice2))
+        assertEquals(2, result.size.toLong())
+        assertTrue(result.contains(invoice1))
+        assertTrue(result.contains(invoice2))
+    }
+
+    @Test
+    fun testCalculateInvoices() {
+        val profile1 = Profile(KontoUser("", "", null))
+        val country = Country("Nederland")
+        val location1 = Location(country,
+            51.457065, 5.476294, now())
+        val location2 = Location(country,
+            51.456346, 5.477750, now())
+        val activity1 = Activity(country, profile1).apply {
+            locations = arrayListOf(location1, location2)
+        }
+        val activity2 = Activity(country, profile1).apply {
+            locations = arrayListOf(location1, location2)
+        }
+        val rate = Rate(VehicleType.LKW, VignetteType.TEN_DAYS, 0.1)
+        val vehicle1 = Vehicle("1234",
+            "TF-09-PP", VehicleType.LKW, profile1, rate).apply {
+            activities = arrayListOf(activity1)
+        }
+        val vehicle2 = Vehicle("12345",
+            "TF-09-XYZ", VehicleType.LKW, profile1, rate).apply {
+            activities = arrayListOf(activity2)
+        }
+        val vehicles = arrayListOf<Vehicle>(vehicle1, vehicle2)
+
+        Mockito.`when`(vehicleServiceMock!!.allVehicles()).thenReturn(vehicles)
+
+        val results = invoiceService.generateVehiclesInvoices(country, now())
+
+        assertEquals(2, results.size)
+
+        assertEquals(0.128, results[0].kilometers, 0.001)
+        assertEquals(0.128, results[1].kilometers, 0.001)
     }
 }

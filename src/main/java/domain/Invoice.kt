@@ -31,7 +31,7 @@ data class Invoice(
     @ManyToOne
     val vehicle: Vehicle? = null,
     @Temporal(TemporalType.DATE)
-    val generatedFor: Date,
+    val expires: Date,
     val kilometers: Double
 ) {
 
@@ -43,8 +43,6 @@ data class Invoice(
     val uuid: String = UUID.randomUUID().toString()
 
     val createdOn: Date = now()
-
-    var expires: Date? = null
 
     var totalPrice: Double = 0.toDouble()
 }

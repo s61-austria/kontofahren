@@ -13,7 +13,7 @@ import javax.persistence.Table
 data class KontoUser(
     val userName: String,
     val password: String,
-    val profile: Profile
+    val profile: Profile? = null
 ) {
     @Id
     private val id: String = UUID.randomUUID().toString()
