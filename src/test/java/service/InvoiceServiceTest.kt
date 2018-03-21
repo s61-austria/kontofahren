@@ -112,11 +112,13 @@ class InvoiceServiceTest {
             51.457065, 5.476294, now())
         val location2 = Location(country,
             51.456346, 5.477750, now())
+        val location3 = Location(country,
+            51.453946, 5.480196, now())
         val activity1 = Activity(country, profile1).apply {
             locations = arrayListOf(location1, location2)
         }
         val activity2 = Activity(country, profile1).apply {
-            locations = arrayListOf(location1, location2)
+            locations = arrayListOf(location1, location2, location3)
         }
         val rate = Rate(VehicleType.LKW, VignetteType.TEN_DAYS, 0.1)
         val vehicle1 = Vehicle("1234",
@@ -136,6 +138,6 @@ class InvoiceServiceTest {
         assertEquals(2, results.size)
 
         assertEquals(0.128, results[0].kilometers, 0.001)
-        assertEquals(0.128, results[1].kilometers, 0.001)
+        assertEquals(0.445, results[1].kilometers, 0.001)
     }
 }
