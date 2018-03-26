@@ -15,7 +15,7 @@ import org.junit.Test
 class VehicleServiceTest {
     lateinit var vehicleService: VehicleService
 
-    val user1 = KontoUser("Henk", "Maatwerk4Fun", null)
+    val user1 = KontoUser("Henk", "Maatwerk4Fun")
     val profile1 = Profile(user1)
 
     val vehicle1 = Vehicle(

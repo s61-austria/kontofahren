@@ -2,9 +2,14 @@ package service
 
 import dao.InvoiceDao
 import dao.UserDao
+import domain.Country
 import domain.Invoice
+import domain.Point
+import domain.Profile
+import domain.Vehicle
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
+import org.apache.commons.lang.time.DateUtils
 import java.util.Date
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -12,7 +17,8 @@ import javax.inject.Inject
 @Stateless
 class InvoiceService @Inject constructor(
     val invoiceDao: InvoiceDao,
-    val userDao: UserDao
+    val userDao: UserDao,
+    val vehicleService: VehicleService
 ) {
 
     fun allInvoices(): List<Invoice> = invoiceDao.allInvoices()
@@ -40,4 +46,44 @@ class InvoiceService @Inject constructor(
 
         return invoiceDao.updateInvoice(invoice)
     }
+
+    fun generateVehiclesInvoices(country: Country, month: Date): List<Invoice> {
+        val expirationDate = DateUtils.addMonths(month, 1)
+
+        return vehicleService
+            .allVehicles()
+            .map { generateVehicleInvoice(it, country, month, expirationDate) }
+            .filterNotNull()
+    }
+
+    fun generateVehicleInvoice(vehicle: Vehicle, country: Country, month: Date, expirationDate: Date): Invoice? {
+        var totalMeters = 0.0
+        val rider: Profile = vehicle.owner ?: return null
+
+        vehicle.activities.filter {
+            it.creationDate.month == month.month
+                && it.creationDate.year == month.year
+                && it.country.name == country.name
+                && it.rider.id == rider.id
+        }.map {
+            totalMeters += distance(it.locations.map { it.point })
+        }
+
+        val invoice = Invoice(
+            InvoiceGenerationType.AUTO,
+            InvoiceState.OPEN,
+            expirationDate,
+            totalMeters
+        ).apply {
+            totalPrice = vehicle.rate.kmPrice * this.meters
+        }
+
+        invoiceDao.addInvoice(invoice)
+
+        return invoice
+    }
+
+    fun distance(points: List<Point>) = points.zip(points.drop(1))
+        .map { it.first.distanceBetween(it.second) }
+        .fold(0.0) { acc, d -> acc + d }
 }

@@ -25,13 +25,15 @@ data class Vehicle(
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     var owner: Profile? = null
 ) {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0
 
     @Column(unique = true)
     var uuid: String = UUID.randomUUID().toString()
+
+    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
+    lateinit var rate: Rate
 
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
     var activities: List<Activity> = emptyList()
