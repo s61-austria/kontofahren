@@ -17,8 +17,7 @@ import javax.persistence.TemporalType
 data class Location(
     @ManyToOne
     val country: Country,
-    val latitude: Double,
-    val longitude: Double,
+    val point: Point,
     @Temporal(TemporalType.DATE)
     val creationDate: Date
 ) {

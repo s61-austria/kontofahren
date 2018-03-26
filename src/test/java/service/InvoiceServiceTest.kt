@@ -12,18 +12,18 @@ import domain.enums.InvoiceGenerationType.AUTO
 import domain.enums.InvoiceGenerationType.MANUAL
 import domain.enums.InvoiceState
 import domain.enums.VehicleType
+import org.joda.time.DateTime
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.util.Date
 import kotlin.collections.ArrayList
 
 class InvoiceServiceTest {
     lateinit var invoiceService: InvoiceService
 
-    val user1 = KontoUser("Henk", "Maatwerk4Fun", null)
-    val date1 = Date(2018, 1, 1)
-    val date2 = Date(2019, 1, 1)
+    val user1 = KontoUser("Henk", "Maatwerk4Fun")
+    val date1 = DateTime(2018, 1, 1, 0, 0).toDate()
+    val date2 = DateTime(2019, 1, 1, 0, 0).toDate()
 
     val invoice1 = Invoice(generationType = AUTO)
     val invoice1b = Invoice(generationType = AUTO).apply {
@@ -36,7 +36,9 @@ class InvoiceServiceTest {
         addInvoice(invoice1)
     }
 
-    val user2 = KontoUser("Ingrid", "Maatwerk5Fun", profile2)
+    val user2 = KontoUser("Ingrid", "Maatwerk5Fun").apply {
+        profile = profile2
+    }
 
     val vehicle1 = Vehicle("103-13231432-238", "12-AB-390", VehicleType.PKW, profile1)
 

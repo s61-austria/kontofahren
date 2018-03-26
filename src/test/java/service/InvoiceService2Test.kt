@@ -7,6 +7,7 @@ import domain.Country
 import domain.Invoice
 import domain.KontoUser
 import domain.Location
+import domain.Point
 import domain.Profile
 import domain.Rate
 import domain.Vehicle
@@ -15,8 +16,6 @@ import domain.enums.InvoiceGenerationType.MANUAL
 import domain.enums.InvoiceState
 import domain.enums.VehicleType
 import domain.enums.VignetteType
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.InjectMocks
@@ -26,12 +25,14 @@ import org.mockito.MockitoAnnotations
 import utils.now
 
 import java.util.ArrayList
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class InvoiceService2Test {
 
-    private val invoice1 = Invoice(MANUAL, InvoiceState.OPEN, null, null, now(), 0.0)
-    private val invoice2 = Invoice(MANUAL, InvoiceState.OPEN, null, null, now(), 0.0)
-    private val invoice3 = Invoice(AUTO, InvoiceState.OPEN, null, null, now(), 0.0)
+    private val invoice1 = Invoice(MANUAL, InvoiceState.OPEN, now(), 0.0)
+    private val invoice2 = Invoice(MANUAL, InvoiceState.OPEN, now(), 0.0)
+    private val invoice3 = Invoice(AUTO, InvoiceState.OPEN, now(), 0.0)
 
     @Mock
     private var invoiceDaoMock: InvoiceDao? = null
@@ -89,14 +90,14 @@ class InvoiceService2Test {
 
     @Test
     fun testCalculateInvoices() {
-        val profile1 = Profile(KontoUser("", "", null))
+        val profile1 = Profile(KontoUser("", ""))
         val country = Country("Nederland")
         val location1 = Location(country,
-            51.457065, 5.476294, now())
+            Point(51.457065, 5.476294), now())
         val location2 = Location(country,
-            51.456346, 5.477750, now())
+            Point(51.456346, 5.477750), now())
         val location3 = Location(country,
-            51.453946, 5.480196, now())
+            Point(51.453946, 5.480196), now())
         val activity1 = Activity(country, profile1).apply {
             locations = arrayListOf(location1, location2)
         }
@@ -105,14 +106,16 @@ class InvoiceService2Test {
         }
         val rate = Rate(VehicleType.LKW, VignetteType.TEN_DAYS, 0.1)
         val vehicle1 = Vehicle("1234",
-            "TF-09-PP", VehicleType.LKW, profile1, rate).apply {
+            "TF-09-PP", VehicleType.LKW, profile1).apply {
             activities = arrayListOf(activity1)
+            this.rate = rate
         }
         val vehicle2 = Vehicle("12345",
-            "TF-09-XYZ", VehicleType.LKW, profile1, rate).apply {
+            "TF-09-XYZ", VehicleType.LKW, profile1).apply {
             activities = arrayListOf(activity2)
+            this.rate = rate
         }
-        val vehicles = arrayListOf<Vehicle>(vehicle1, vehicle2)
+        val vehicles = arrayListOf(vehicle1, vehicle2)
 
         Mockito.`when`(vehicleServiceMock!!.allVehicles()).thenReturn(vehicles)
 
@@ -120,7 +123,20 @@ class InvoiceService2Test {
 
         assertEquals(2, results.size)
 
-        assertEquals(0.128, results[0].kilometers, 0.001)
-        assertEquals(0.445, results[1].kilometers, 0.001)
+        assertEquals(128.8639919576991, results[0].meters)
+        assertEquals(445.35395505130776, results[1].meters)
+    }
+
+    @Test
+    fun testDistance() {
+        val points = listOf(
+            Point(51.457065, 5.476294),
+            Point(51.456346, 5.477750),
+            Point(51.453946, 5.480196)
+        )
+
+        val distance = invoiceService.distance(points)
+
+        assertEquals(445.35395505130776, distance)
     }
 }

@@ -7,11 +7,11 @@ import dao.RateDao
 import domain.Rate
 import domain.enums.VehicleType
 import domain.enums.VignetteType
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertSame
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import kotlin.test.assertEquals
+import kotlin.test.assertSame
 
 class RateServiceTest {
     lateinit var rateService: RateService

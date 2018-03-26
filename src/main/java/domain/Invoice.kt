@@ -27,14 +27,15 @@ data class Invoice(
     val generationType: InvoiceGenerationType,
     @Enumerated(EnumType.STRING)
     var state: InvoiceState = InvoiceState.OPEN,
-    @ManyToOne
-    val profile: Profile? = null,
-    @ManyToOne
-    var vehicle: Vehicle? = null,
     @Temporal(TemporalType.DATE)
     val expires: Date = now(),
-    val kilometers: Double = 0.0
+    val meters: Double = 0.0
 ) {
+    @ManyToOne
+    lateinit var profile: Profile
+
+    @ManyToOne
+    lateinit var vehicle: Vehicle
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

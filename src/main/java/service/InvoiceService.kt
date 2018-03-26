@@ -2,17 +2,17 @@ package service
 
 import dao.InvoiceDao
 import dao.UserDao
-import domain.Activity
 import domain.Country
 import domain.Invoice
 import domain.Location
+import domain.Point
 import domain.Profile
 import domain.Vehicle
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
+import org.apache.commons.lang.time.DateUtils
 import java.util.Date
 import utils.measureGeoDistance
-import java.util.* // ktlint-disable no-wildcard-imports
 
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -51,42 +51,34 @@ class InvoiceService @Inject constructor(
     }
 
     fun generateVehiclesInvoices(country: Country, month: Date): List<Invoice> {
-        var invoices = arrayListOf<Invoice>()
-        val vehicles: List<Vehicle> = vehicleService.allVehicles()
-        val monthSeconds: Long = 60 * 60 * 24 * 30
-        val millisInSecond: Long = 1000
-        val expirationDate = Date(month.time + monthSeconds * millisInSecond)
+        val expirationDate = DateUtils.addMonths(month, 1)
 
-        vehicles.forEach {
-            val invoice = generateVehicleInvoice(it, country, month, expirationDate)
-            invoices.add(invoice)
-        }
-
-        return invoices
+        return vehicleService
+            .allVehicles()
+            .map { generateVehicleInvoice(it, country, month, expirationDate) }
+            .filterNotNull()
     }
 
-    fun generateVehicleInvoice(vehicle: Vehicle, country: Country, month: Date, expirationDate: Date): Invoice {
+    fun generateVehicleInvoice(vehicle: Vehicle, country: Country, month: Date, expirationDate: Date): Invoice? {
         var totalMeters = 0.0
-        val rider: Profile = vehicle.owner!!
+        val rider: Profile = vehicle.owner ?: return null
 
         vehicle.activities.filter {
             it.creationDate.month == month.month
-            && it.creationDate.year == month.year
-            && it.country.name == country.name
-            && it.rider.id == rider.id
+                && it.creationDate.year == month.year
+                && it.country.name == country.name
+                && it.rider.id == rider.id
         }.map {
-            totalMeters += getTotalDistanceOfActivity(it)
+            totalMeters += distance(it.locations.map { it.point })
         }
 
         val invoice = Invoice(
             InvoiceGenerationType.AUTO,
             InvoiceState.OPEN,
-            rider,
-            vehicle,
             expirationDate,
-            totalMeters / 1000
+            totalMeters
         ).apply {
-            totalPrice = vehicle.rate!!.kmPrice * this.kilometers
+            totalPrice = vehicle.rate.kmPrice * this.meters
         }
 
         invoiceDao.addInvoice(invoice)
@@ -94,11 +86,15 @@ class InvoiceService @Inject constructor(
         return invoice
     }
 
-    fun getTotalDistanceOfActivity(activity: Activity): Double {
-        var totalMeters = 0.0
-        var prevLocation: Location = activity.locations.first()
+    fun distance(points: List<Point>) = points.zip(points.drop(1))
+        .map { it.first.distanceBetween(it.second) }
+        .fold(0.0) { acc, d -> acc + d }
 
-        activity.locations.filter {
+    fun getTotalDistanceOfLocations(locations: List<Location>): Double {
+        var totalMeters = 0.0
+        var prevLocation: Location = locations.first()
+
+        locations.filter {
             !prevLocation.equals(it)
         }.map {
             totalMeters += measureGeoDistance(prevLocation, it)

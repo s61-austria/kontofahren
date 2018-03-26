@@ -15,9 +15,9 @@ import javax.persistence.Table
 @Inheritance(strategy = InheritanceType.JOINED)
 data class KontoUser(
     val userName: String,
-    val password: String,
-    val profile: Profile? = null
+    val password: String
 ) {
+    lateinit var profile: Profile
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

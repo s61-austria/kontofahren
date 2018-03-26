@@ -13,10 +13,10 @@ fun measureGeoDistance(l1: Location, l2: Location): Double {
 
     val Radius = 6378.137 // Radius of earth in km.
 
-    val lat1 = l1.latitude
-    val lon1 = l1.longitude
-    val lat2 = l2.latitude
-    val lon2 = l2.longitude
+    val lat1 = l1.point.lat
+    val lon1 = l1.point.lng
+    val lat2 = l2.point.lat
+    val lon2 = l2.point.lng
 
     val lat1Rad = Math.toRadians(lat1) // Latitude 1 in radians.
     val lat2Rad = Math.toRadians(lat2) // Latitude 2 in radians.

@@ -23,9 +23,7 @@ data class Vehicle(
     @Enumerated(EnumType.STRING)
     var vehicleType: VehicleType,
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
-    var owner: Profile? = null,
-    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
-    var rate: Rate? = null
+    var owner: Profile? = null
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,6 +31,9 @@ data class Vehicle(
 
     @Column(unique = true)
     var uuid: String = UUID.randomUUID().toString()
+
+    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
+    lateinit var rate: Rate
 
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
     var activities: List<Activity> = emptyList()
