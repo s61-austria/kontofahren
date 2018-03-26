@@ -4,7 +4,6 @@ import dao.InvoiceDao
 import dao.UserDao
 import domain.Country
 import domain.Invoice
-import domain.Location
 import domain.Point
 import domain.Profile
 import domain.Vehicle
@@ -12,8 +11,6 @@ import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import org.apache.commons.lang.time.DateUtils
 import java.util.Date
-import utils.measureGeoDistance
-
 import javax.ejb.Stateless
 import javax.inject.Inject
 
@@ -89,18 +86,4 @@ class InvoiceService @Inject constructor(
     fun distance(points: List<Point>) = points.zip(points.drop(1))
         .map { it.first.distanceBetween(it.second) }
         .fold(0.0) { acc, d -> acc + d }
-
-    fun getTotalDistanceOfLocations(locations: List<Location>): Double {
-        var totalMeters = 0.0
-        var prevLocation: Location = locations.first()
-
-        locations.filter {
-            !prevLocation.equals(it)
-        }.map {
-            totalMeters += measureGeoDistance(prevLocation, it)
-            prevLocation = it
-        }
-
-        return totalMeters
-    }
 }
