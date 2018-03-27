@@ -47,6 +47,19 @@ class InvoiceService @Inject constructor(
         return invoiceDao.updateInvoice(invoice)
     }
 
+    fun regenerateInvoice(uuid: String): Invoice? {
+        val invoice = invoiceDao.getInvoiceByUuid(uuid)
+        val newInvoice: Invoice = generateVehicleInvoice(invoice.vehicle, invoice.country,
+            invoice.createdFor, invoice.expires) ?: return null
+
+        invoice.meters = newInvoice.meters
+        invoice.totalPrice = newInvoice.totalPrice
+
+        invoiceDao.updateInvoice(invoice)
+
+        return invoice
+    }
+
     fun generateVehiclesInvoices(country: Country, month: Date): List<Invoice> {
         val expirationDate = DateUtils.addMonths(month, 1)
 
@@ -73,9 +86,12 @@ class InvoiceService @Inject constructor(
             InvoiceGenerationType.AUTO,
             InvoiceState.OPEN,
             expirationDate,
+            month,
             totalMeters
         ).apply {
-            totalPrice = vehicle.rate.kmPrice * this.meters
+            this.totalPrice = vehicle.rate.kmPrice * this.meters
+            this.country = country
+            this.vehicle = vehicle
         }
 
         invoiceDao.addInvoice(invoice)
