@@ -41,10 +41,10 @@ public class InvoiceServiceTest {
         invoices.add(invoice2);
         invoices.add(invoice3);
 
-        Mockito.when(invoiceDaoMock.getAllInvoices())
+        Mockito.when(invoiceDaoMock.allInvoices())
                 .thenReturn(invoices);
 
-        List<Invoice> result = invoiceService.getAllInvoices();
+        List<Invoice> result = invoiceService.allInvoices();
 
         Assert.assertEquals(3, result.size());
         Assert.assertTrue(result.contains(invoice1));
