@@ -29,7 +29,7 @@ data class Activity(
     @Column(unique = true)
     var uuid: String = UUID.randomUUID().toString()
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
-    var locations: List<Location> = emptyList()
+    var locations: MutableList<Location> = mutableListOf()
     @Temporal(TemporalType.DATE)
     val creationDate: Date = now()
 }

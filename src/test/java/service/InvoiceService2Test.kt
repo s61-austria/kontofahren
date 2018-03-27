@@ -30,9 +30,9 @@ import kotlin.test.assertTrue
 
 class InvoiceService2Test {
 
-    private val invoice1 = Invoice(MANUAL, InvoiceState.OPEN, now(), 0.0)
-    private val invoice2 = Invoice(MANUAL, InvoiceState.OPEN, now(), 0.0)
-    private val invoice3 = Invoice(AUTO, InvoiceState.OPEN, now(), 0.0)
+    private val invoice1 = Invoice(MANUAL, InvoiceState.OPEN, now(), now(), 0.0)
+    private val invoice2 = Invoice(MANUAL, InvoiceState.OPEN, now(), now(), 0.0)
+    private val invoice3 = Invoice(AUTO, InvoiceState.OPEN, now(), now(), 0.0)
 
     @Mock
     private var invoiceDaoMock: InvoiceDao? = null
@@ -138,5 +138,43 @@ class InvoiceService2Test {
         val distance = invoiceService.distance(points)
 
         assertEquals(445.35395505130776, distance)
+    }
+
+    @Test
+    fun testRegenerateInvoice() {
+        val profile1 = Profile(KontoUser("", ""))
+        val country = Country("Nederland")
+        val location1 = Location(country,
+            Point(51.457065, 5.476294), now())
+        val location2 = Location(country,
+            Point(51.456346, 5.477750), now())
+        val activity1 = Activity(country, profile1).apply {
+            locations = mutableListOf(location1, location2)
+        }
+        val rate = Rate(VehicleType.LKW, VignetteType.TEN_DAYS, 0.1)
+        val vehicle1 = Vehicle("1234",
+            "TF-09-PP", VehicleType.LKW, profile1).apply {
+            activities = mutableListOf(activity1)
+            this.rate = rate
+        }
+        val vehicles = mutableListOf(vehicle1)
+
+        val location3 = Location(country,
+            Point(51.453946, 5.480196), now())
+
+        Mockito.`when`(vehicleServiceMock!!.allVehicles()).thenReturn(vehicles)
+
+        val result = invoiceService.generateVehiclesInvoices(country, now())[0]
+        result.uuid = ""
+
+        assertEquals(128.8639919576991, result.meters)
+
+        activity1.locations.add(location3)
+
+        Mockito.`when`(invoiceDaoMock!!.getInvoiceByUuid("test")).thenReturn(result)
+
+        val result2 = invoiceService.regenerateInvoice("test")!!
+
+        assertEquals(445.35395505130776, result2.meters)
     }
 }
