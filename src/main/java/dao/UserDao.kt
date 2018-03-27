@@ -1,32 +1,31 @@
 package dao
 
-import domain.User
+import domain.KontoUser
 
 import javax.ejb.Stateless
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
-import javax.persistence.TypedQuery
 
 @Stateless
 class UserDao {
     @PersistenceContext
     internal var em: EntityManager? = null
 
-    val allUsers: List<User>
+    val allKontoUsers: List<KontoUser>
         get() {
-            val query = em!!.createQuery("SELECT u FROM KontoUser u", User::class.java)
+            val query = em!!.createQuery("SELECT u FROM KontoUser u", KontoUser::class.java)
 
             return query.resultList
         }
 
-    fun persistUser(user: User): User {
-        em!!.persist(user)
+    fun persistUser(kontoUser: KontoUser): KontoUser {
+        em!!.persist(kontoUser)
 
-        return user
+        return kontoUser
     }
 
-    fun getUserById(id: Long): User {
-        val query = em!!.createQuery("SELECT u FROM User u WHERE u.id = :id", User::class.java)
+    fun getUserById(id: Long): KontoUser {
+        val query = em!!.createQuery("SELECT u FROM KontoUser u WHERE u.id = :id", KontoUser::class.java)
 
         return query.singleResult
     }
