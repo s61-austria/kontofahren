@@ -9,6 +9,7 @@ import javax.ws.rs.Consumes
 import javax.ws.rs.FormParam
 import javax.ws.rs.GET
 import javax.ws.rs.POST
+import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
@@ -80,4 +81,14 @@ class InvoiceResource @Inject constructor(
         @FormParam("state") state: String
     ): Response =
         Response.ok(invoiceService.updateInvoiceState(invoiceId, InvoiceState.valueOf(state))).build()
+
+    @PUT
+    @Path("/regenerate/{uuid}")
+    @Produces("application/json")
+    fun regenerateInvoice(@PathParam("uuid") uuid: String): Response {
+        val regeneratedInvoice = invoiceService.regenerateInvoice(uuid)
+            ?: return Response.notModified().build()
+
+        return Response.ok(regeneratedInvoice).build()
+    }
 }

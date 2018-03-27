@@ -28,14 +28,19 @@ data class Invoice(
     @Enumerated(EnumType.STRING)
     var state: InvoiceState = InvoiceState.OPEN,
     @Temporal(TemporalType.DATE)
-    val expires: Date = now(),
-    val meters: Double = 0.0
+    var expires: Date = now(),
+    @Temporal(TemporalType.DATE)
+    var createdFor: Date = now(),
+    var meters: Double = 0.0
 ) {
     @ManyToOne
     lateinit var profile: Profile
 
     @ManyToOne
     lateinit var vehicle: Vehicle
+
+    @ManyToOne
+    lateinit var country: Country
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -44,6 +49,7 @@ data class Invoice(
     @Column(unique = true)
     var uuid: String = UUID.randomUUID().toString()
 
+    @Temporal(TemporalType.DATE)
     val createdOn: Date = now()
 
     var totalPrice: Double = 0.toDouble()
