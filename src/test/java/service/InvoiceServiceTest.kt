@@ -122,7 +122,7 @@ class InvoiceServiceTest {
 
     @Test
     fun testAllInvoicesCreatedBetweenDates() {
-        var result = invoiceService.allInvoicesCreatedBetweenDates(date1.time.toString(), date2.time.toString())
+        var result = invoiceService.allInvoicesCreatedBetweenDates(date1.time, date2.time)
 
         Assert.assertTrue(result.contains(invoice1))
         Assert.assertTrue(result.contains(invoice2))
