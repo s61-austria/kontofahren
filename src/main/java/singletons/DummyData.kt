@@ -10,8 +10,7 @@ import domain.Vehicle
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import domain.enums.VehicleType
-import utils.now
-import java.util.*
+import java.util.Date
 import javax.annotation.PostConstruct
 import javax.ejb.Singleton
 import javax.ejb.Startup
@@ -44,7 +43,7 @@ class DummyData {
     @Inject
     lateinit var userDao: UserDao
 
-    private val invoice1 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000) ,Date(1517500565000), 0.0)
+    private val invoice1 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0)
     private val invoice2 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0)
     private val invoice3 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0)
     private val invoice4 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0)
