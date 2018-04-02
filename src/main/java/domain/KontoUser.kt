@@ -14,7 +14,7 @@ import javax.persistence.Table
 @Table(name = "kontouser")
 @Inheritance(strategy = InheritanceType.JOINED)
 data class KontoUser(
-    val userName: String,
+    var userName: String,
     val password: String
 ) {
     lateinit var profile: Profile

@@ -4,6 +4,7 @@ import domain.Invoice
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import service.InvoiceService
+import java.time.Instant
 import javax.inject.Inject
 import javax.ws.rs.Consumes
 import javax.ws.rs.FormParam
@@ -22,7 +23,12 @@ class InvoiceResource @Inject constructor(
 
     @GET
     @Produces("application/json")
-    fun allInvoices(): List<Invoice> = invoiceService.allInvoices()
+    fun allInvoices(): List<Invoice> {
+        val startDate: Long = params.getFirst("startDate").toLongOrNull() ?: Instant.MIN.toEpochMilli()
+        val endDate: Long = params.getFirst("endDate").toLongOrNull() ?: Instant.MAX.toEpochMilli()
+
+        return invoiceService.allInvoicesCreatedBetweenDates(startDate, endDate)
+    }
 
     @GET
     @Path("{uuid}")
@@ -41,15 +47,6 @@ class InvoiceResource @Inject constructor(
     @Produces("application/json")
     fun allInvoicesByCivilianId(@PathParam("id") id: String): List<Invoice> =
         invoiceService.allInvoicesByCivilian(id)
-
-    @GET
-    @Path("/date/created/{start}/{end}")
-    @Produces("application/json")
-    fun allInvoicesCreatedBetweenDates(
-        @PathParam("start") start: String,
-        @PathParam("end") end: String
-    ): List<Invoice> =
-        invoiceService.allInvoicesCreatedBetweenDates(start, end)
 
     @GET
     @Path("/date/for/{start}/{end}")
