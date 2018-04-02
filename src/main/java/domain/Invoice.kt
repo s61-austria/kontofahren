@@ -24,7 +24,7 @@ import javax.persistence.TemporalType
 data class Invoice(
 
     @Enumerated(EnumType.STRING)
-    val generationType: InvoiceGenerationType,
+    var generationType: InvoiceGenerationType,
     @Enumerated(EnumType.STRING)
     var state: InvoiceState = InvoiceState.OPEN,
     @Temporal(TemporalType.DATE)
@@ -50,7 +50,7 @@ data class Invoice(
     var uuid: String = UUID.randomUUID().toString()
 
     @Temporal(TemporalType.DATE)
-    val createdOn: Date = now()
+    var createdOn: Date = now()
 
     var totalPrice: Double = 0.toDouble()
 }
