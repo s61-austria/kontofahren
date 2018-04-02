@@ -26,7 +26,11 @@ class InvoiceService @Inject constructor(
         return profile.invoices
     }
 
-    fun allInvoicesCreatedBetweenDates(start: String, end: String): List<Invoice> = invoiceDao.allInvoicesCreatedBetweenDates(Date(start.toLong()), Date(end.toLong()))
+    /**
+     * @param start Start filter time in millis
+     * @param end End filter time in millis
+     */
+    fun allInvoicesCreatedBetweenDates(start: Long, end: Long): List<Invoice> = invoiceDao.allInvoicesCreatedBetweenDates(Date(start), Date(end))
 
     fun allInvoicesForBetweenDates(start: String, end: String): List<Invoice> = invoiceDao.allInvoicesForBetweenDates(Date(start.toLong()), Date(end.toLong()))
 
