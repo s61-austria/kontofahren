@@ -15,6 +15,8 @@ import javax.persistence.Id
 import javax.persistence.ManyToOne
 import javax.persistence.NamedQuery
 import javax.persistence.Table
+import javax.persistence.Temporal
+import javax.persistence.TemporalType
 
 @Entity
 @NamedQuery(name = "Invoice.allInvoices", query = "SELECT i FROM Invoice i")
@@ -22,14 +24,23 @@ import javax.persistence.Table
 data class Invoice(
 
     @Enumerated(EnumType.STRING)
-    var generationType: InvoiceGenerationType,
+    val generationType: InvoiceGenerationType,
     @Enumerated(EnumType.STRING)
     var state: InvoiceState = InvoiceState.OPEN,
-    @ManyToOne
-    var owner: Profile? = null,
-    @ManyToOne
-    var vehicle: Vehicle? = null
+    @Temporal(TemporalType.DATE)
+    var expires: Date = now(),
+    @Temporal(TemporalType.DATE)
+    var createdFor: Date = now(),
+    var meters: Double = 0.0
 ) {
+    @ManyToOne
+    lateinit var profile: Profile
+
+    @ManyToOne
+    lateinit var vehicle: Vehicle
+
+    @ManyToOne
+    lateinit var country: Country
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,9 +49,8 @@ data class Invoice(
     @Column(unique = true)
     var uuid: String = UUID.randomUUID().toString()
 
+    @Temporal(TemporalType.DATE)
     val createdOn: Date = now()
-
-    var expires: Date? = null
 
     var totalPrice: Double = 0.toDouble()
 }

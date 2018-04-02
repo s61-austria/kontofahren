@@ -11,7 +11,7 @@ import javax.persistence.Table
 @Entity
 @Table(name = "country")
 data class Country(
-    var name: String = ""
+    var name: String
 ) {
 
     @Id
