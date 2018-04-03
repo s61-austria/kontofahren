@@ -1,5 +1,6 @@
 package domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.util.UUID
 import javax.json.bind.annotation.JsonbTransient
 import javax.persistence.Column
@@ -18,7 +19,7 @@ data class KontoUser(
     var userName: String,
     val password: String
 ) {
-    @JsonbTransient
+    @JsonIgnore
     lateinit var profile: Profile
 
     @Id
