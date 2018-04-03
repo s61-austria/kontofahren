@@ -1,6 +1,7 @@
 package domain
 
 import java.util.UUID
+import javax.json.bind.annotation.JsonbTransient
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -17,6 +18,7 @@ data class KontoUser(
     var userName: String,
     val password: String
 ) {
+    @JsonbTransient
     lateinit var profile: Profile
 
     @Id

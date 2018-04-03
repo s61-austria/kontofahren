@@ -4,16 +4,12 @@ import dao.InvoiceDao
 import dao.RateDao
 import dao.UserDao
 import dao.VehicleDao
-import domain.Invoice
-import domain.KontoUser
-import domain.Profile
-import domain.Rate
-import domain.Vehicle
+import domain.*
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import domain.enums.VehicleType
 import domain.enums.VignetteType
-import java.util.Date
+import java.util.*
 import javax.annotation.PostConstruct
 import javax.ejb.Singleton
 import javax.ejb.Startup
@@ -70,18 +66,18 @@ class DummyData {
     private val rate8 = Rate(VehicleType.MOTOR, VignetteType.TEN_DAYS, 0.16)
     private val rate9 = Rate(VehicleType.MOTOR, VignetteType.TWO_MONTHS, 0.16)
 
-    private val user1 = KontoUser("Jandie Hendriks", "password1")
-    private val user2 = KontoUser("Michel Mans", "password2")
+    private val user1 = KontoUser("Jandie Hendriks", "password1").apply { profile = Profile(this) }
+    private val user2 = KontoUser("Michel Mans", "password2").apply { profile = Profile(this) }
 
-    private val profile1 = Profile(user1)
-    private val profile2 = Profile(user2)
-
-    private val vehicle1 = Vehicle("27383937", "AB-3B-D2", VehicleType.PKW, profile1)
-    private val vehicle2 = Vehicle("27343937", "A3-CD-6L", VehicleType.LKW, profile2)
+    private val vehicle1 = Vehicle("27383937", "AB-3B-D2", VehicleType.PKW, user1.profile).apply {
+        rate = rate1
+    }
+    private val vehicle2 = Vehicle("27343937", "A3-CD-6L", VehicleType.LKW, user2.profile).apply {
+        rate = rate2
+    }
 
     @PostConstruct
     fun setup() {
-
         rateDao.addRate(rate1)
         rateDao.addRate(rate2)
         rateDao.addRate(rate3)
@@ -92,17 +88,14 @@ class DummyData {
         rateDao.addRate(rate8)
         rateDao.addRate(rate9)
 
-        vehicle1.owner = profile1
-        vehicle2.owner = profile2
-
         invoice1.vehicle = vehicle1
-        invoice1.profile = profile1
+        invoice1.profile = user1.profile
         invoice7.vehicle = vehicle1
-        invoice7.profile = profile1
+        invoice7.profile = user1.profile
         invoice2.vehicle = vehicle2
-        invoice2.profile = profile2
+        invoice2.profile = user2.profile
         invoice8.vehicle = vehicle2
-        invoice8.profile = profile2
+        invoice8.profile = user2.profile
 
         userDao.persistUser(user1)
         userDao.persistUser(user2)

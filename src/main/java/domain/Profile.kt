@@ -2,6 +2,7 @@ package domain
 
 import exceptions.KontoException
 import java.util.UUID
+import javax.json.bind.annotation.JsonbTransient
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -16,7 +17,7 @@ import javax.persistence.Table
 @Table(name = "profile")
 data class Profile(
     @OneToOne
-    var kontoUser: KontoUser?
+    var kontoUser: KontoUser
 ) {
 
     @Id
