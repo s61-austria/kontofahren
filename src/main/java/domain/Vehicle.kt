@@ -3,9 +3,12 @@ package domain
 import domain.enums.VehicleType
 import java.util.UUID
 import javax.persistence.CascadeType
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
@@ -22,9 +25,15 @@ data class Vehicle(
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     var owner: Profile? = null
 ) {
-
     @Id
-    var id: String = UUID.randomUUID().toString()
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0
+
+    @Column(unique = true)
+    var uuid: String = UUID.randomUUID().toString()
+
+    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
+    lateinit var rate: Rate
 
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
     var activities: List<Activity> = emptyList()

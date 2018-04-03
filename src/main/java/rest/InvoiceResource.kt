@@ -4,11 +4,11 @@ import domain.Invoice
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import service.InvoiceService
+import java.time.Instant
 import javax.inject.Inject
-import javax.ws.rs.Consumes
-import javax.ws.rs.FormParam
 import javax.ws.rs.GET
 import javax.ws.rs.POST
+import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
@@ -21,13 +21,18 @@ class InvoiceResource @Inject constructor(
 
     @GET
     @Produces("application/json")
-    fun allInvoices(): List<Invoice> = invoiceService.allInvoices()
+    fun allInvoices(): List<Invoice> {
+        val startDate: Long = params.getFirst("startDate").toLongOrNull() ?: Instant.MIN.toEpochMilli()
+        val endDate: Long = params.getFirst("endDate").toLongOrNull() ?: Instant.MAX.toEpochMilli()
+
+        return invoiceService.allInvoicesCreatedBetweenDates(startDate, endDate)
+    }
 
     @GET
-    @Path("{id}")
+    @Path("{uuid}")
     @Produces("application/json")
-    fun getInvoiceById(@PathParam("id") id: String): Response =
-        Response.ok(invoiceService.getInvoiceById(id)).build()
+    fun getInvoiceById(@PathParam("uuid") uuid: String): Response =
+        Response.ok(invoiceService.getInvoiceByUuid(uuid)).build()
 
     @GET
     @Path("/vehicle/{id}")
@@ -40,15 +45,6 @@ class InvoiceResource @Inject constructor(
     @Produces("application/json")
     fun allInvoicesByCivilianId(@PathParam("id") id: String): List<Invoice> =
         invoiceService.allInvoicesByCivilian(id)
-
-    @GET
-    @Path("/date/created/{start}/{end}")
-    @Produces("application/json")
-    fun allInvoicesCreatedBetweenDates(
-        @PathParam("start") start: String,
-        @PathParam("end") end: String
-    ): List<Invoice> =
-        invoiceService.allInvoicesCreatedBetweenDates(start, end)
 
     @GET
     @Path("/date/for/{start}/{end}")
@@ -72,12 +68,22 @@ class InvoiceResource @Inject constructor(
         invoiceService.allInvoicesByState(InvoiceState.valueOf(state))
 
     @POST
-    @Path("/state/change/")
+    @Path("/update/state/{uuid}")
     @Produces("application/json")
-    @Consumes("application/x-www-form-urlencoded")
-    fun updateInvoiceState(
-        @FormParam("invoiceId") invoiceId: String,
-        @FormParam("state") state: String
-    ): Response =
-        Response.ok(invoiceService.updateInvoiceState(invoiceId, InvoiceState.valueOf(state))).build()
+    fun updateInvoiceState(@PathParam("uuid") uuid: String): Response {
+        val invoice = invoiceService.updateInvoiceState(uuid, InvoiceState.valueOf(params.getFirst("state")))
+            ?: return Response.notModified().build()
+
+        return Response.ok(invoice).build()
+    }
+
+    @PUT
+    @Path("/regenerate/{uuid}")
+    @Produces("application/json")
+    fun regenerateInvoice(@PathParam("uuid") uuid: String): Response {
+        val regeneratedInvoice = invoiceService.regenerateInvoice(uuid)
+            ?: return Response.notModified().build()
+
+        return Response.ok(regeneratedInvoice).build()
+    }
 }

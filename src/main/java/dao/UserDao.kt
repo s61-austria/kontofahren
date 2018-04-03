@@ -8,25 +8,25 @@ import javax.persistence.PersistenceContext
 
 @Stateless
 class UserDao {
+
     @PersistenceContext
-    internal var em: EntityManager? = null
+    lateinit var em: EntityManager
 
     val allKontoUsers: List<KontoUser>
         get() {
-            val query = em!!.createQuery("SELECT u FROM KontoUser u", KontoUser::class.java)
+            val query = em.createQuery("SELECT u FROM KontoUser u", KontoUser::class.java)
 
             return query.resultList
         }
 
     fun persistUser(kontoUser: KontoUser): KontoUser {
-        em!!.persist(kontoUser)
+        em.persist(kontoUser)
 
         return kontoUser
     }
 
-    fun getUserById(id: String): KontoUser {
-        val query = em!!.createQuery("SELECT u FROM KontoUser u WHERE u.id = :id", KontoUser::class.java)
-
-        return query.singleResult
-    }
+    fun getUserByUuid(userId: String): KontoUser? = em
+        .createQuery("SELECT k FROM KontoUser k WHERE k.uuid = :userId", KontoUser::class.java)
+        .setParameter("userId", userId)
+        .singleResult
 }

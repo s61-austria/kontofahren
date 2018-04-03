@@ -1,75 +1,91 @@
 package service
 
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
 import dao.UserDao
 import dao.VehicleDao
+import domain.KontoUser
+import domain.Profile
 import domain.Vehicle
 import domain.enums.VehicleType
 import org.junit.Assert
 import org.junit.Before
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
-import java.util.* // ktlint-disable no-wildcard-imports
+import org.junit.Test
 
-//todo re-anble tests
 class VehicleServiceTest {
+    lateinit var vehicleService: VehicleService
+
+    val user1 = KontoUser("Henk", "Maatwerk4Fun")
+    val profile1 = Profile(user1)
+
     val vehicle1 = Vehicle(
-        "dwadawdaw",
+        "3759-8576854895959-212",
         vehicleType = VehicleType.LKW,
-        licensePlate = "haha ja"
+        licensePlate = "123-AB-12"
     )
 
     val vehicle2 = Vehicle(
-        "dawwa",
+        "2643-3753854543548-234",
         vehicleType = VehicleType.MOTOR,
-        licensePlate = "haha nee"
-        )
-    @Mock
-    internal var vehicleDaoMock: VehicleDao? = null
-
-    @Mock
-    internal var userDaoMock: UserDao? = null
-
-    @InjectMocks
-    lateinit var vehicleService: VehicleService
+        licensePlate = "CBJ-126"
+    )
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        vehicleService = VehicleService(vehicleDaoMock!!, userDaoMock!!)
+        val vehicleMock = mock<VehicleDao>() {
+            on { allVehicles() } doReturn ArrayList<Vehicle>().apply {
+                add(vehicle1)
+                add(vehicle2)
+            }
+            on { getAllVehiclesInCountry("Austria") } doReturn ArrayList<Vehicle>().apply {
+                add(vehicle1)
+                add(vehicle2)
+            }
+            on { getVehicleByUuid(vehicle1.uuid) } doReturn vehicle1
+            on { persistVehicle(vehicle1) } doReturn vehicle1
+        }
+
+        val userMock = mock<UserDao>() {
+            on { getUserByUuid(user1.uuid) } doReturn user1
+        }
+
+        vehicleService = VehicleService(vehicleMock, userMock)
     }
 
+    @Test
     fun getAllVehiclesInCountryTest() {
-        val country = "Nederland"
-        val vehicles = ArrayList<Vehicle>()
+        val result = vehicleService.getAllVehiclesInCountry("Austria")
 
-        vehicles.add(vehicle1)
-        vehicles.add(vehicle2)
-
-        Mockito.`when`(vehicleDaoMock!!.getAllVehiclesInCountry(country))
-            .thenReturn(vehicles)
-
-        val result = vehicleService.getAllVehiclesInCountry(country)
-
-        Assert.assertEquals(2, result.size.toLong())
+        Assert.assertEquals(2, result.size)
         Assert.assertTrue(result.contains(vehicle1))
         Assert.assertTrue(result.contains(vehicle2))
     }
 
+    @Test
     fun getAllVehicles() {
-        val vehicles = ArrayList<Vehicle>()
-
-        vehicles.add(vehicle1)
-        vehicles.add(vehicle2)
-
-        Mockito.`when`(vehicleDaoMock!!.allVehicles())
-            .thenReturn(vehicles)
-
         val result = vehicleService.allVehicles()
 
         Assert.assertEquals(2, result.size.toLong())
         Assert.assertTrue(result.contains(vehicle1))
         Assert.assertTrue(result.contains(vehicle2))
+    }
+
+    @Test
+    fun testAddVehicles() {
+        val result = vehicleService.addVehicle(vehicle1.hardwareSerialNumber,
+            vehicle1.vehicleType, vehicle1.licensePlate)
+
+        Assert.assertEquals(vehicle1.licensePlate, result.licensePlate)
+        Assert.assertEquals(vehicle1.vehicleType, result.vehicleType)
+        Assert.assertEquals(vehicle1.hardwareSerialNumber, result.hardwareSerialNumber)
+    }
+
+    @Test
+    fun testSaveVehicle() {
+        val result = vehicleService.saveVehicle(vehicle1.uuid, vehicle1.licensePlate, user1.uuid)
+
+        Assert.assertEquals(vehicle1.licensePlate, result.licensePlate)
+        Assert.assertEquals(vehicle1.hardwareSerialNumber, result.hardwareSerialNumber)
+        Assert.assertEquals(vehicle1.vehicleType, result.vehicleType)
     }
 }

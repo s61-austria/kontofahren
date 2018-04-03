@@ -2,7 +2,10 @@ package domain
 
 import exceptions.KontoException
 import java.util.UUID
+import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.ManyToMany
 import javax.persistence.OneToMany
@@ -13,11 +16,15 @@ import javax.persistence.Table
 @Table(name = "profile")
 data class Profile(
     @OneToOne
-    val kontoUser: KontoUser
+    var kontoUser: KontoUser?
 ) {
 
     @Id
-    var id: String = UUID.randomUUID().toString()
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0
+
+    @Column(unique = true)
+    var uuid: String = UUID.randomUUID().toString()
 
     @ManyToMany
     var vehicles: List<Vehicle> = emptyList()

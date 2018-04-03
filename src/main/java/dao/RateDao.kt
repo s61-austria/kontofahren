@@ -16,8 +16,8 @@ class RateDao {
         .createQuery("SELECT r FROM Rate r", Rate::class.java)
         .resultList
 
-    fun getRateById(rateId: String) = em
-        .createQuery("SELECT r FROM Rate r WHERE r.id = :rateId", Rate::class.java)
+    fun getRateByUuid(rateId: String) = em
+        .createQuery("SELECT r FROM Rate r WHERE r.uuid = :rateId", Rate::class.java)
         .setParameter("rateId", rateId)
         .singleResult
 
