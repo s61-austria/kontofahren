@@ -1,15 +1,18 @@
 package singletons
 
 import dao.InvoiceDao
+import dao.RateDao
 import dao.UserDao
 import dao.VehicleDao
 import domain.Invoice
 import domain.KontoUser
 import domain.Profile
+import domain.Rate
 import domain.Vehicle
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import domain.enums.VehicleType
+import domain.enums.VignetteType
 import java.util.Date
 import javax.annotation.PostConstruct
 import javax.ejb.Singleton
@@ -43,6 +46,9 @@ class DummyData {
     @Inject
     lateinit var userDao: UserDao
 
+    @Inject
+    lateinit var rateDao: RateDao
+
     private val invoice1 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0)
     private val invoice2 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0)
     private val invoice3 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0)
@@ -54,8 +60,18 @@ class DummyData {
     private val invoice9 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.CLOSED, Date(1525103765000), Date(1519919765000), 0.0)
     private val invoice10 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.CLOSED, Date(1525103765000), Date(1519919765000), 0.0)
 
-    private val user1 = KontoUser("username1", "password1")
-    private val user2 = KontoUser("username2", "password2")
+    private val rate1 = Rate(VehicleType.LKW, VignetteType.ONE_YEAR, 0.22)
+    private val rate2 = Rate(VehicleType.LKW, VignetteType.TEN_DAYS, 0.22)
+    private val rate3 = Rate(VehicleType.LKW, VignetteType.TWO_MONTHS, 0.22)
+    private val rate4 = Rate(VehicleType.PKW, VignetteType.ONE_YEAR, 0.18)
+    private val rate5 = Rate(VehicleType.PKW, VignetteType.TEN_DAYS, 0.18)
+    private val rate6 = Rate(VehicleType.PKW, VignetteType.TWO_MONTHS, 0.18)
+    private val rate7 = Rate(VehicleType.MOTOR, VignetteType.ONE_YEAR, 0.16)
+    private val rate8 = Rate(VehicleType.MOTOR, VignetteType.TEN_DAYS, 0.16)
+    private val rate9 = Rate(VehicleType.MOTOR, VignetteType.TWO_MONTHS, 0.16)
+
+    private val user1 = KontoUser("Jandie Hendriks", "password1")
+    private val user2 = KontoUser("Michel Mans", "password2")
 
     private val profile1 = Profile(user1)
     private val profile2 = Profile(user2)
@@ -65,6 +81,16 @@ class DummyData {
 
     @PostConstruct
     fun setup() {
+
+        rateDao.addRate(rate1)
+        rateDao.addRate(rate2)
+        rateDao.addRate(rate3)
+        rateDao.addRate(rate4)
+        rateDao.addRate(rate5)
+        rateDao.addRate(rate6)
+        rateDao.addRate(rate7)
+        rateDao.addRate(rate8)
+        rateDao.addRate(rate9)
 
         vehicle1.owner = profile1
         vehicle2.owner = profile2
