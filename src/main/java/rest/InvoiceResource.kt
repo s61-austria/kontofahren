@@ -6,8 +6,6 @@ import domain.enums.InvoiceState
 import service.InvoiceService
 import java.time.Instant
 import javax.inject.Inject
-import javax.ws.rs.Consumes
-import javax.ws.rs.FormParam
 import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.PUT
@@ -70,14 +68,14 @@ class InvoiceResource @Inject constructor(
         invoiceService.allInvoicesByState(InvoiceState.valueOf(state))
 
     @POST
-    @Path("/state/change/")
+    @Path("/update/state/{uuid}")
     @Produces("application/json")
-    @Consumes("application/x-www-form-urlencoded")
-    fun updateInvoiceState(
-        @FormParam("invoiceId") invoiceId: String,
-        @FormParam("state") state: String
-    ): Response =
-        Response.ok(invoiceService.updateInvoiceState(invoiceId, InvoiceState.valueOf(state))).build()
+    fun updateInvoiceState(@PathParam("uuid") uuid: String): Response {
+        val invoice = invoiceService.updateInvoiceState(uuid, InvoiceState.valueOf(params.getFirst("state")))
+            ?: return Response.notModified().build()
+
+        return Response.ok(invoice).build()
+    }
 
     @PUT
     @Path("/regenerate/{uuid}")

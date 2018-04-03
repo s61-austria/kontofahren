@@ -44,11 +44,13 @@ class InvoiceService @Inject constructor(
 
     fun allInvoicesByState(state: InvoiceState): List<Invoice> = invoiceDao.allInvoicesByStatus(state)
 
-    fun updateInvoiceState(invoiceId: String, state: InvoiceState): Invoice {
+    fun updateInvoiceState(invoiceId: String, state: InvoiceState): Invoice? {
         val invoice = invoiceDao.getInvoiceByUuid(invoiceId)
-        invoice.state = state
 
-        return invoiceDao.updateInvoice(invoice)
+        invoice.state = state
+        invoiceDao.updateInvoice(invoice)
+
+        return invoice
     }
 
     fun regenerateInvoice(uuid: String): Invoice? {
