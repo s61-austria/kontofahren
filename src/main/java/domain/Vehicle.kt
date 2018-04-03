@@ -1,5 +1,6 @@
 package domain
 
+import afu.org.checkerframework.checker.igj.qual.Mutable
 import domain.enums.VehicleType
 
 import javax.persistence.*
@@ -19,7 +20,9 @@ class Vehicle : Serializable {
     @Enumerated(EnumType.STRING)
     var vehicleType: VehicleType? = null
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
-    var activities: List<Activity>? = null
+    var activities: MutableList<Activity>? = null
+    @OneToMany(cascade = arrayOf(CascadeType.ALL))
+    var pastOwners: MutableList<Profile>? = null
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     var owner: Profile? = null
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
@@ -31,8 +34,9 @@ class Vehicle : Serializable {
         this.hardwareSerialNumber = hardwareSerialNumber
         this.vehicleType = vehicleType
         this.currentLocation = currentLocation
-        this.activities = ArrayList()
+        this.activities = mutableListOf()
         this.licensePlate = plate
+        this.pastOwners = mutableListOf()
     }
 
     companion object {

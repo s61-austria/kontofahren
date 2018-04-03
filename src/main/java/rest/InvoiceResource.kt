@@ -18,7 +18,7 @@ class InvoiceResource @Inject constructor(
 
     @GET
     @Produces("application/json")
-    fun allInvoices() = invoiceService.allInvoices
+    fun allInvoices() = invoiceService.allInvoices()
 
     @GET
     @Path("{id}")

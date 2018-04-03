@@ -40,6 +40,7 @@ class VehicleService @Inject constructor(
             try {
                 prevOwner.removeVehicle(vehicle)
                 newOwner.addVehicle(vehicle)
+                vehicle.pastOwners?.add(prevOwner)
                 vehicle.owner = newOwner
 
             } catch (e: KontoException) {
