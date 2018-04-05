@@ -1,5 +1,6 @@
 package domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -19,6 +20,7 @@ data class KontoUser(
     val password: String
 ) {
     @ManyToOne(targetEntity = Profile::class)
+    @JsonIgnore
     lateinit var profile: Profile
 
     @Id

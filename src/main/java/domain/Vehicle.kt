@@ -1,5 +1,6 @@
 package domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import domain.enums.VehicleType
 import java.util.UUID
 import javax.persistence.CascadeType
@@ -7,6 +8,7 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -36,7 +38,8 @@ data class Vehicle(
     lateinit var rate: Rate
 
     @OneToMany(cascade = arrayOf(CascadeType.ALL), targetEntity = Activity::class)
-    var activities: MutableList<Activity>? = null
+    @JsonIgnore
+    var activities: MutableList<Activity> = mutableListOf()
 
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     @JoinColumn(nullable = true)
