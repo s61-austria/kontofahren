@@ -11,13 +11,17 @@ import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
+import javax.ws.rs.core.Context
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.UriInfo
 
 @Path("vehicles")
 @Open
 class VehicleResource @Inject constructor(
     private val vehicleService: VehicleService
-) : BaseResource() {
+) {
+    @Context
+    private lateinit var request: UriInfo
 
     @GET
     @Produces("application/json")
@@ -41,9 +45,9 @@ class VehicleResource @Inject constructor(
     @Consumes("application/json")
     fun addVehicle(): Response {
         val vehicle = vehicleService.addVehicle(
-            params.getFirst("serialNumber"),
-            VehicleType.valueOf(params.getFirst("vehicleType")),
-            params.getFirst("licensePlate")
+            request.queryParameters.getFirst("serialNumber"),
+            VehicleType.valueOf(request.queryParameters.getFirst("vehicleType")),
+            request.queryParameters.getFirst("licensePlate")
         )
 
         return Response.ok(vehicle).build()
@@ -56,8 +60,8 @@ class VehicleResource @Inject constructor(
         @PathParam("uuid") uuid: String
     ): Response {
         val vehicle = vehicleService.vehicleDao.getVehicleByUuid(uuid) ?: return Response.status(404).build()
-        val licensePlate: String = params.getFirst("licensePlate") ?: return Response.notModified().build()
-        val ownerId: String = params.getFirst("ownerId") ?: return Response.notModified().build()
+        val licensePlate: String = request.queryParameters.getFirst("licensePlate") ?: return Response.notModified().build()
+        val ownerId: String = request.queryParameters.getFirst("ownerId") ?: return Response.notModified().build()
 
         if (licensePlate.isEmpty()) return Response.notModified().build()
         if (ownerId.isEmpty()) return Response.notModified().build()

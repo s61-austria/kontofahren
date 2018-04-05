@@ -12,10 +12,14 @@ import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
+import javax.ws.rs.core.Context
+import javax.ws.rs.core.UriInfo
 
 @Path("vignettes")
 @Open
-class VignetteResource @Inject constructor(private val vignetteService: VignetteService) : BaseResource() {
+class VignetteResource @Inject constructor(private val vignetteService: VignetteService) {
+    @Context
+    private lateinit var request: UriInfo
 
     @GET
     @Produces("application/json")
