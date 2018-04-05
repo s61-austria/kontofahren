@@ -8,6 +8,9 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
+import javax.persistence.ManyToMany
+import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
@@ -17,6 +20,7 @@ data class KontoUser(
     var userName: String,
     val password: String
 ) {
+    @ManyToOne(targetEntity = Profile::class)
     lateinit var profile: Profile
 
     @Id

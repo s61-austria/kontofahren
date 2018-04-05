@@ -35,8 +35,8 @@ data class Vehicle(
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     lateinit var rate: Rate
 
-    @OneToMany(cascade = arrayOf(CascadeType.ALL))
-    var activities: List<Activity> = emptyList()
+    @OneToMany(cascade = arrayOf(CascadeType.ALL), targetEntity = Activity::class)
+    var activities: MutableList<Activity>? = null
 
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     @JoinColumn(nullable = true)

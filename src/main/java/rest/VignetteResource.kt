@@ -4,6 +4,7 @@ import domain.Vignette
 import domain.enums.VehicleType
 import domain.enums.VignetteType
 import service.VignetteService
+import utils.Open
 import javax.inject.Inject
 import javax.ws.rs.Consumes
 import javax.ws.rs.FormParam
@@ -13,7 +14,8 @@ import javax.ws.rs.Path
 import javax.ws.rs.Produces
 
 @Path("vignettes")
-class VignetteResource @Inject constructor(val vignetteService: VignetteService) : BaseResource() {
+@Open
+class VignetteResource @Inject constructor(private val vignetteService: VignetteService) : BaseResource() {
 
     @GET
     @Produces("application/json")

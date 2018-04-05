@@ -2,6 +2,7 @@ package rest
 
 import domain.Rate
 import service.RateService
+import utils.Open
 import utils.decode
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -13,7 +14,8 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.Response
 
 @Path("rates")
-class RateResource @Inject constructor(val rateService: RateService) : BaseResource() {
+@Open
+class RateResource @Inject constructor(private val rateService: RateService) : BaseResource() {
 
     @GET
     @Produces("application/json")

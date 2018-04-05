@@ -4,6 +4,7 @@ import domain.Invoice
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import service.InvoiceService
+import utils.Open
 import java.time.Instant
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -15,8 +16,9 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.Response
 
 @Path("invoices")
+@Open
 class InvoiceResource @Inject constructor(
-    val invoiceService: InvoiceService
+    private val invoiceService: InvoiceService
 ) : BaseResource() {
 
     @GET
