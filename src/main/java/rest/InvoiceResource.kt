@@ -4,6 +4,7 @@ import domain.Invoice
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import service.InvoiceService
+import utils.Open
 import java.time.Instant
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -12,18 +13,23 @@ import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
+import javax.ws.rs.core.Context
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.UriInfo
 
 @Path("invoices")
+@Open
 class InvoiceResource @Inject constructor(
-    val invoiceService: InvoiceService
-) : BaseResource() {
+    private val invoiceService: InvoiceService
+) {
+    @Context
+    private lateinit var request: UriInfo
 
     @GET
     @Produces("application/json")
     fun allInvoices(): List<Invoice> {
-        val startDate: Long = params.getFirst("startDate").toLongOrNull() ?: Instant.MIN.toEpochMilli()
-        val endDate: Long = params.getFirst("endDate").toLongOrNull() ?: Instant.MAX.toEpochMilli()
+        val startDate: Long = request.queryParameters.getFirst("startDate").toLongOrNull() ?: Instant.MIN.toEpochMilli()
+        val endDate: Long = request.queryParameters.getFirst("endDate").toLongOrNull() ?: Instant.MAX.toEpochMilli()
 
         return invoiceService.allInvoicesCreatedBetweenDates(startDate, endDate)
     }
@@ -71,7 +77,7 @@ class InvoiceResource @Inject constructor(
     @Path("/update/state/{uuid}")
     @Produces("application/json")
     fun updateInvoiceState(@PathParam("uuid") uuid: String): Response {
-        val invoice = invoiceService.updateInvoiceState(uuid, InvoiceState.valueOf(params.getFirst("state")))
+        val invoice = invoiceService.updateInvoiceState(uuid, InvoiceState.valueOf(request.queryParameters.getFirst("state")))
             ?: return Response.notModified().build()
 
         return Response.ok(invoice).build()
