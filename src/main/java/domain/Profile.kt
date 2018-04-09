@@ -1,10 +1,12 @@
 package domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import exceptions.KontoException
 import java.util.UUID
 import javax.json.bind.annotation.JsonbTransient
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -27,16 +29,17 @@ data class Profile(
     @Column(unique = true)
     var uuid: String = UUID.randomUUID().toString()
 
-    @ManyToMany
-    var vehicles: List<Vehicle> = emptyList()
+    @ManyToMany(targetEntity = Vehicle::class, fetch = FetchType.EAGER)
+    var vehicles: MutableList<Vehicle> = mutableListOf()
 
-    @OneToMany
-    var invoices: List<Invoice> = emptyList()
+    @OneToMany(targetEntity = Invoice::class)
+    @JsonIgnore
+    var invoices: MutableList<Invoice> = mutableListOf()
 
     @Throws(KontoException::class)
     fun addVehicle(vehicle: Vehicle) {
         if (!vehicles.contains(vehicle)) {
-            vehicles += vehicle
+            vehicles.add(vehicle)
         }
         throw KontoException("kontoUser already owns car")
     }
@@ -44,7 +47,7 @@ data class Profile(
     @Throws(KontoException::class)
     fun removeVehicle(vehicle: Vehicle) {
         if (vehicles.contains(vehicle)) {
-            vehicles -= vehicle
+            vehicles.remove(vehicle)
         } else {
             throw KontoException("kontoUser does not own this car " + vehicle.hardwareSerialNumber)
         }
@@ -53,7 +56,7 @@ data class Profile(
     @Throws(KontoException::class)
     fun addInvoice(invoice: Invoice) {
         if (!invoices.contains(invoice)) {
-            invoices += invoice
+            invoices.add(invoice)
         } else {
             throw KontoException("kontoUser already has invoice")
         }

@@ -1,6 +1,6 @@
 package domain
 
-import afu.org.checkerframework.checker.igj.qual.Mutable
+import com.fasterxml.jackson.annotation.JsonIgnore
 import domain.enums.VehicleType
 import java.util.UUID
 import javax.persistence.CascadeType
@@ -39,8 +39,9 @@ data class Vehicle(
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
     var pastOwners: MutableList<Profile>? = mutableListOf()
 
-    @OneToMany(cascade = arrayOf(CascadeType.ALL))
-    var activities: List<Activity> = emptyList()
+    @OneToMany(cascade = arrayOf(CascadeType.ALL), targetEntity = Activity::class)
+    @JsonIgnore
+    var activities: MutableList<Activity> = mutableListOf()
 
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     @JoinColumn(nullable = true)
