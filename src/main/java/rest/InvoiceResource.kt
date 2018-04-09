@@ -3,9 +3,13 @@ package rest
 import domain.Invoice
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
+import org.apache.commons.lang.time.DateUtils
 import service.InvoiceService
 import utils.Open
+import utils.capped
+import java.io.Console
 import java.time.Instant
+import java.util.*
 import javax.inject.Inject
 import javax.ws.rs.GET
 import javax.ws.rs.POST
@@ -28,8 +32,10 @@ class InvoiceResource @Inject constructor(
     @GET
     @Produces("application/json")
     fun allInvoices(): List<Invoice> {
-        val startDate: Long = request.queryParameters.getFirst("startDate").toLongOrNull() ?: Instant.MIN.toEpochMilli()
-        val endDate: Long = request.queryParameters.getFirst("endDate").toLongOrNull() ?: Instant.MAX.toEpochMilli()
+        val startDate: Long = request.queryParameters.get("startDate")?.first()?.toLongOrNull() ?: 0
+        val endDate: Long = request.queryParameters.get("endDate")?.first()?.toLongOrNull() ?: Date(3000, 1, 1).toInstant().toEpochMilli()
+
+        println("$startDate $endDate")
 
         return invoiceService.allInvoicesCreatedBetweenDates(startDate, endDate)
     }
