@@ -37,6 +37,7 @@ data class Vehicle(
     lateinit var rate: Rate
 
     @OneToMany(cascade = arrayOf(CascadeType.ALL))
+    @JsonIgnore
     var pastOwners: MutableList<Profile>? = mutableListOf()
 
     @OneToMany(cascade = arrayOf(CascadeType.ALL), targetEntity = Activity::class)
