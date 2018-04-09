@@ -1,9 +1,11 @@
 package singletons
 
+import dao.CountryDao
 import dao.InvoiceDao
 import dao.RateDao
 import dao.UserDao
 import dao.VehicleDao
+import domain.Country
 import domain.Invoice
 import domain.KontoUser
 import domain.Profile
@@ -47,18 +49,12 @@ class DummyData {
     lateinit var userDao: UserDao
 
     @Inject
+    lateinit var countryDao: CountryDao
+
+    @Inject
     lateinit var rateDao: RateDao
 
-    private val invoice1 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0)
-    private val invoice2 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0)
-    private val invoice3 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0)
-    private val invoice4 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0)
-    private val invoice5 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0)
-    private val invoice6 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0)
-    private val invoice7 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.PAID, Date(1519836934000), Date(1514825734000), 0.0)
-    private val invoice8 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.PAID, Date(1519836934000), Date(1514825734000), 0.0)
-    private val invoice9 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.CLOSED, Date(1525103765000), Date(1519919765000), 0.0)
-    private val invoice10 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.CLOSED, Date(1525103765000), Date(1519919765000), 0.0)
+    private val country1 = Country("Austria")
 
     private val rate1 = Rate(VehicleType.LKW, VignetteType.ONE_YEAR, 0.22)
     private val rate2 = Rate(VehicleType.LKW, VignetteType.TEN_DAYS, 0.22)
@@ -80,8 +76,22 @@ class DummyData {
         rate = rate2
     }
 
+    private val invoice1 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
+    private val invoice2 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
+    private val invoice3 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
+    private val invoice4 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
+    private val invoice5 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
+    private val invoice6 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
+    private val invoice7 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.PAID, Date(1519836934000), Date(1514825734000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
+    private val invoice8 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.PAID, Date(1519836934000), Date(1514825734000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
+    private val invoice9 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.CLOSED, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
+    private val invoice10 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.CLOSED, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
+
     @PostConstruct
     fun setup() {
+
+        countryDao.persistCountry(country1)
+
         rateDao.addRate(rate1)
         rateDao.addRate(rate2)
         rateDao.addRate(rate3)
@@ -91,15 +101,6 @@ class DummyData {
         rateDao.addRate(rate7)
         rateDao.addRate(rate8)
         rateDao.addRate(rate9)
-
-        invoice1.vehicle = vehicle1
-        invoice1.profile = user1.profile
-        invoice7.vehicle = vehicle1
-        invoice7.profile = user1.profile
-        invoice2.vehicle = vehicle2
-        invoice2.profile = user2.profile
-        invoice8.vehicle = vehicle2
-        invoice8.profile = user2.profile
 
         userDao.persistUser(user1)
         userDao.persistUser(user2)
