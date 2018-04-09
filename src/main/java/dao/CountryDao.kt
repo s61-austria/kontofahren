@@ -12,6 +12,6 @@ class CountryDao {
     fun persistCountry(country: Country): Country {
         em.persist(country)
 
-        return country;
+        return country
     }
 }

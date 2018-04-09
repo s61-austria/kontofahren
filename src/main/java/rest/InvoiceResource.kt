@@ -3,13 +3,9 @@ package rest
 import domain.Invoice
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
-import org.apache.commons.lang.time.DateUtils
 import service.InvoiceService
 import utils.Open
-import utils.capped
-import java.io.Console
-import java.time.Instant
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 import javax.ws.rs.GET
 import javax.ws.rs.POST

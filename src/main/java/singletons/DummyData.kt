@@ -90,7 +90,7 @@ class DummyData {
     @PostConstruct
     fun setup() {
 
-        countryDao.persistCountry(country1);
+        countryDao.persistCountry(country1)
 
         rateDao.addRate(rate1)
         rateDao.addRate(rate2)
