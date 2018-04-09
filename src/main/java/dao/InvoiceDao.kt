@@ -4,13 +4,10 @@ import domain.Invoice
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import java.util.Date
-import domain.Vehicle
 
 import javax.ejb.Stateless
-import javax.inject.Inject
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
-import javax.persistence.TypedQuery
 
 @Stateless
 class InvoiceDao {

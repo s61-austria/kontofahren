@@ -153,6 +153,5 @@ class InvoiceServiceTest {
 
         assertEquals(invoice1.uuid, result?.uuid)
         assertEquals(invoice1b, result)
-
     }
 }

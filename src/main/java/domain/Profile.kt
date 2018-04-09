@@ -3,7 +3,6 @@ package domain
 import com.fasterxml.jackson.annotation.JsonIgnore
 import exceptions.KontoException
 import java.util.UUID
-import javax.json.bind.annotation.JsonbTransient
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
