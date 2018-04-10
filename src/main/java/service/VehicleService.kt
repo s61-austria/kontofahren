@@ -32,19 +32,21 @@ class VehicleService @Inject constructor(
         vehicle.licensePlate = licensePlate
 
         //change owner if changed.
-        val prevOwner: Profile = vehicle.owner ?: return vehicle
+        val prevOwner: Profile? = vehicle.owner
 
-        if (prevOwner.id.equals(newOwnerId)) {
-            val newOwner = userDao.getUserByUuid(newOwnerId)?.profile
+        if (prevOwner == null || !prevOwner.id.equals(newOwnerId)) {
+            val newOwner: Profile = profileDao.getProfileByUuid(newOwnerId)
                 ?: return vehicleDao.persistVehicle(vehicle)
 
-            prevOwner.removeVehicle(vehicle)
             newOwner.addVehicle(vehicle)
-            vehicle.pastOwners.add(prevOwner)
             vehicle.owner = newOwner
-
-            profileDao.persist(prevOwner)
             profileDao.persist(newOwner)
+
+            if (prevOwner != null) {
+                prevOwner.removeVehicle(vehicle)
+                vehicle.pastOwners.add(prevOwner)
+                profileDao.persist(prevOwner)
+            }
         }
 
         return vehicleDao.persistVehicle(vehicle)

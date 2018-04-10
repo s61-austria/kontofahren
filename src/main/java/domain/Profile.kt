@@ -39,8 +39,9 @@ data class Profile(
     fun addVehicle(vehicle: Vehicle) {
         if (!vehicles.contains(vehicle)) {
             vehicles.add(vehicle)
+        } else {
+            throw KontoException("kontoUser already owns car")
         }
-        throw KontoException("kontoUser already owns car")
     }
 
     @Throws(KontoException::class)
