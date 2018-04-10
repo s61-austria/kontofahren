@@ -18,7 +18,7 @@ import javax.persistence.Table
 @Table(name = "profile")
 data class Profile(
     @OneToOne
-    var kontoUser: KontoUser?
+    var kontoUser: KontoUser
 ) {
 
     @Id

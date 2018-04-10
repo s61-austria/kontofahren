@@ -36,6 +36,10 @@ data class Vehicle(
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     lateinit var rate: Rate
 
+    @OneToMany(cascade = arrayOf(CascadeType.ALL))
+    @JsonIgnore
+    var pastOwners: MutableList<Profile> = mutableListOf()
+
     @OneToMany(cascade = arrayOf(CascadeType.ALL), targetEntity = Activity::class)
     @JsonIgnore
     var activities: MutableList<Activity> = mutableListOf()
@@ -43,4 +47,9 @@ data class Vehicle(
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     @JoinColumn(nullable = true)
     var currentLocation: Location? = null
+
+    companion object {
+
+        private val serialVersionUID = 1L
+    }
 }
