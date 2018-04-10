@@ -49,7 +49,11 @@ data class Vehicle(
     var currentLocation: Location? = null
 
     companion object {
-
         private val serialVersionUID = 1L
+    }
+
+    fun addPastOwner(profile: Profile) {
+        if (!pastOwners.contains(profile))
+            pastOwners.add(profile)
     }
 }
