@@ -22,4 +22,10 @@ class ProfileDao {
         .singleResult
 
     fun allProfiles(): MutableList<Profile> = em.createQuery("SELECT p FROM Profile p", Profile::class.java).resultList
+
+    fun persist(profile: Profile): Profile {
+        em.persist(profile)
+
+        return profile
+    }
 }

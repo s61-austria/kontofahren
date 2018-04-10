@@ -1,11 +1,11 @@
 package service
 
+import dao.ProfileDao
 import dao.UserDao
 import dao.VehicleDao
 import domain.Profile
 import domain.Vehicle
 import domain.enums.VehicleType
-import exceptions.KontoException
 import utils.Open
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -14,7 +14,8 @@ import javax.inject.Inject
 @Open
 class VehicleService @Inject constructor(
     val vehicleDao: VehicleDao,
-    val userDao: UserDao
+    val userDao: UserDao,
+    val profileDao: ProfileDao
 ) {
     fun allVehicles(): List<Vehicle> = vehicleDao.allVehicles()
 
@@ -25,27 +26,27 @@ class VehicleService @Inject constructor(
         vehicleDao.persistVehicle(Vehicle(
             hardwareSerialNumber, vehicleType = vehicleType, licensePlate = licensePlate))
 
-    fun saveVehicle(uuid: String, licensePlate: String, newOwnerId: String): Vehicle {
+    fun saveVehicle(uuid: String, licensePlate: String, newOwnerId: String): Vehicle? {
+        val vehicle = vehicleDao.getVehicleByUuid(uuid) ?: return null
 
-        val vehicle = vehicleDao.getVehicleByUuid(uuid)
-        //if licenseplate changed
-        if (vehicle.licensePlate !== licensePlate) {
-            vehicle.licensePlate = licensePlate
-        }
+        vehicle.licensePlate = licensePlate
+
         //change owner if changed.
         val prevOwner: Profile = vehicle.owner ?: return vehicle
 
         if (prevOwner.id.equals(newOwnerId)) {
-            val newOwner = userDao.getUserByUuid(newOwnerId)?.profile ?: throw KontoException("KEIN OWNER")
-            try {
-                prevOwner.removeVehicle(vehicle)
-                newOwner.addVehicle(vehicle)
-                vehicle.pastOwners.add(prevOwner)
-                vehicle.owner = newOwner
-            } catch (e: KontoException) {
-                e.printStackTrace()
-            }
+            val newOwner = userDao.getUserByUuid(newOwnerId)?.profile
+                ?: return vehicleDao.persistVehicle(vehicle)
+
+            prevOwner.removeVehicle(vehicle)
+            newOwner.addVehicle(vehicle)
+            vehicle.pastOwners.add(prevOwner)
+            vehicle.owner = newOwner
+
+            profileDao.persist(prevOwner)
+            profileDao.persist(newOwner)
         }
+
         return vehicleDao.persistVehicle(vehicle)
     }
 }

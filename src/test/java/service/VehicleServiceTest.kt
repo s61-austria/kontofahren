@@ -2,6 +2,7 @@ package service
 
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
+import dao.ProfileDao
 import dao.UserDao
 import dao.VehicleDao
 import domain.KontoUser
@@ -49,7 +50,9 @@ class VehicleServiceTest {
             on { getUserByUuid(user1.uuid) } doReturn user1
         }
 
-        vehicleService = VehicleService(vehicleMock, userMock)
+        val profileDaoMock = mock<ProfileDao>()
+
+        vehicleService = VehicleService(vehicleMock, userMock, profileDaoMock)
     }
 
     @Test
@@ -84,7 +87,7 @@ class VehicleServiceTest {
     fun testSaveVehicle() {
         val result = vehicleService.saveVehicle(vehicle1.uuid, vehicle1.licensePlate, user1.uuid)
 
-        Assert.assertEquals(vehicle1.licensePlate, result.licensePlate)
+        Assert.assertEquals(vehicle1.licensePlate, result!!.licensePlate)
         Assert.assertEquals(vehicle1.hardwareSerialNumber, result.hardwareSerialNumber)
         Assert.assertEquals(vehicle1.vehicleType, result.vehicleType)
     }
