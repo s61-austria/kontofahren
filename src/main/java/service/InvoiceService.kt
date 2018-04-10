@@ -83,7 +83,7 @@ class InvoiceService @Inject constructor(
         var totalMeters = 0.0
         val rider: Profile = vehicle.owner ?: return null
 
-        vehicle.activities.filter {
+        vehicle.activities!!.filter {
             it.creationDate.month == month.month
                 && it.creationDate.year == month.year
                 && it.country.name == country.name

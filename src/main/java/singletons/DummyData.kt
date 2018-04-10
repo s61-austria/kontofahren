@@ -1,15 +1,13 @@
 package singletons
 
+import dao.CountryDao
 import dao.InvoiceDao
 import dao.RateDao
 import dao.UserDao
 import dao.VehicleDao
-import domain.Activity
 import domain.Country
 import domain.Invoice
 import domain.KontoUser
-import domain.Location
-import domain.Point
 import domain.Profile
 import domain.Rate
 import domain.Vehicle
@@ -17,7 +15,6 @@ import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import domain.enums.VehicleType
 import domain.enums.VignetteType
-import utils.now
 import java.util.Date
 import javax.annotation.PostConstruct
 import javax.ejb.Singleton
@@ -52,15 +49,12 @@ class DummyData {
     lateinit var userDao: UserDao
 
     @Inject
+    lateinit var countryDao: CountryDao
+
+    @Inject
     lateinit var rateDao: RateDao
 
-    private val country = Country("Nederland")
-
-    private val user1 = KontoUser("Jandie Hendriks", "password1")
-    private val user2 = KontoUser("Michel Mans", "password2")
-
-    private val profile1 = Profile(user1)
-    private val profile2 = Profile(user2)
+    private val country1 = Country("Austria")
 
     private val rate1 = Rate(VehicleType.LKW, VignetteType.ONE_YEAR, 0.22)
     private val rate2 = Rate(VehicleType.LKW, VignetteType.TEN_DAYS, 0.22)
@@ -72,47 +66,31 @@ class DummyData {
     private val rate8 = Rate(VehicleType.MOTOR, VignetteType.TEN_DAYS, 0.16)
     private val rate9 = Rate(VehicleType.MOTOR, VignetteType.TWO_MONTHS, 0.16)
 
-    private var location1 = Location(country, Point(51.457065, 5.476294), now())
-    private var location2 = Location(country, Point(51.456346, 5.477750), now())
+    private val user1 = KontoUser("Jandie Hendriks", "password1").apply { profile = Profile(this) }
+    private val user2 = KontoUser("Michel Mans", "password2").apply { profile = Profile(this) }
 
-    private val activity1 = Activity(country, profile1).apply {
-        locations = mutableListOf(location1, location2)
+    private val vehicle1 = Vehicle("27383937", "AB-3B-D2", VehicleType.PKW, user1.profile).apply {
+        rate = rate1
+    }
+    private val vehicle2 = Vehicle("27343937", "A3-CD-6L", VehicleType.LKW, user2.profile).apply {
+        rate = rate2
     }
 
-    private val vehicle1 = Vehicle("27383937", "AB-3B-D2", VehicleType.PKW, profile1).apply {
-        this.owner = profile1
-        this.rate = rate1
-        this.activities = mutableListOf(activity1)
-    }
-
-    private val vehicle2 = Vehicle("27343937", "A3-CD-6L", VehicleType.LKW, profile2).apply {
-        this.owner = profile2
-        this.rate = rate7
-        this.activities = mutableListOf(activity1)
-    }
-
-    private val invoice1 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0).apply {
-        this.vehicle = vehicle1
-        this.profile = profile1
-    }
-
-    private val invoice2 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0).apply {
-        this.vehicle = vehicle2
-        this.profile = profile2
-    }
-
-    private val invoice3 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.PAID, Date(1519836934000), Date(1514825734000), 0.0).apply {
-        this.vehicle = vehicle1
-        this.profile = profile1
-    }
-
-    private val invoice4 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.PAID, Date(1519836934000), Date(1514825734000), 0.0).apply {
-        this.vehicle = vehicle2
-        this.profile = profile2
-    }
+    private val invoice1 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
+    private val invoice2 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
+    private val invoice3 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
+    private val invoice4 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
+    private val invoice5 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
+    private val invoice6 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
+    private val invoice7 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.PAID, Date(1519836934000), Date(1514825734000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
+    private val invoice8 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.PAID, Date(1519836934000), Date(1514825734000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
+    private val invoice9 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.CLOSED, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
+    private val invoice10 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.CLOSED, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
 
     @PostConstruct
     fun setup() {
+
+        countryDao.persistCountry(country1)
 
         rateDao.addRate(rate1)
         rateDao.addRate(rate2)
@@ -130,14 +108,15 @@ class DummyData {
         vehicleDao.persistVehicle(vehicle1)
         vehicleDao.persistVehicle(vehicle2)
 
-        invoice1.country = country
-        invoice2.country = country
-        invoice3.country = country
-        invoice4.country = country
-
         invoiceDao.addInvoice(invoice1)
         invoiceDao.addInvoice(invoice2)
         invoiceDao.addInvoice(invoice3)
         invoiceDao.addInvoice(invoice4)
+        invoiceDao.addInvoice(invoice5)
+        invoiceDao.addInvoice(invoice6)
+        invoiceDao.addInvoice(invoice7)
+        invoiceDao.addInvoice(invoice8)
+        invoiceDao.addInvoice(invoice9)
+        invoiceDao.addInvoice(invoice10)
     }
 }
