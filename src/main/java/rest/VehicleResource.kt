@@ -25,7 +25,7 @@ class VehicleResource @Inject constructor(
 
     @GET
     @Produces("application/json")
-    fun allVehiclesInCountry(): Response {
+    fun getAllVehicles(): Response {
         val vehicles = vehicleService.allVehicles()
 
         return Response.ok(vehicles).build()
