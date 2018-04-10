@@ -1,7 +1,6 @@
 package utils
 
 import nl.stil4m.mollie.ClientBuilder
-import nl.stil4m.mollie.DynamicClientBuilder
 import nl.stil4m.mollie.domain.CreatePayment
 import nl.stil4m.mollie.domain.Payment
 import java.util.Optional
