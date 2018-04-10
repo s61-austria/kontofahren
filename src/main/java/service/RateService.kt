@@ -21,6 +21,16 @@ class RateService @Inject constructor(val rateDao: RateDao) {
         return rateDao.addRate(r)
     }
 
+    fun updateRatePrice(rateUuid: String, kmPrice: Double?): Rate? {
+        if(kmPrice == null) return null;
+        if(kmPrice < 0) return null;
+
+        val r = rateDao.getRateByUuid(rateUuid)
+        r.kmPrice = kmPrice;
+
+        return rateDao.updateRate(r)
+    }
+
     fun updateRate(rateId: String, vehicleType: VehicleType, kmPrice: Double, vignetteType: VignetteType): Rate {
         val r = rateDao.getRateByUuid(rateId)
         r.vehicleType = vehicleType
