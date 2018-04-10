@@ -16,10 +16,10 @@ buildscript {
 }
 
 repositories {
-    mavenCentral()
     jcenter()
     maven { url 'https://jitpack.io' }
     maven { url "https://github.com/stil4m/maven-repository/raw/master/releases/" }
+    mavenCentral()
 }
 
 group 'at.kontofahren'
@@ -51,11 +51,6 @@ noArg {
 }
 
 sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-    jcenter()
-}
 
 sourceSets {
     integrationTest {
