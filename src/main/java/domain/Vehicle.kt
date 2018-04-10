@@ -40,7 +40,6 @@ data class Vehicle(
     @JsonIgnore
     var pastOwners: MutableList<Profile>? = mutableListOf()
 
-
     @OneToMany(cascade = arrayOf(CascadeType.ALL), targetEntity = Activity::class)
     @JsonIgnore
     var activities: MutableList<Activity> = mutableListOf()

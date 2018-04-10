@@ -13,7 +13,7 @@ class ProfileService @Inject constructor(
 ) {
     fun getAllProfiles(vehicleUUID: String?): MutableList<Profile> {
 
-        if(!vehicleUUID.isNullOrBlank()){
+        if (!vehicleUUID.isNullOrBlank()) {
             val profileList = vehicleDao.getVehicleByUuid(vehicleUUID!!).pastOwners
             return if (profileList == null) mutableListOf<Profile>() else profileList
         }

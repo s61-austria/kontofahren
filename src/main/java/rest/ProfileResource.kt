@@ -1,6 +1,5 @@
 package rest
 
-import jdk.nashorn.internal.objects.annotations.Getter
 import service.ProfileService
 import utils.Open
 import javax.inject.Inject
@@ -37,5 +36,4 @@ class ProfileResource @Inject constructor(
         val profile = profileService.getProfile(userUUID) ?: return Response.status(404).build()
         return Response.ok(profile).build()
     }
-
 }

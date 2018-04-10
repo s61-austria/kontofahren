@@ -22,5 +22,4 @@ class ProfileDao {
         .singleResult
 
     fun allProfiles(): MutableList<Profile> = em.createQuery("SELECT p FROM Profile p", Profile::class.java).resultList
-
 }

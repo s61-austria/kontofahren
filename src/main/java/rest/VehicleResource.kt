@@ -74,6 +74,4 @@ class VehicleResource @Inject constructor(
 
         return Response.ok(vehicle2).build()
     }
-
-
 }
