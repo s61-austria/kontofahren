@@ -92,4 +92,14 @@ class InvoiceResource @Inject constructor(
 
         return Response.ok(regeneratedInvoice).build()
     }
+
+    @PUT
+    @Path("/pay/{uuid}/{paymentId}")
+    @Produces("application/json")
+    fun payInvoice(@PathParam("uuid") uuid: String, @PathParam("paymentId") paymentId: String): Response {
+        val regeneratedInvoice = invoiceService.payInvoice(uuid, paymentId)
+            ?: return Response.notModified().build()
+
+        return Response.ok(regeneratedInvoice).build()
+    }
 }

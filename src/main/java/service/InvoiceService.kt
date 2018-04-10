@@ -11,6 +11,7 @@ import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import org.apache.commons.lang.time.DateUtils
 import utils.createMolliePayment
+import utils.getMolliePayment
 import java.util.Date
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -61,8 +62,6 @@ class InvoiceService @Inject constructor(
 
         invoice.meters = newInvoice.meters
         invoice.totalPrice = newInvoice.totalPrice
-        invoice.paymentId = newInvoice.paymentId
-        invoice.payLink = newInvoice.payLink
 
         invoiceDao.updateInvoice(invoice)
 
@@ -101,18 +100,24 @@ class InvoiceService @Inject constructor(
             this.totalPrice = vehicle.rate.kmPrice * totalMeters
             this.country = country
             this.vehicle = vehicle
-
-            var payment = createMolliePayment(totalPrice, this.uuid, month)
-
-            if (payment != null) {
-                this.payLink = payment.links.paymentUrl
-                this.paymentId = payment.id
-            }
         }
 
         invoiceDao.addInvoice(invoice)
 
         return invoice
+    }
+
+    fun payInvoice(uuid: String, paymentId: String): Invoice? {
+        var invoice = invoiceDao.getInvoiceByUuid(uuid)
+        var payment = getMolliePayment(paymentId)
+
+        if(payment?.metadata?.get("invoiceId") == invoice.uuid) {
+            invoice.paymentId = payment.id
+            invoice.payTime = payment.expiredDatetime
+            invoice.state = InvoiceState.PAID
+        }
+
+        return null
     }
 
     fun distance(points: List<Point>) = points.zip(points.drop(1))
