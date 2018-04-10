@@ -9,9 +9,8 @@ import domain.Profile
 import domain.Vehicle
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
-import nl.stil4m.mollie.domain.Payment
 import org.apache.commons.lang.time.DateUtils
-import utils.MollieHelper
+import utils.createMolliePayment
 import java.util.Date
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -103,7 +102,7 @@ class InvoiceService @Inject constructor(
             this.country = country
             this.vehicle = vehicle
 
-            var payment = MollieHelper().createMolliePayment(totalPrice, this.uuid, month)
+            var payment = createMolliePayment(totalPrice, this.uuid, month)
 
             if (payment != null) {
                 this.payLink = payment.links.paymentUrl
