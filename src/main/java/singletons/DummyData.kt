@@ -15,6 +15,7 @@ import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import domain.enums.VehicleType
 import domain.enums.VignetteType
+import utils.sha256
 import java.util.Date
 import javax.annotation.PostConstruct
 import javax.ejb.Singleton
@@ -66,8 +67,8 @@ class DummyData {
     private val rate8 = Rate(VehicleType.MOTOR, VignetteType.TEN_DAYS, 0.16)
     private val rate9 = Rate(VehicleType.MOTOR, VignetteType.TWO_MONTHS, 0.16)
 
-    private val user1 = KontoUser("Jandie Hendriks", "password1").apply { profile = Profile(this) }
-    private val user2 = KontoUser("Michel Mans", "password2").apply { profile = Profile(this) }
+    private val user1 = KontoUser("Jandie Hendriks", sha256("password1")).apply { profile = Profile(this) }
+    private val user2 = KontoUser("Michel Mans", sha256("password2")).apply { profile = Profile(this) }
 
     private val vehicle1 = Vehicle("27383937", "AB-3B-D2", VehicleType.PKW, user1.profile).apply {
         rate = rate1

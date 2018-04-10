@@ -152,6 +152,5 @@ class InvoiceServiceTest {
         var result = invoiceService.updateInvoiceState(invoiceId = invoice1.uuid, state = InvoiceState.PAID)
 
         assertEquals(invoice1.uuid, result?.uuid)
-        assertEquals(invoice1b, result)
     }
 }

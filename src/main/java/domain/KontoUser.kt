@@ -1,6 +1,7 @@
 package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import java.io.Serializable
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -19,7 +20,7 @@ import javax.persistence.Table
 data class KontoUser(
     var userName: String,
     val password: String
-) {
+) : Serializable {
     @ManyToMany(mappedBy = "users")
     var groups = mutableSetOf<KontoGroup>()
 
