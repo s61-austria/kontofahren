@@ -9,6 +9,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
+import javax.persistence.ManyToMany
 import javax.persistence.OneToOne
 import javax.persistence.Table
 
@@ -19,6 +20,9 @@ data class KontoUser(
     var userName: String,
     val password: String
 ) {
+    @ManyToMany(mappedBy = "users")
+    var groups = mutableSetOf<KontoGroup>()
+
     @OneToOne(targetEntity = Profile::class)
     @JsonIgnore
     lateinit var profile: Profile

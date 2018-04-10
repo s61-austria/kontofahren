@@ -25,6 +25,10 @@ class UserDao {
         return kontoUser
     }
 
+    fun getUserByUsername(username: String) = em.createQuery("SELECT u FROM KontoUser u where u.userName = :username", KontoUser::class.java)
+        .setParameter("username", username)
+        .singleResult
+
     fun getUserByUuid(userId: String): KontoUser? = em
         .createQuery("SELECT k FROM KontoUser k WHERE k.uuid = :userId", KontoUser::class.java)
         .setParameter("userId", userId)
