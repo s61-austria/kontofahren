@@ -22,6 +22,7 @@ data class KontoUser(
     val password: String
 ) : Serializable {
     @ManyToMany(mappedBy = "users")
+    @JsonIgnore
     var groups = mutableSetOf<KontoGroup>()
 
     @OneToOne(targetEntity = Profile::class)

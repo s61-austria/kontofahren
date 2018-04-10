@@ -29,6 +29,7 @@ data class Profile(
     var uuid: String = UUID.randomUUID().toString()
 
     @ManyToMany(targetEntity = Vehicle::class, fetch = FetchType.EAGER)
+    @JsonIgnore
     var vehicles: MutableList<Vehicle> = mutableListOf()
 
     @OneToMany(targetEntity = Invoice::class)

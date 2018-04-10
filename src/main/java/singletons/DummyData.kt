@@ -103,6 +103,9 @@ class DummyData {
         rateDao.addRate(rate8)
         rateDao.addRate(rate9)
 
+        user1.profile.vehicles.add(vehicle1)
+        user2.profile.vehicles.add(vehicle2)
+
         userDao.persistUser(user1)
         userDao.persistUser(user2)
 
