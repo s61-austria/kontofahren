@@ -8,10 +8,8 @@ import com.rabbitmq.client.DefaultConsumer
 import com.rabbitmq.client.Envelope
 import logger
 import utils.GsonWrapper
-import javax.ejb.Stateless
 import javax.ws.rs.core.MediaType
 
-@Stateless
 class RabbitGateway(
     val username: String = "user",
     val password: String = "pass",
@@ -118,7 +116,6 @@ class RabbitGateway(
         routing: Routing,
         deliverMode: Int = 2
     ) = publish(exchange.name, obj, routing.name, deliverMode)
-
 }
 
 enum class Exchange {

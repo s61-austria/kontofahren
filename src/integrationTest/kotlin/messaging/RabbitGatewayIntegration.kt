@@ -9,13 +9,13 @@ class RabbitGatewayIntegration {
     val rabbitGateway by lazy { RabbitGateway() }
 
     @Test
-    fun basicPublish(){
+    fun basicPublish() {
         val obj = mapOf("hello" to "world")
-        rabbitGateway.publish(LOCATION_EXCHANGE,obj, EMPTY)
+        rabbitGateway.publish(LOCATION_EXCHANGE, obj, EMPTY)
     }
 
     @Test
-    fun basicConsume(){
+    fun basicConsume() {
         rabbitGateway.consume(FRONTEND_LOCATION_UPDATE, {
             println(it)
             return@consume
