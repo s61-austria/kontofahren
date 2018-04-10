@@ -44,7 +44,7 @@ class VehicleService @Inject constructor(
 
             if (prevOwner != null) {
                 prevOwner.removeVehicle(vehicle)
-                vehicle.pastOwners.add(prevOwner)
+                vehicle.addPastOwner(prevOwner)
                 profileDao.persist(prevOwner)
             }
         }
