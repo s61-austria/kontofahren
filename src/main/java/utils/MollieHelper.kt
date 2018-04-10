@@ -36,6 +36,17 @@ fun createMolliePayment(totalPrice: Double, uuid: String, month: Date): Payment?
     return null
 }
 
+fun getMolliePayment(paymentId: String): Payment? {
+    val client = ClientBuilder().withApiKey(apiKey).build()
+
+    if(client != null) {
+        val response = client.payments().get(paymentId);
+        if(response.success) return response.data ?: return null
+    }
+
+    return null
+}
+
 fun removeMolliePayment(paymentId: String) {
     var client = ClientBuilder().withApiKey(apiKey).build()
     client.payments().delete(paymentId)
