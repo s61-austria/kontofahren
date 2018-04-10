@@ -1,6 +1,5 @@
 package rest
 
-import domain.Vehicle
 import domain.enums.VehicleType
 import service.VehicleService
 import utils.Open
@@ -58,15 +57,21 @@ class VehicleResource @Inject constructor(
     @PUT
     @Produces("application/json")
     fun saveVehicle(body: String): Response {
-        val vehicle: Vehicle = decode(body, Vehicle::class.java)
+        val vehicle = decode(body, mutableMapOf<String, String>()::class.java)
 
-        if (vehicle.licensePlate.isBlank()) return Response.notModified().build()
-        if (vehicle.owner == null || vehicle.owner!!.uuid.isBlank()) return Response.notModified().build()
+        if (vehicle["uuid"] == null ||
+            vehicle["uuid"]!!.isBlank()) return Response.notModified().build()
+
+        if (vehicle["licensePlate"] == null ||
+            vehicle["licensePlate"]!!.isBlank()) return Response.notModified().build()
+
+        if (vehicle["owner"] == null ||
+            vehicle["owner"]!!.isBlank()) return Response.notModified().build()
 
         val vehicle2 = vehicleService.saveVehicle(
-            vehicle.uuid,
-            vehicle.licensePlate,
-            vehicle.owner!!.uuid
+            vehicle["uuid"]!!,
+            vehicle["licensePlate"]!!,
+            vehicle["owner"]!!
         ) ?: return Response.notModified().build()
 
         return Response.ok(vehicle2).build()
