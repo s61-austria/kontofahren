@@ -102,6 +102,7 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-lang/commons-lang
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
     // https://mvnrepository.com/artifact/joda-time/joda-time
+    compile 'com.auth0:java-jwt:3.3.0'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     providedCompile group: 'javax', name: 'javaee-api', version: '8.0'
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
