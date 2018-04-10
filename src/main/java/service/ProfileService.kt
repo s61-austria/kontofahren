@@ -1,23 +1,27 @@
 package service
 
 import dao.ProfileDao
+import dao.VehicleDao
 import domain.Profile
 import javax.ejb.Stateless
 import javax.inject.Inject
 
 @Stateless
 class ProfileService @Inject constructor(
-    private val profileDao: ProfileDao
+    private val profileDao: ProfileDao,
+    private val vehicleDao: VehicleDao
 ) {
-    fun getAllProfiles(userUUID: String?): MutableList<Profile> {
+    fun getAllProfiles(vehicleUUID: String?): MutableList<Profile> {
 
-
-        if (!userUUID.isNullOrBlank()) {
-            val profile = profileDao.getProfileByUuid(userUUID!!)
-
-            return if (profile == null) mutableListOf<Profile>() else mutableListOf(profile)
+        if(!vehicleUUID.isNullOrBlank()){
+            val profileList = vehicleDao.getVehicleByUuid(vehicleUUID!!).pastOwners
+            return if (profileList == null) mutableListOf<Profile>() else profileList
         }
 
         return profileDao.allProfiles()
+    }
+
+    fun getProfile(userUUID: String): Profile? {
+        return profileDao.getProfileByUuid(userUUID)
     }
 }

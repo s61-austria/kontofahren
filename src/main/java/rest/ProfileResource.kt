@@ -6,6 +6,7 @@ import utils.Open
 import javax.inject.Inject
 import javax.ws.rs.GET
 import javax.ws.rs.Path
+import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.Response
@@ -23,10 +24,18 @@ class ProfileResource @Inject constructor(
     @Produces("application/json")
     fun getAllProfiles(): Response {
         val userUUID = request.queryParameters.get("userUUID")?.first()?.toString()
-        val responses = profileService.getAllProfiles(userUUID)
+        val vehicleUUID = request.queryParameters.get("vehicleUUID")?.first()?.toString()
+        val responses = profileService.getAllProfiles(vehicleUUID)
 
         return Response.ok(responses).build()
     }
 
+    @GET
+    @Path("/{uuid}")
+    @Produces("application/json")
+    fun getProfile(@PathParam("uuid") userUUID: String): Response {
+        val profile = profileService.getProfile(userUUID) ?: return Response.status(404).build()
+        return Response.ok(profile).build()
+    }
 
 }
