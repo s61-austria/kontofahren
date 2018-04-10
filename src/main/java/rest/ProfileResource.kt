@@ -22,7 +22,6 @@ class ProfileResource @Inject constructor(
     @GET
     @Produces("application/json")
     fun getAllProfiles(): Response {
-        val userUUID = request.queryParameters.get("userUUID")?.first()?.toString()
         val vehicleUUID = request.queryParameters.get("vehicleUUID")?.first()?.toString()
         val responses = profileService.getAllProfiles(vehicleUUID)
 
