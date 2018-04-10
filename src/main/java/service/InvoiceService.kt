@@ -10,6 +10,7 @@ import domain.Vehicle
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import org.apache.commons.lang.time.DateUtils
+import utils.createMolliePayment
 import java.util.Date
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -60,6 +61,8 @@ class InvoiceService @Inject constructor(
 
         invoice.meters = newInvoice.meters
         invoice.totalPrice = newInvoice.totalPrice
+        invoice.paymentId = newInvoice.paymentId
+        invoice.payLink = newInvoice.payLink
 
         invoiceDao.updateInvoice(invoice)
 
@@ -95,9 +98,16 @@ class InvoiceService @Inject constructor(
             month,
             totalMeters
         ).apply {
-            this.totalPrice = vehicle.rate.kmPrice * this.meters
+            this.totalPrice = vehicle.rate.kmPrice * totalMeters
             this.country = country
             this.vehicle = vehicle
+
+            var payment = createMolliePayment(totalPrice, this.uuid, month)
+
+            if (payment != null) {
+                this.payLink = payment.links.paymentUrl
+                this.paymentId = payment.id
+            }
         }
 
         invoiceDao.addInvoice(invoice)

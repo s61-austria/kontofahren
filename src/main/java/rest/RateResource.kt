@@ -66,4 +66,16 @@ class RateResource @Inject constructor(private val rateService: RateService) {
 
         return Response.ok(rate).build()
     }
+
+    @POST
+    @Path("/update/price/{uuid}")
+    @Produces("application/json")
+    fun updateRatePrice(
+        @PathParam("uuid") uuid: String
+    ): Response {
+        val price = request.queryParameters.getFirst("price").toDoubleOrNull()
+        val rate = rateService.updateRatePrice(uuid, price) ?: return Response.notModified().build()
+
+        return Response.ok(rate).build()
+    }
 }

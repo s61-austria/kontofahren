@@ -5,6 +5,7 @@ buildscript {
         mavenCentral()
         jcenter()
         maven { url 'https://jitpack.io' }
+        maven { url "https://github.com/stil4m/maven-repository/raw/master/releases/" }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -15,9 +16,10 @@ buildscript {
 }
 
 repositories {
-    mavenCentral()
     jcenter()
     maven { url 'https://jitpack.io' }
+    maven { url "https://github.com/stil4m/maven-repository/raw/master/releases/" }
+    mavenCentral()
 }
 
 group 'at.kontofahren'
@@ -50,11 +52,6 @@ noArg {
 
 sourceCompatibility = 1.8
 
-repositories {
-    mavenCentral()
-    jcenter()
-}
-
 sourceSets {
     integrationTest {
         java.srcDir file('src/integration/kotlin')
@@ -74,7 +71,6 @@ task ktlint(type: JavaExec, group: "verification") {
     classpath = configurations.ktlint
     main = "com.github.shyiko.ktlint.Main"
     args "src/**/*.kt"
-
 }
 check.dependsOn ktlint
 
@@ -104,6 +100,7 @@ dependencies {
     // https://mvnrepository.com/artifact/joda-time/joda-time
     compile 'com.auth0:java-jwt:3.3.0'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
+    compile 'nl.stil4m:mollie-api:2.7.0'
     providedCompile group: 'javax', name: 'javaee-api', version: '8.0'
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
