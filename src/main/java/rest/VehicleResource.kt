@@ -3,6 +3,7 @@ package rest
 import domain.enums.VehicleType
 import service.VehicleService
 import utils.Open
+import utils.decode
 import javax.inject.Inject
 import javax.ws.rs.Consumes
 import javax.ws.rs.GET
@@ -54,23 +55,24 @@ class VehicleResource @Inject constructor(
     }
 
     @PUT
-    @Path("/{uuid}")
     @Produces("application/json")
-    fun saveVehicle(
-        @PathParam("uuid") uuid: String
-    ): Response {
-        val vehicle = vehicleService.vehicleDao.getVehicleByUuid(uuid) ?: return Response.status(404).build()
-        val licensePlate: String = request.queryParameters.getFirst("licensePlate") ?: return Response.notModified().build()
-        val ownerId: String = request.queryParameters.getFirst("ownerId") ?: return Response.notModified().build()
+    fun saveVehicle(body: String): Response {
+        val vehicle = decode(body, mutableMapOf<String, String>()::class.java)
 
-        if (licensePlate.isEmpty()) return Response.notModified().build()
-        if (ownerId.isEmpty()) return Response.notModified().build()
+        if (vehicle["uuid"] == null ||
+            vehicle["uuid"]!!.isBlank()) return Response.notModified().build()
+
+        if (vehicle["licensePlate"] == null ||
+            vehicle["licensePlate"]!!.isBlank()) return Response.notModified().build()
+
+        if (vehicle["owner"] == null ||
+            vehicle["owner"]!!.isBlank()) return Response.notModified().build()
 
         val vehicle2 = vehicleService.saveVehicle(
-            vehicle.uuid,
-            licensePlate,
-            ownerId
-        )
+            vehicle["uuid"]!!,
+            vehicle["licensePlate"]!!,
+            vehicle["owner"]!!
+        ) ?: return Response.notModified().build()
 
         return Response.ok(vehicle2).build()
     }

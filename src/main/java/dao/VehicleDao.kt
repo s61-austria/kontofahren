@@ -22,7 +22,7 @@ class VehicleDao {
             .setParameter("countryName", countryName)
             .resultList
 
-    fun getVehicleByUuid(uuid: String) = entityManager.createQuery<Vehicle>(
+    fun getVehicleByUuid(uuid: String): Vehicle? = entityManager.createQuery<Vehicle>(
         "SELECT v FROM Vehicle v WHERE v.uuid = :uuid", Vehicle::class.java)
         .setParameter("uuid", uuid)
         .singleResult

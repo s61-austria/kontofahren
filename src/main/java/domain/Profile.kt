@@ -29,6 +29,7 @@ data class Profile(
     var uuid: String = UUID.randomUUID().toString()
 
     @ManyToMany(targetEntity = Vehicle::class, fetch = FetchType.EAGER)
+    @JsonIgnore
     var vehicles: MutableList<Vehicle> = mutableListOf()
 
     @OneToMany(targetEntity = Invoice::class)
@@ -39,8 +40,9 @@ data class Profile(
     fun addVehicle(vehicle: Vehicle) {
         if (!vehicles.contains(vehicle)) {
             vehicles.add(vehicle)
+        } else {
+            throw KontoException("kontoUser already owns car")
         }
-        throw KontoException("kontoUser already owns car")
     }
 
     @Throws(KontoException::class)

@@ -32,6 +32,10 @@ apply plugin: "kotlin-allopen"
 apply plugin: "kotlin-noarg"
 apply plugin: 'war'
 
+war {
+    archiveName = 'government.war'
+}
+
 configurations {
     ktlint
 }
@@ -98,6 +102,7 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-lang/commons-lang
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
     // https://mvnrepository.com/artifact/joda-time/joda-time
+    compile 'com.auth0:java-jwt:3.3.0'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compile 'nl.stil4m:mollie-api:2.7.0'
     providedCompile group: 'javax', name: 'javaee-api', version: '8.0'

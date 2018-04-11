@@ -48,8 +48,3 @@ fun getMolliePayment(paymentId: String): Payment? {
 
     return null
 }
-
-fun removeMolliePayment(paymentId: String) {
-    var client = ClientBuilder().withApiKey(apiKey).build()
-    client.payments().delete(paymentId)
-}
