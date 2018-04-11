@@ -32,6 +32,10 @@ apply plugin: "kotlin-allopen"
 apply plugin: "kotlin-noarg"
 apply plugin: 'war'
 
+war {
+    archiveName = 'government.war'
+}
+
 configurations {
     ktlint
 }
