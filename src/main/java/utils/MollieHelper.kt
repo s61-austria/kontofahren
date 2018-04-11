@@ -3,18 +3,20 @@ package utils
 import nl.stil4m.mollie.ClientBuilder
 import nl.stil4m.mollie.domain.CreatePayment
 import nl.stil4m.mollie.domain.Payment
-import java.util.*
+import java.util.Optional
+import java.util.Date
 
 private val apiKey = "test_KamHdPyNppksPNrjqxFAWfk2d5fEdw"
 
-fun createMolliePayment(totalPrice: Double, uuid: String, month: Date): Payment? {
-    var metaData = HashMap<String, Any>().apply { this.put("invoiceId", uuid) }
+fun createMolliePayment(uuid: String, totalPrice: Double, month: Date): Payment? {
+    var metaData = HashMap<String, Any>().apply { this["invoiceId"] = uuid }
 
-    var payment = CreatePayment(Optional.empty(),
+    var payment = CreatePayment(
+        Optional.empty(),
         totalPrice,
         "KontoFahren, Invoice payment. ID: " + uuid + " " + month.month + "/" + month.year,
         "http://localhost:3000/#/invoices",
-        Optional.empty(),
+        Optional.of("https://svc-2000.nl/kontofahren/webhook.php"),
         metaData as Map<String, Any>?
     )
 
@@ -39,9 +41,9 @@ fun createMolliePayment(totalPrice: Double, uuid: String, month: Date): Payment?
 fun getMolliePayment(paymentId: String): Payment? {
     val client = ClientBuilder().withApiKey(apiKey).build()
 
-    if(client != null) {
-        val response = client.payments().get(paymentId);
-        if(response.success) return response.data ?: return null
+    if (client != null) {
+        val response = client.payments().get(paymentId)
+        if (response.success) return response.data ?: return null
     }
 
     return null
