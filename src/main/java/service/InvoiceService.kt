@@ -107,20 +107,42 @@ class InvoiceService @Inject constructor(
         return invoice
     }
 
-    fun payInvoice(uuid: String, paymentId: String): Invoice? {
-        var invoice = invoiceDao.getInvoiceByUuid(uuid)
-        var payment = getMolliePayment(paymentId)
+    fun distance(points: List<Point>) = points.zip(points.drop(1))
+        .map { it.first.distanceBetween(it.second) }
+        .fold(0.0) { acc, d -> acc + d }
 
-        if(payment?.metadata?.get("invoiceId") == invoice.uuid) {
+    fun payInvoice(uuid: String): Invoice? {
+        val invoice = invoiceDao.getInvoiceByUuid(uuid)
+        val payment = getMolliePayment(invoice.paymentId)
+
+        if (payment?.metadata?.get("invoiceId") == invoice.uuid) {
             invoice.paymentId = payment.id
             invoice.payTime = payment.expiredDatetime
             invoice.state = InvoiceState.PAID
         }
 
-        return null
+        invoiceDao.updateInvoice(invoice)
+
+        return invoice
     }
 
-    fun distance(points: List<Point>) = points.zip(points.drop(1))
-        .map { it.first.distanceBetween(it.second) }
-        .fold(0.0) { acc, d -> acc + d }
+    fun createPayment(uuid: String): Invoice? {
+        val invoice = invoiceDao.getInvoiceByUuid(uuid)
+
+        if(invoice.totalPrice == 0.0)
+            invoice.totalPrice = 5.0
+
+        val payment = createMolliePayment(invoice.uuid, invoice.totalPrice, invoice.createdFor)
+
+        if(payment != null) {
+            invoice.paymentId = payment.id
+            invoice.payLink = payment.links.paymentUrl
+
+            invoiceDao.updateInvoice(invoice)
+
+            return invoice
+        }
+
+        return null
+    }
 }

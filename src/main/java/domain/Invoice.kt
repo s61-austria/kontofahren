@@ -52,6 +52,7 @@ data class Invoice(
     @Temporal(TemporalType.DATE)
     var createdOn: Date = now()
 
+    var payLink: String = ""
     var payTime: String = ""
     var paymentId: String = ""
 
