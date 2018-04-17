@@ -40,14 +40,14 @@ class JwtUtilsTest {
     fun verifyToken() {
         val token = jwtUtils.createToken()
 
-        assertTrue { jwtUtils.verifyToken(token)!!.getClaim("username").asString() != null }
+        assertTrue { verifyToken(token)!!.getClaim("username").asString() != null }
     }
 
     @Test
     fun verifyTokenFail() {
         val token = "haha nee"
 
-        assertNull(jwtUtils.verifyToken(token))
+        assertNull(verifyToken(token))
     }
 
     @Test
@@ -56,7 +56,7 @@ class JwtUtilsTest {
 
         assertNotNull(token)
 
-        val verifiedToken = jwtUtils.verifyToken(token!!)
+        val verifiedToken = verifyToken(token!!)
 
         assertNotEquals(verifiedToken!!.getClaim("groups").asArray(String::class.java), emptyArray())
     }
