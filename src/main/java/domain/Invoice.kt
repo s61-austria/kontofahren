@@ -53,6 +53,7 @@ data class Invoice(
     var createdOn: Date = now()
 
     var payLink: String = ""
+    var payTime: String = ""
     var paymentId: String = ""
 
     var totalPrice: Double = 0.toDouble()
