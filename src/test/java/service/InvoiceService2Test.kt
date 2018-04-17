@@ -15,6 +15,7 @@ import domain.enums.InvoiceGenerationType.AUTO
 import domain.enums.InvoiceGenerationType.MANUAL
 import domain.enums.InvoiceState
 import domain.enums.VehicleType
+import domain.enums.VehicleType.LKW
 import domain.enums.VignetteType
 import org.junit.Before
 import org.junit.Test
@@ -23,7 +24,6 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import utils.now
-
 import java.util.ArrayList
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -91,12 +91,17 @@ class InvoiceService2Test {
     @Test
     fun testCalculateInvoices() {
         val profile1 = Profile(KontoUser("", ""))
-        val country = Country("Nederland")
-        val location1 = Location(country,
+        val country = Country("Austria")
+        val vehicle = Vehicle(
+            "1",
+            "haha-ja",
+            LKW
+        )
+        val location1 = Location(vehicle,
             Point(51.457065, 5.476294), now())
-        val location2 = Location(country,
+        val location2 = Location(vehicle,
             Point(51.456346, 5.477750), now())
-        val location3 = Location(country,
+        val location3 = Location(vehicle,
             Point(51.453946, 5.480196), now())
         val activity1 = Activity(country, profile1).apply {
             locations = arrayListOf(location1, location2)
@@ -144,9 +149,14 @@ class InvoiceService2Test {
     fun testRegenerateInvoice() {
         val profile1 = Profile(KontoUser("", ""))
         val country = Country("Nederland")
-        val location1 = Location(country,
+        val vehicle = Vehicle(
+            "1",
+            "haha-ja",
+            LKW
+        )
+        val location1 = Location(vehicle,
             Point(51.457065, 5.476294), now())
-        val location2 = Location(country,
+        val location2 = Location(vehicle,
             Point(51.456346, 5.477750), now())
         val activity1 = Activity(country, profile1).apply {
             locations = mutableListOf(location1, location2)
@@ -159,7 +169,7 @@ class InvoiceService2Test {
         }
         val vehicles = mutableListOf(vehicle1)
 
-        val location3 = Location(country,
+        val location3 = Location(vehicle,
             Point(51.453946, 5.480196), now())
 
         Mockito.`when`(vehicleServiceMock!!.allVehicles()).thenReturn(vehicles)

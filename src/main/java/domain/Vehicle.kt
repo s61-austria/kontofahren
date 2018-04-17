@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.persistence.Table
 
-@Entity
+@Entity(name = "Vehicle")
 @Table(name = "vehicle")
 data class Vehicle(
     var hardwareSerialNumber: String,

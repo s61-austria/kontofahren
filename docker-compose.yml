@@ -16,8 +16,9 @@ services:
     volumes:
       - database:/var/lib/mysql
   mq:
-    image: rabbitmq:3-management
+    image: byteflair/rabbitmq-stomp
     ports:
+       - "61613:61613"
        - "15672:15672"
        - "5672:5672"
        - "5671:5671"

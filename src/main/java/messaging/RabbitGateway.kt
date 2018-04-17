@@ -7,6 +7,8 @@ import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DefaultConsumer
 import com.rabbitmq.client.Envelope
 import logger
+import messaging.Exchange.LOCATION_EXCHANGE
+import messaging.Routing.EMPTY
 import utils.GsonWrapper
 import javax.ws.rs.core.MediaType
 
@@ -47,9 +49,11 @@ class RabbitGateway(
 
         logger.info("Creating queues")
         queueDeclare(Queue.FRONTEND_LOCATION_UPDATE)
+        queueDeclare(Queue.LOCATION_TO_ACTIVITY)
 
         logger.info("Binding queues to exchanges")
-        queueBind(Queue.FRONTEND_LOCATION_UPDATE, Exchange.LOCATION_EXCHANGE, Routing.EMPTY)
+        queueBind(Queue.FRONTEND_LOCATION_UPDATE, LOCATION_EXCHANGE, EMPTY)
+        queueBind(Queue.LOCATION_TO_ACTIVITY, LOCATION_EXCHANGE, EMPTY)
     }
 
     private fun exchangeDeclare(exchange: Exchange, type: BuiltinExchangeType) = channel.exchangeDeclare(exchange.name, type)
@@ -123,7 +127,8 @@ enum class Exchange {
 }
 
 enum class Queue {
-    FRONTEND_LOCATION_UPDATE
+    FRONTEND_LOCATION_UPDATE,
+    LOCATION_TO_ACTIVITY
 }
 
 enum class Routing {

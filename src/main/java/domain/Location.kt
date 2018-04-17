@@ -2,7 +2,6 @@ package domain
 
 import java.util.Date
 import java.util.UUID
-import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -16,8 +15,8 @@ import javax.persistence.TemporalType
 @Entity
 @Table(name = "location")
 data class Location(
-    @ManyToOne(cascade = [CascadeType.PERSIST])
-    val country: Country,
+    @ManyToOne
+    val vehicle: Vehicle,
     val point: Point,
     @Temporal(TemporalType.DATE)
     val creationDate: Date

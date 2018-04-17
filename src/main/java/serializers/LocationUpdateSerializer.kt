@@ -1,7 +1,9 @@
 package serializers
 
+import java.io.Serializable
+
 data class LocationUpdateSerializer(
-    val vehicleUid: String,
+    val vehicleId: String,
     val lat: Double,
     val lng: Double
-)
+) : Serializable

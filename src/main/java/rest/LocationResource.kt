@@ -1,6 +1,6 @@
 package rest
 
-import domain.Country
+import com.google.gson.Gson
 import domain.Location
 import domain.Point
 import logger
@@ -14,7 +14,6 @@ import utils.JwtUtils
 import utils.Open
 import utils.now
 import javax.inject.Inject
-import javax.ws.rs.Consumes
 import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
@@ -33,25 +32,24 @@ class LocationResource @Inject constructor(
     val rabbitGateway get() = RabbitGateway()
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     fun postLocation(
-        locationUpdate: LocationUpdateSerializer,
+        body: String,
         @Context header: HttpHeaders
     ): Response {
         logger.info("Receiving new location update")
-        val token = header.getHeaderString("Authorization") ?: return Response.noContent().build()
+        val locationUpdate = Gson().fromJson(body, LocationUpdateSerializer::class.java)
 
-        if (!jwtUtils.isLoggedIn(token)) {
-            logger.warn("User was not logged in!")
-            Response.noContent().build()
+        val user = jwtUtils.loggedInUser(header)
+        val vehicle = vehicleService.getVehicleByUuid(locationUpdate.vehicleId) ?: return Response.status(404).build()
+
+        if (vehicle.owner!!.uuid != user.profile.uuid) {
+            logger.warn("User does not own vehicle!")
+            return Response.status(Response.Status.UNAUTHORIZED).build()
         }
 
-        val user = jwtUtils.loggedInUser(token) ?: return Response.status(404).build()
-        val vehicle = vehicleService.getVehicleByUuid(locationUpdate.vehicleUid) ?: return Response.status(404).build()
-
         val location = Location(
-            Country("Austria"),
+            vehicle,
             Point(locationUpdate.lat, locationUpdate.lng),
             now()
         )
@@ -60,7 +58,11 @@ class LocationResource @Inject constructor(
         locationService.saveLocation(location)
 
         logger.info("Publishing location to MQ")
-        rabbitGateway.publish(LOCATION_EXCHANGE, location, EMPTY)
+        try {
+            rabbitGateway.publish(LOCATION_EXCHANGE, locationUpdate, EMPTY)
+        } catch (ex: Exception) {
+            logger.error("Failed to publish location to exchange!", ex)
+        }
 
         return Response.ok().build()
     }
