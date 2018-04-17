@@ -39,7 +39,7 @@ class PaymentServiceTest {
     @Test
     fun testCreatePayment() {
         val invoice = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, now(), now(), 0.0).apply { totalPrice = 99.0 }
-        val link = Links("testPaymentUrl/adsbakjd", "", "", Optional.empty(), Optional.empty())
+        val link = Links("testPaymentUrl/adsba", "", "", Optional.empty(), Optional.empty())
         val payment = Payment("", "konto-test-id", "", "", "", "", Date(), "", "", "", "", 0.0, 0.0, 0.0, "", "", mutableMapOf(), link, mutableMapOf(), "", "", "", Optional.empty(), Optional.empty())
 
         Mockito.`when`(invoiceDao.getInvoiceByUuid(invoice.uuid))
