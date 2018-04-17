@@ -10,8 +10,6 @@ import domain.Vehicle
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import org.apache.commons.lang.time.DateUtils
-import utils.createMolliePayment
-import utils.getMolliePayment
 import java.util.Date
 import javax.ejb.Stateless
 import javax.inject.Inject

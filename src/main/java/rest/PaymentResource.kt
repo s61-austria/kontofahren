@@ -1,6 +1,5 @@
 package rest
 
-import service.InvoiceService
 import service.PaymentService
 import utils.Open
 import javax.inject.Inject

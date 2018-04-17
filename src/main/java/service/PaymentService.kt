@@ -3,12 +3,13 @@ package service
 import dao.InvoiceDao
 import domain.Invoice
 import domain.enums.InvoiceState
-import utils.createMolliePayment
+import utils.MollieHelper
 import javax.inject.Inject
 
 class PaymentService@Inject constructor(
-    val invoiceDao: InvoiceDao
-)  {
+    val invoiceDao: InvoiceDao,
+    val mollieHelper: MollieHelper
+) {
 
     fun createPayment(uuid: String): Invoice? {
         val invoice = invoiceDao.getInvoiceByUuid(uuid)
@@ -16,7 +17,8 @@ class PaymentService@Inject constructor(
         if (invoice.totalPrice == 0.0)
             invoice.totalPrice = 5.0
 
-        val payment = createMolliePayment(invoice.uuid, invoice.totalPrice, invoice.createdFor)
+        val payment = mollieHelper.createMolliePayment(invoice.uuid, invoice.totalPrice,
+            invoice.createdFor)
 
         if (payment != null) {
             invoice.paymentId = payment.id
@@ -30,5 +32,4 @@ class PaymentService@Inject constructor(
 
         return null
     }
-
 }
