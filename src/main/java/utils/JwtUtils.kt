@@ -10,12 +10,23 @@ import javax.ejb.Stateless
 import javax.inject.Inject
 import javax.inject.Named
 
+internal val algorithm by lazy { Algorithm.HMAC256("Waarom is java EE zo'n absolute  kutzooi? Ik snap er echt geen flikker van") }
+internal val issuer = "kontofahren-widlfly"
+internal val verifier = JWT.require(algorithm).withIssuer(issuer).build()
+
+/**
+ * Verifies an incoming token
+ * @param token A JWT token to be verified
+ */
+fun verifyToken(token: String): DecodedJWT? = try {
+    verifier.verify(token)
+} catch (ex: Exception) {
+    null
+}
+
 @Named
 @Stateless
 class JwtUtils @Inject constructor(val userService: UserService) {
-    private val algorithm by lazy { Algorithm.HMAC256("Waarom is java EE zo'n absolute  kutzooi? Ik snap er echt geen flikker van") }
-    private val issuer = "kontofahren-widlfly"
-    private val verifier = JWT.require(algorithm).withIssuer(issuer).build()
 
     private val today get() = DateTime.now().toDate()
     private val oneMonthFromNow get() = DateTime.now().plusMonths(1).toDate()
@@ -39,16 +50,6 @@ class JwtUtils @Inject constructor(val userService: UserService) {
         .withIssuedAt(today)
         .withExpiresAt(oneMonthFromNow)
         .sign(algorithm)
-
-    /**
-     * Verifies an incoming token
-     * @param token A JWT token to be verified
-     */
-    fun verifyToken(token: String): DecodedJWT? = try {
-        verifier.verify(token)
-    } catch (ex: Exception) {
-        null
-    }
 
     /**
      * Authenticate a user and create a JWT token
