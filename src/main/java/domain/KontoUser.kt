@@ -14,7 +14,7 @@ import javax.persistence.ManyToMany
 import javax.persistence.OneToOne
 import javax.persistence.Table
 
-@Entity
+@Entity(name = "KontoUser")
 @Table(name = "kontouser")
 @Inheritance(strategy = InheritanceType.JOINED)
 data class KontoUser(

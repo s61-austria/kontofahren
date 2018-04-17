@@ -92,19 +92,16 @@ dependencies {
     compile group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
     compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
     compile group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
-
     compileOnly group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.1.0.Final'
     compileOnly group: 'org.hibernate', name: 'hibernate-validator', version: '5.2.4.Final'
-
     compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
     compile 'com.github.s61-austria:auslandersintegrationskurs:v1.1'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
-    // https://mvnrepository.com/artifact/commons-lang/commons-lang
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
-    // https://mvnrepository.com/artifact/joda-time/joda-time
     compile 'com.auth0:java-jwt:3.3.0'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compile 'nl.stil4m:mollie-api:2.7.0'
+    compile group: 'com.rabbitmq', name: 'amqp-client', version: '5.2.0'
     providedCompile group: 'javax', name: 'javaee-api', version: '8.0'
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
@@ -113,6 +110,8 @@ dependencies {
     ktlint "com.github.shyiko:ktlint:0.18.0"
     integrationTestCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     integrationTestCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    integrationTestCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+    integrationTestCompile group: 'com.rabbitmq', name: 'amqp-client', version: '5.2.0'
     integrationTestCompile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.5.0'
     integrationTestCompile group: 'org.postgresql', name: 'postgresql', version: '42.2.1'
     integrationTestCompile 'io.rest-assured:rest-assured:3.0.7'

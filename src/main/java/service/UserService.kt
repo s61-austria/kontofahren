@@ -9,5 +9,5 @@ class UserService @Inject constructor(
 ) {
     fun allUsers(): List<KontoUser> = userDao.allKontoUsers
 
-    fun getUserByUsername(username: String): KontoUser? = userDao.getUserByUsername(username) ?: null
+    fun getUserByUsername(username: String): KontoUser? = userDao.getUserByUsername(username)
 }

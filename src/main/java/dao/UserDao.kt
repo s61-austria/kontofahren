@@ -26,7 +26,7 @@ class UserDao {
     }
 
     fun getUserByUsername(username: String) = try {
-        em.createQuery("SELECT u FROM KontoUser u where u.userName = :username", KontoUser::class.java)
+        em.createQuery("SELECT u FROM KontoUser u where u.userName LIKE :username", KontoUser::class.java)
             .setParameter("username", username)
             .singleResult
     } catch (ex: Exception) {

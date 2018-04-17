@@ -51,4 +51,6 @@ class VehicleService @Inject constructor(
 
         return vehicleDao.persistVehicle(vehicle)
     }
+
+    fun getVehicleByUuid(uuid: String) = vehicleDao.getVehicleByUuid(uuid)
 }
