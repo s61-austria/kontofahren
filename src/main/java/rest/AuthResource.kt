@@ -1,5 +1,6 @@
 package rest
 
+import annotations.JWTTokenNeeded
 import com.google.gson.Gson
 import serializers.LoginSerializer
 import utils.JwtUtils
@@ -10,27 +11,20 @@ import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
-import javax.ws.rs.core.Context
-import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
-@Open
 @Path("auth")
+@Open
 class AuthResource @Inject constructor(val jwtUtils: JwtUtils) {
+
     /**
      * Check a token for validity
      */
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    fun get(
-        token: String,
-        @Context header: HttpHeaders
-    ): Response {
-        val token = header.getHeaderString("Authorization") ?: return Response.noContent().build()
-
-        return if (jwtUtils.isLoggedIn(token)) Response.ok().build() else Response.noContent().build()
-    }
+    @JWTTokenNeeded
+    @Produces("application/json")
+    fun get() = Response.ok().build()
 
     /**
      * Log a user in
