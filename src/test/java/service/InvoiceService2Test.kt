@@ -103,22 +103,26 @@ class InvoiceService2Test {
             Point(51.456346, 5.477750), now())
         val location3 = Location(vehicle,
             Point(51.453946, 5.480196), now())
-        val activity1 = Activity(country, profile1).apply {
-            locations = arrayListOf(location1, location2)
-        }
-        val activity2 = Activity(country, profile1).apply {
-            locations = arrayListOf(location1, location2, location3)
-        }
+
         val rate = Rate(VehicleType.LKW, VignetteType.TEN_DAYS, 0.1)
+
         val vehicle1 = Vehicle("1234",
             "TF-09-PP", VehicleType.LKW, profile1).apply {
-            activities = arrayListOf(activity1)
+            activities = mutableListOf()
             this.rate = rate
+        }.apply {
+            locations.add(location1)
+            locations.add(location2)
         }
+
         val vehicle2 = Vehicle("12345",
             "TF-09-XYZ", VehicleType.LKW, profile1).apply {
-            activities = arrayListOf(activity2)
+            activities = mutableListOf()
             this.rate = rate
+        }.apply {
+            locations.add(location1)
+            locations.add(location2)
+            locations.add(location3)
         }
         val vehicles = arrayListOf(vehicle1, vehicle2)
 
@@ -166,6 +170,9 @@ class InvoiceService2Test {
             "TF-09-PP", VehicleType.LKW, profile1).apply {
             activities = mutableListOf(activity1)
             this.rate = rate
+        }.apply {
+            locations.add(location1)
+            locations.add(location2)
         }
         val vehicles = mutableListOf(vehicle1)
 
@@ -179,7 +186,7 @@ class InvoiceService2Test {
 
         assertEquals(128.8639919576991, result.meters)
 
-        activity1.locations.add(location3)
+        vehicle1.locations.add(location3)
 
         Mockito.`when`(invoiceDaoMock!!.getInvoiceByUuid("test")).thenReturn(result)
 

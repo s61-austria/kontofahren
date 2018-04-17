@@ -8,6 +8,7 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.FetchType.EAGER
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -47,6 +48,9 @@ data class Vehicle(
     @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     @JoinColumn(nullable = true)
     var currentLocation: Location? = null
+
+    @OneToMany(mappedBy = "vehicle", fetch = EAGER)
+    val locations: MutableSet<Location> = mutableSetOf()
 
     companion object {
         private val serialVersionUID = 1L
