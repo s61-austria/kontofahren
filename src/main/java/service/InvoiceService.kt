@@ -129,14 +129,15 @@ class InvoiceService @Inject constructor(
     fun createPayment(uuid: String): Invoice? {
         val invoice = invoiceDao.getInvoiceByUuid(uuid)
 
-        if(invoice.totalPrice == 0.0)
+        if (invoice.totalPrice == 0.0)
             invoice.totalPrice = 5.0
 
         val payment = createMolliePayment(invoice.uuid, invoice.totalPrice, invoice.createdFor)
 
-        if(payment != null) {
+        if (payment != null) {
             invoice.paymentId = payment.id
             invoice.payLink = payment.links.paymentUrl
+            invoice.state = InvoiceState.PAID
 
             invoiceDao.updateInvoice(invoice)
 

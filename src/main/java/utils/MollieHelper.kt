@@ -6,7 +6,7 @@ import nl.stil4m.mollie.domain.Payment
 import java.util.Optional
 import java.util.Date
 
-private val apiKey = "test_KamHdPyNppksPNrjqxFAWfk2d5fEdw"
+private val apiKey = "test_jg624zMCDTzB8EDJFtCp2FHCjuBGRy"
 
 fun createMolliePayment(uuid: String, totalPrice: Double, month: Date): Payment? {
     var metaData = HashMap<String, Any>().apply { this["invoiceId"] = uuid }
@@ -16,7 +16,7 @@ fun createMolliePayment(uuid: String, totalPrice: Double, month: Date): Payment?
         totalPrice,
         "KontoFahren, Invoice payment. ID: " + uuid + " " + month.month + "/" + month.year,
         "http://localhost:3000/#/invoices",
-        Optional.of("https://svc-2000.nl/kontofahren/webhook.php"),
+        Optional.empty(),
         metaData as Map<String, Any>?
     )
 
