@@ -5,7 +5,6 @@ import exceptions.KontoException
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -28,7 +27,7 @@ data class Profile(
     @Column(unique = true)
     var uuid: String = UUID.randomUUID().toString()
 
-    @ManyToMany(targetEntity = Vehicle::class, fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Vehicle::class)
     @JsonIgnore
     var vehicles: MutableList<Vehicle> = mutableListOf()
 

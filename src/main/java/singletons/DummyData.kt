@@ -17,7 +17,6 @@ import domain.enums.VehicleType
 import domain.enums.VignetteType
 import utils.sha256
 import java.util.Date
-import javax.annotation.PostConstruct
 import javax.ejb.Singleton
 import javax.ejb.Startup
 import javax.inject.Inject
@@ -88,20 +87,8 @@ class DummyData {
     private val invoice9 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.CLOSED, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
     private val invoice10 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.CLOSED, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user2.profile; vehicle = vehicle2 }
 
-    @PostConstruct
     fun setup() {
-
-        countryDao.persistCountry(country1)
-
         rateDao.addRate(rate1)
-        rateDao.addRate(rate2)
-        rateDao.addRate(rate3)
-        rateDao.addRate(rate4)
-        rateDao.addRate(rate5)
-        rateDao.addRate(rate6)
-        rateDao.addRate(rate7)
-        rateDao.addRate(rate8)
-        rateDao.addRate(rate9)
 
         user1.profile.vehicles.add(vehicle1)
         user2.profile.vehicles.add(vehicle2)
@@ -111,16 +98,5 @@ class DummyData {
 
         vehicleDao.persistVehicle(vehicle1)
         vehicleDao.persistVehicle(vehicle2)
-
-        invoiceDao.addInvoice(invoice1)
-        invoiceDao.addInvoice(invoice2)
-        invoiceDao.addInvoice(invoice3)
-        invoiceDao.addInvoice(invoice4)
-        invoiceDao.addInvoice(invoice5)
-        invoiceDao.addInvoice(invoice6)
-        invoiceDao.addInvoice(invoice7)
-        invoiceDao.addInvoice(invoice8)
-        invoiceDao.addInvoice(invoice9)
-        invoiceDao.addInvoice(invoice10)
     }
 }

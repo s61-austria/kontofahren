@@ -57,9 +57,12 @@ class LocationResource @Inject constructor(
         logger.info("Persisting location")
         locationService.saveLocation(location)
 
-        logger.info("Publishing location to MQ")
+        locationUpdate.locationId = location.uuid
+
         try {
+            logger.info("Publishing location to MQ")
             rabbitGateway.publish(LOCATION_EXCHANGE, locationUpdate, EMPTY)
+            logger.info("Succesfully pushed to MQ")
         } catch (ex: Exception) {
             logger.error("Failed to publish location to exchange!", ex)
         }

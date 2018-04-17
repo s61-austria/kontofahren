@@ -12,4 +12,6 @@ class LocationService @Inject constructor(
     val locationDao: LocationDao
 ) {
     fun saveLocation(location: Location) = locationDao.createLocation(location)
+    fun getLocation(locationId: String) = locationDao.getLocation(locationId)
+    fun updateLocation(location: Location) = locationDao.updateLocation(location)
 }

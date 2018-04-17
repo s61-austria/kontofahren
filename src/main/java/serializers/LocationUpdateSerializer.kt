@@ -5,5 +5,6 @@ import java.io.Serializable
 data class LocationUpdateSerializer(
     val vehicleId: String,
     val lat: Double,
-    val lng: Double
+    val lng: Double,
+    var locationId: String?
 ) : Serializable

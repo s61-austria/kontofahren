@@ -8,9 +8,10 @@ class LocationResourceIntegration : BaseResourceIntegration() {
     @Test
     fun pushLocationUpdate() {
         val body = LocationUpdateSerializer(
-            "9a9dfe2e-5709-4f52-ade4-4e18ec30570e", // Set manually
+            "e38822fa-4280-45a6-84f0-bf722480ee3f", // Set manually
             0.0,
-            0.0
+            0.0,
+            null
         )
 
         given().body(body)

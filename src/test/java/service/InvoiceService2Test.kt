@@ -162,7 +162,7 @@ class InvoiceService2Test {
             Point(51.457065, 5.476294), now())
         val location2 = Location(vehicle,
             Point(51.456346, 5.477750), now())
-        val activity1 = Activity(country, profile1).apply {
+        val activity1 = Activity(profile1, vehicle).apply {
             locations = mutableListOf(location1, location2)
         }
         val rate = Rate(VehicleType.LKW, VignetteType.TEN_DAYS, 0.1)

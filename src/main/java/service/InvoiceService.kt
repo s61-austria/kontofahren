@@ -92,7 +92,7 @@ class InvoiceService @Inject constructor(
             month,
             distance
         ).apply {
-            this.totalPrice = vehicle.rate.kmPrice * totalMeters
+            this.totalPrice = vehicle.rate.kmPrice * distance
             this.country = country
             this.vehicle = vehicle
         }

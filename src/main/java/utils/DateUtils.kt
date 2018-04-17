@@ -1,5 +1,6 @@
 package utils
 
+import org.joda.time.DateTime
 import java.time.Instant
 import java.util.Arrays
 import java.time.Instant.ofEpochMilli
@@ -9,3 +10,5 @@ fun capped(instant: Instant): Instant {
     Arrays.sort(instants)
     return instants[1]
 }
+
+infix fun DateTime.before(other: DateTime) = this.isBefore(other)

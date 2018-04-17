@@ -70,8 +70,12 @@ class RabbitGateway(
         val consumer = object : DefaultConsumer(channel) {
             override fun handleDelivery(consumerTag: String, envelope: Envelope, properties: BasicProperties, body: ByteArray) {
                 val tag = envelope.deliveryTag
-                handler(body.toString(Charsets.UTF_8))
-                channel.basicAck(tag, false)
+                try {
+                    handler(body.toString(Charsets.UTF_8))
+                    channel.basicAck(tag, false)
+                } catch (ex: Exception) {
+                    this@RabbitGateway.logger.error("Error parsing message for queue $queue", ex)
+                }
             }
         }
 
