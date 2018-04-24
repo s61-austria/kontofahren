@@ -4,6 +4,7 @@ import domain.Invoice
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import java.util.Date
+
 import javax.ejb.Stateless
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
@@ -42,6 +43,12 @@ class InvoiceDao {
         .createQuery("SELECT i FROM Invoice i WHERE i.generationType = :type", Invoice::class.java)
         .setParameter("type", type)
         .resultList
+
+    fun getAllInvoicesByProfile(profileId: Long?): List<Invoice> {
+        val query = em.createQuery("SELECT i FROM Invoice i " + "JOIN i.profile c WHERE c.id = :id", Invoice::class.java)
+
+        return query.setParameter("id", profileId).resultList
+    }
 
     fun allInvoicesByStatus(state: InvoiceState): List<Invoice> = em
         .createQuery("SELECT i FROM Invoice i WHERE i.state = :type", Invoice::class.java)

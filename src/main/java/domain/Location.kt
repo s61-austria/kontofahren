@@ -1,6 +1,7 @@
 package domain
 
-import java.util.Date
+import org.joda.time.DateTime
+import java.sql.Timestamp
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -9,17 +10,14 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.ManyToOne
 import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
 
-@Entity
+@Entity(name = "Location")
 @Table(name = "location")
 data class Location(
     @ManyToOne
-    val country: Country,
+    val vehicle: Vehicle,
     val point: Point,
-    @Temporal(TemporalType.DATE)
-    val creationDate: Date
+    val creationDate: Timestamp
 ) {
 
     @Id
@@ -28,4 +26,9 @@ data class Location(
 
     @Column(unique = true)
     var uuid: String = UUID.randomUUID().toString()
+
+    @ManyToOne
+    var activity: Activity? = null
+
+    val creation get() = DateTime(creationDate)
 }

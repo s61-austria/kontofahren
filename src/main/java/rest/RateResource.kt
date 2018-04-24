@@ -2,6 +2,7 @@ package rest
 
 import domain.Rate
 import service.RateService
+import utils.Open
 import utils.decode
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -10,10 +11,15 @@ import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
+import javax.ws.rs.core.Context
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.UriInfo
 
 @Path("rates")
-class RateResource @Inject constructor(val rateService: RateService) : BaseResource() {
+@Open
+class RateResource @Inject constructor(private val rateService: RateService) {
+    @Context
+    private lateinit var request: UriInfo
 
     @GET
     @Produces("application/json")
@@ -57,6 +63,18 @@ class RateResource @Inject constructor(val rateService: RateService) : BaseResou
             rateObject.kmPrice,
             rateObject.vignetteType
         )
+
+        return Response.ok(rate).build()
+    }
+
+    @POST
+    @Path("/update/price/{uuid}")
+    @Produces("application/json")
+    fun updateRatePrice(
+        @PathParam("uuid") uuid: String
+    ): Response {
+        val price = request.queryParameters.getFirst("price").toDoubleOrNull()
+        val rate = rateService.updateRatePrice(uuid, price) ?: return Response.notModified().build()
 
         return Response.ok(rate).build()
     }

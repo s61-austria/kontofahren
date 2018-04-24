@@ -22,10 +22,14 @@ class VehicleDao {
             .setParameter("countryName", countryName)
             .resultList
 
-    fun getVehicleByUuid(uuid: String) = entityManager.createQuery<Vehicle>(
-        "SELECT v FROM Vehicle v WHERE v.uuid = :uuid", Vehicle::class.java)
-        .setParameter("uuid", uuid)
-        .singleResult
+    fun getVehicleByUuid(uuid: String): Vehicle? = try {
+        entityManager.createQuery(
+            "SELECT v FROM Vehicle v WHERE v.uuid LIKE :uuid", Vehicle::class.java)
+            .setParameter("uuid", uuid)
+            .singleResult
+    } catch (ex: Exception) {
+        null
+    }
 
     fun persistVehicle(vehicle: Vehicle): Vehicle {
         entityManager.persist(vehicle)

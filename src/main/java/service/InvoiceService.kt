@@ -5,11 +5,10 @@ import dao.UserDao
 import domain.Country
 import domain.Invoice
 import domain.Point
-import domain.Profile
 import domain.Vehicle
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
-import org.apache.commons.lang.time.DateUtils
+import org.joda.time.DateTime
 import java.util.Date
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -56,7 +55,7 @@ class InvoiceService @Inject constructor(
     fun regenerateInvoice(uuid: String): Invoice? {
         val invoice = invoiceDao.getInvoiceByUuid(uuid)
         val newInvoice: Invoice = generateVehicleInvoice(invoice.vehicle, invoice.country,
-            invoice.createdFor, invoice.expires) ?: return null
+            invoice.createdFor, DateTime(invoice.expires)) ?: return null
 
         invoice.meters = newInvoice.meters
         invoice.totalPrice = newInvoice.totalPrice
@@ -66,36 +65,34 @@ class InvoiceService @Inject constructor(
         return invoice
     }
 
-    fun generateVehiclesInvoices(country: Country, month: Date): List<Invoice> {
-        val expirationDate = DateUtils.addMonths(month, 1)
+    fun generateVehiclesInvoices(country: Country, month: Date): List<Invoice> = vehicleService
+        .allVehicles().mapNotNull { generateVehicleInvoice(it, country, month) }
 
-        return vehicleService
-            .allVehicles()
-            .map { generateVehicleInvoice(it, country, month, expirationDate) }
-            .filterNotNull()
-    }
+    fun generateVehicleInvoice(
+        vehicle: Vehicle,
+        country: Country,
+        month: Date,
+        expirationDate: DateTime = DateTime.now().plusMonths(1)
+    ): Invoice? {
+        val dateMonth = DateTime(month)
 
-    fun generateVehicleInvoice(vehicle: Vehicle, country: Country, month: Date, expirationDate: Date): Invoice? {
-        var totalMeters = 0.0
-        val rider: Profile = vehicle.owner ?: return null
+        val points = vehicle.locations
+            .filter {
+                val date = DateTime(it.creationDate)
+                date.monthOfYear == dateMonth.monthOfYear
+            }
+            .map { it.point }
 
-        vehicle.activities.filter {
-            it.creationDate.month == month.month
-                && it.creationDate.year == month.year
-                && it.country.name == country.name
-                && it.rider.id == rider.id
-        }.map {
-            totalMeters += distance(it.locations.map { it.point })
-        }
+        val distance = distance(points)
 
         val invoice = Invoice(
             InvoiceGenerationType.AUTO,
             InvoiceState.OPEN,
-            expirationDate,
+            expirationDate.toDate(),
             month,
-            totalMeters
+            distance
         ).apply {
-            this.totalPrice = vehicle.rate.kmPrice * this.meters
+            this.totalPrice = vehicle.rate.kmPrice * distance
             this.country = country
             this.vehicle = vehicle
         }
