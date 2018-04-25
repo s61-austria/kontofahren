@@ -11,6 +11,7 @@ import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import org.apache.commons.lang.time.DateUtils
 import utils.createMolliePayment
+import java.util.Optional
 import java.util.Date
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -24,9 +25,19 @@ class InvoiceService @Inject constructor(
 
     fun allInvoices(): List<Invoice> = invoiceDao.allInvoices()
 
+    fun allInvoices(start: Long, end: Long, vehicleId: Optional<String>): List<Invoice>{
+
+        var invoices = allInvoicesCreatedBetweenDates(start, end)
+
+        if(vehicleId.isPresent) {
+            invoices = invoices.filter { invoice ->  invoice.vehicle.uuid.equals(vehicleId.get())}
+        }
+        return invoices
+    }
+
     fun getInvoiceByUuid(uuid: String): Invoice = invoiceDao.getInvoiceByUuid(uuid)
 
-    fun allInvoicesByVehicle(id: String): List<Invoice> = invoiceDao.allInvoicesByVehicle(id)
+    fun allInvoicesByVehicle(uuid: String): List<Invoice> = invoiceDao.allInvoicesByVehicle(uuid)
 
     fun allInvoicesByCivilian(id: String): List<Invoice> {
         val profile = userDao.getUserByUuid(id)?.profile ?: return emptyList()

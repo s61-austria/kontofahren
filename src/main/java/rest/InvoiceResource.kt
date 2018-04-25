@@ -27,11 +27,12 @@ class InvoiceResource @Inject constructor(
 
     @GET
     @Produces("application/json")
-    fun allInvoices(): List<Invoice> {
+    fun allInvoices(): Response {
+        val vehicleUUID: String? = request.queryParameters.get("vehicleId")?.first()
         val startDate: Long = request.queryParameters.get("startDate")?.first()?.toLongOrNull() ?: 0
         val endDate: Long = request.queryParameters.get("endDate")?.first()?.toLongOrNull() ?: Date(3000, 1, 1).toInstant().toEpochMilli()
-
-        return invoiceService.allInvoicesCreatedBetweenDates(startDate, endDate)
+        val invoices = invoiceService.allInvoices(startDate, endDate, Optional.ofNullable(vehicleUUID))
+        return Response.ok(invoices).build()
     }
 
     @GET
@@ -39,12 +40,6 @@ class InvoiceResource @Inject constructor(
     @Produces("application/json")
     fun getInvoiceById(@PathParam("uuid") uuid: String): Response =
         Response.ok(invoiceService.getInvoiceByUuid(uuid)).build()
-
-    @GET
-    @Path("/vehicle/{id}")
-    @Produces("application/json")
-    fun allInvoicesByVehicleId(@PathParam("id") id: String): List<Invoice> =
-        invoiceService.allInvoicesByVehicle(id)
 
     @GET
     @Path("/civilian/{id}")
