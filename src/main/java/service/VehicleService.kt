@@ -4,8 +4,10 @@ import dao.ProfileDao
 import dao.UserDao
 import dao.VehicleDao
 import domain.Profile
+import domain.Rate
 import domain.Vehicle
 import domain.enums.VehicleType
+import domain.enums.VignetteType
 import utils.Open
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -24,7 +26,9 @@ class VehicleService @Inject constructor(
 
     fun addVehicle(hardwareSerialNumber: String, vehicleType: VehicleType, licensePlate: String): Vehicle =
         vehicleDao.persistVehicle(Vehicle(
-            hardwareSerialNumber, vehicleType = vehicleType, licensePlate = licensePlate))
+            hardwareSerialNumber, vehicleType = vehicleType, licensePlate = licensePlate).apply {
+            rate = Rate(vehicleType, VignetteType.TEN_DAYS, 0.0)
+        })
 
     fun saveVehicle(uuid: String, licensePlate: String, newOwnerId: String): Vehicle? {
         val vehicle = vehicleDao.getVehicleByUuid(uuid) ?: return null
