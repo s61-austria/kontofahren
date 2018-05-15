@@ -3,6 +3,7 @@ package domain
 import org.joda.time.DateTime
 import java.sql.Timestamp
 import java.util.UUID
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -16,6 +17,7 @@ import javax.persistence.Table
 data class Location(
     @ManyToOne
     val vehicle: Vehicle,
+    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     val point: Point,
     val creationDate: Timestamp
 ) {
