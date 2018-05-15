@@ -1,11 +1,22 @@
 package domain
 
 import java.io.Serializable
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.Table
 
+@Entity(name = "Point")
+@Table(name = "point")
 data class Point(
     val lat: Double,
     val lng: Double
 ) : Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0
+
     fun distanceBetween(point: Point): Double {
         val Radius = 6378.137 // Radius of earth in km.
 
