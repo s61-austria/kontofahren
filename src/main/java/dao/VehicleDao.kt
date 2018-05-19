@@ -1,6 +1,7 @@
 package dao
 
 import domain.Vehicle
+import logger
 
 import javax.ejb.Stateless
 import javax.persistence.EntityManager
@@ -35,5 +36,15 @@ class VehicleDao {
         entityManager.persist(vehicle)
 
         return vehicle
+    }
+
+    fun getStolenVehicle(stolen: Boolean = true) = try {
+        entityManager.createQuery("SELECT v FROM Vehicle v where v.isStolen = :stolen", Vehicle::class.java)
+            .setParameter("stolen", stolen)
+            .resultList ?: emptyList()
+    } catch (e: Exception) {
+        logger.warn("Failed to fetch stolen vehicles")
+        logger.error("Exception", e)
+        emptyList<Vehicle>()
     }
 }

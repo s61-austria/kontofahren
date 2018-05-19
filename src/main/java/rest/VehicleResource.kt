@@ -10,8 +10,8 @@ import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.PUT
 import javax.ws.rs.Path
-import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
+import javax.ws.rs.QueryParam
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
@@ -26,17 +26,14 @@ class VehicleResource @Inject constructor(
 
     @GET
     @Produces("application/json")
-    fun getAllVehicles(): Response {
-        val vehicles = vehicleService.allVehicles()
-
-        return Response.ok(vehicles).build()
-    }
-
-    @GET
-    @Path("/{countryName}")
-    @Produces("application/json")
-    fun getAllVehiclesInCountry(@PathParam("countryName") countryName: String): Response {
-        val vehicles = vehicleService.getAllVehiclesInCountry(countryName)
+    fun getAllVehicles(
+        @QueryParam("stolen") stolen: String?
+    ): Response {
+        val vehicles = if (stolen == "true") {
+            vehicleService.getStolenVehicle()
+        } else {
+            vehicleService.allVehicles()
+        }
 
         return Response.ok(vehicles).build()
     }

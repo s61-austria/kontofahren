@@ -53,4 +53,5 @@ class VehicleService @Inject constructor(
     }
 
     fun getVehicleByUuid(uuid: String) = vehicleDao.getVehicleByUuid(uuid)
+    fun getStolenVehicle() = vehicleDao.getStolenVehicle()
 }
