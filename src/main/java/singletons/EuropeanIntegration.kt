@@ -1,21 +1,28 @@
 package singletons
 
+import com.google.gson.Gson
 import connector.Connector
+import domain.Vehicle
+import domain.enums.VehicleType.PKW
 import logger
 import model.Car
 import model.Countries.AUSTRIA
 import model.Invoice
 import model.StolenCar
+import service.VehicleService
 import utils.Open
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 import javax.ejb.Singleton
 import javax.ejb.Startup
+import javax.inject.Inject
 
 @Open
 @Singleton
 @Startup
-class EuropeanIntegration {
+class EuropeanIntegration @Inject constructor(
+    private val vehicleService: VehicleService
+) {
     val connection by lazy {
         logger.info("Instantiating European Connector class")
         Connector(
@@ -41,6 +48,16 @@ class EuropeanIntegration {
 
             connection.subscribeToQueue(AUSTRIA, StolenCar::class.java, {
                 logger.info("Received stolen car message from MQ")
+                val stolenCar = Gson().fromJson(it, StolenCar::class.java)
+                val vehicles = vehicleService.allVehicles()
+
+                val vehicle = vehicles.filter { it.licensePlate == stolenCar.licencePlate }.firstOrNull()
+                    ?: Vehicle("", stolenCar.licencePlate, PKW)
+
+                vehicle.isStolen = stolenCar.isStolen
+
+                vehicleService.updateVehicle(vehicle)
+
                 logger.debug(it)
             })
         } catch (e: Exception) {
