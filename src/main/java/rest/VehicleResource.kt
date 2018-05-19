@@ -1,7 +1,10 @@
 package rest
 
 import domain.enums.VehicleType
+import model.Car
+import model.Countries.AUSTRIA
 import service.VehicleService
+import singletons.EuropeanIntegration
 import utils.Open
 import utils.decode
 import javax.inject.Inject
@@ -23,7 +26,8 @@ import javax.ws.rs.core.UriInfo
 @Path("vehicles")
 @Open
 class VehicleResource @Inject constructor(
-    private val vehicleService: VehicleService
+    private val vehicleService: VehicleService,
+    private val europeanIntegration: EuropeanIntegration
 ) {
     @Context
     private lateinit var request: UriInfo
@@ -92,6 +96,13 @@ class VehicleResource @Inject constructor(
         } else {
             vehicle.isStolen = true
             vehicleService.updateVehicle(vehicle)
+
+            europeanIntegration.connection.publishStolenCar(Car(
+                "AT-${vehicle.licensePlate}",
+                AUSTRIA,
+                AUSTRIA,
+                true
+            ))
             Response.ok(vehicle).build()
         }
     }
@@ -110,6 +121,12 @@ class VehicleResource @Inject constructor(
         } else {
             vehicle.isStolen = false
             vehicleService.updateVehicle(vehicle)
+            europeanIntegration.connection.publishStolenCar(Car(
+                "AT-${vehicle.licensePlate}",
+                AUSTRIA,
+                AUSTRIA,
+                false
+            ))
             Response.ok(vehicle).build()
         }
     }
