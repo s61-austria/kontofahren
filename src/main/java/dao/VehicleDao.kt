@@ -47,4 +47,6 @@ class VehicleDao {
         logger.error("Exception", e)
         emptyList<Vehicle>()
     }
+
+    fun merge(vehicle: Vehicle) = entityManager.merge(vehicle)
 }
