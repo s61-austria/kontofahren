@@ -53,6 +53,8 @@ data class Vehicle(
     @JsonIgnore
     val locations: MutableSet<Location> = mutableSetOf()
 
+    var isStolen = false
+
     companion object {
         private val serialVersionUID = 1L
     }

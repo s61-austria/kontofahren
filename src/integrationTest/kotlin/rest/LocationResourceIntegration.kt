@@ -9,8 +9,8 @@ class LocationResourceIntegration : BaseResourceIntegration() {
     fun pushLocationUpdate() {
         val body = LocationUpdateSerializer(
             "e38822fa-4280-45a6-84f0-bf722480ee3f", // Set manually
-            0.0,
-            0.0,
+            50.0,
+            20.0,
             null
         )
 
