@@ -21,9 +21,11 @@ import javax.inject.Inject
 @Open
 @Singleton
 @Startup
-class EuropeanIntegration @Inject constructor(
-    private val vehicleService: VehicleService
-) {
+class EuropeanIntegration {
+
+    @Inject
+    lateinit var vehicleService: VehicleService
+
     val connection by lazy {
         logger.info("Instantiating European Connector class")
         Connector(
