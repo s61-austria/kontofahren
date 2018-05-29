@@ -57,7 +57,7 @@ class EuropeanIntegration @Inject constructor(
                 val vehicles = vehicleService.allVehicles()
 
                 val vehicle = vehicles.filter { it.licensePlate == stolenCar.licencePlate }.firstOrNull()
-                    ?: Vehicle("", stolenCar.licencePlate, PKW)
+                    ?: Vehicle("", stolenCar.licencePlate, VehicleType.PKW)
 
                 vehicle.isStolen = stolenCar.isStolen
 
