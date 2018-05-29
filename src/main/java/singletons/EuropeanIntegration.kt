@@ -2,8 +2,8 @@ package singletons
 
 import com.google.gson.Gson
 import connector.Connector
+import domain.enums.VehicleType
 import domain.Vehicle
-import domain.enums.VehicleType.PKW
 import logger
 import model.Car
 import model.Countries.AUSTRIA
@@ -11,6 +11,7 @@ import model.Invoice
 import model.StolenCar
 import service.VehicleService
 import utils.Open
+import utils.decode
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 import javax.ejb.Singleton
@@ -38,6 +39,10 @@ class EuropeanIntegration @Inject constructor(
         try {
             connection.subscribeToQueue(AUSTRIA, Car::class.java, {
                 logger.info("Received car message from MQ")
+                val car: Car = decode(it, Car::class.java)
+
+                vehicleService.addVehicle(car.licencePlate, VehicleType.ABROAD, car.licencePlate)
+
                 logger.debug(it)
             })
 
@@ -52,7 +57,7 @@ class EuropeanIntegration @Inject constructor(
                 val vehicles = vehicleService.allVehicles()
 
                 val vehicle = vehicles.filter { it.licensePlate == stolenCar.licencePlate }.firstOrNull()
-                    ?: Vehicle("", stolenCar.licencePlate, PKW)
+                    ?: Vehicle("", stolenCar.licencePlate, VehicleType.PKW)
 
                 vehicle.isStolen = stolenCar.isStolen
 

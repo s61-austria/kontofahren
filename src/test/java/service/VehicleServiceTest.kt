@@ -1,5 +1,6 @@
 package service
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import dao.ProfileDao
@@ -11,6 +12,7 @@ import domain.Vehicle
 import domain.enums.VehicleType
 import org.junit.Before
 import org.junit.Test
+import singletons.EuropeanIntegrationPublisher
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -42,7 +44,7 @@ class VehicleServiceTest {
                 add(vehicle1)
                 add(vehicle2)
             }
-            on { getAllVehiclesInCountry("Austria") } doReturn ArrayList<Vehicle>().apply {
+            on { getAllVehiclesInCountry(any()) } doReturn ArrayList<Vehicle>().apply {
                 add(vehicle1)
                 add(vehicle2)
             }
@@ -61,7 +63,11 @@ class VehicleServiceTest {
             on { getProfileByUuid(profile2.uuid) } doReturn profile2
         }
 
-        vehicleService = VehicleService(vehicleMock, userMock, profileDaoMock)
+        val eu = mock<EuropeanIntegrationPublisher> {
+            on { publishCar(any()) } doReturn true
+        }
+
+        vehicleService = VehicleService(vehicleMock, userMock, profileDaoMock, eu)
     }
 
     @Test

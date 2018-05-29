@@ -50,7 +50,7 @@ class VehicleResource @Inject constructor(
     @Produces("application/json")
     @Consumes("application/json")
     fun addVehicle(): Response {
-        val vehicle = vehicleService.addVehicle(
+        val vehicle = vehicleService.addAustrianVehicle(
             request.queryParameters.getFirst("serialNumber"),
             VehicleType.valueOf(request.queryParameters.getFirst("vehicleType")),
             request.queryParameters.getFirst("licensePlate")
