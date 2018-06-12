@@ -1,5 +1,9 @@
 package service
 
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
+import com.s61.integration.connector.InternationalConnector
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Activity
@@ -23,6 +27,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import singletons.EuropeanIntegration
 import utils.now
 import java.util.ArrayList
 import kotlin.test.assertEquals
@@ -46,10 +51,18 @@ class InvoiceService2Test {
     @InjectMocks
     lateinit var invoiceService: InvoiceService
 
+    val connectorMock = mock<InternationalConnector>() {
+        on { publishCar(any()) }
+    }
+
+    val europeanMock = mock<EuropeanIntegration>() {
+        on { connection } doReturn connectorMock
+    }
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        invoiceService = InvoiceService(invoiceDaoMock!!, userDaoMock!!, vehicleServiceMock!!)
+        invoiceService = InvoiceService(invoiceDaoMock!!, userDaoMock!!, vehicleServiceMock!!, europeanMock)
     }
 
     @Test

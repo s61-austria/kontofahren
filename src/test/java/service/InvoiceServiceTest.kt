@@ -1,7 +1,10 @@
 package service
 
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.doNothing
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
+import com.s61.integration.connector.InternationalConnector
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Invoice
@@ -15,6 +18,8 @@ import domain.enums.VehicleType
 import org.joda.time.DateTime
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito
+import singletons.EuropeanIntegration
 import kotlin.collections.ArrayList
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
@@ -87,8 +92,15 @@ class InvoiceServiceTest {
         }
 
         val vehicleServiceMock = mock<VehicleService>()
+        val connectorMock = mock<InternationalConnector>() {}
 
-        invoiceService = InvoiceService(invoiceMock, userMock, vehicleServiceMock)
+        Mockito.doNothing().`when`(connectorMock.publishCar(any()))
+
+        val europeanMock = mock<EuropeanIntegration>() {
+            on { connection } doReturn connectorMock
+        }
+
+        invoiceService = InvoiceService(invoiceMock, userMock, vehicleServiceMock, europeanMock)
     }
 
     @Test
