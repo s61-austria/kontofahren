@@ -3,6 +3,7 @@ volumes:
   database:
   rabbitmq:
   prometheus:
+  grafana:
 services:
   app:
     build: government-docker
@@ -46,3 +47,9 @@ services:
       - prometheus:/prometheus
     depends_on:
       - "app"
+  grafana:
+    image: grafana/grafana:5.1.0
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana:/var/lib/grafana
