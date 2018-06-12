@@ -73,6 +73,23 @@ class JwtUtils @Inject constructor(val userService: UserService) {
     }
 
     /**
+     * Register a user and create a JWT token
+     * @param username username to later on login with
+     * @param password unhashed password to register a user
+     * @return Valid JWT. If something went wrong with a duplicated user null is returned
+     */
+    fun register(username: String, password: String): String? {
+        val user = userService.registerUser(username, password) ?: return null
+
+        val groups = user.groups
+            .map { it.groupName }
+            .toTypedArray()
+
+        return createToken(user.uuid, user.userName, groups)
+
+    }
+
+    /**
      * Check if there's a logged in user
      * @param token JWT token
      */

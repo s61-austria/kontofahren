@@ -3,6 +3,7 @@ package rest
 import annotations.JWTTokenNeeded
 import com.google.gson.Gson
 import serializers.LoginSerializer
+import serializers.RegisterSerializer
 import utils.JwtUtils
 import utils.Open
 import javax.inject.Inject
@@ -39,6 +40,19 @@ class AuthResource @Inject constructor(val jwtUtils: JwtUtils) {
         val loginSerializer = Gson().fromJson(input, LoginSerializer::class.java)
 
         val token = jwtUtils.login(loginSerializer.username, loginSerializer.password)
+            ?: return Response.noContent().build()
+
+        return Response.ok(token).build()
+    }
+
+    @POST
+    @Path("register")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun register(input: String): Response? {
+        val registerSerializer = Gson().fromJson(input, RegisterSerializer::class.java)
+
+        val token = jwtUtils.register(registerSerializer.username, registerSerializer.password)
             ?: return Response.noContent().build()
 
         return Response.ok(token).build()
