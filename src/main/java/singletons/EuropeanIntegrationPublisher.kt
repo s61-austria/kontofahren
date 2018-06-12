@@ -1,15 +1,15 @@
 package singletons
 
-import connector.Connector
+import com.s61.integration.connector.InternationalConnector
+import com.s61.integration.model.InternationalCar
 import logger
-import model.Car
 import javax.ejb.Stateless
 
 @Stateless
 class EuropeanIntegrationPublisher {
     val connection by lazy {
         logger.info("Instantiating European Connector class")
-        Connector(
+        InternationalConnector(
             "rabbitmq",
             "rabbitmq",
             "vhost",
@@ -17,7 +17,7 @@ class EuropeanIntegrationPublisher {
         )
     }
 
-    fun publishCar(car: Car): Boolean {
+    fun publishCar(car: InternationalCar): Boolean {
         connection.publishCar(car)
 
         return true
