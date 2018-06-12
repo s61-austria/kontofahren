@@ -1,8 +1,9 @@
 package messaging
 
-import messaging.Exchange.LOCATION_EXCHANGE
-import messaging.Queue.FRONTEND_LOCATION_UPDATE
-import messaging.Routing.EMPTY
+import com.kontofahren.integrationslosung.Exchange
+import com.kontofahren.integrationslosung.Queue
+import com.kontofahren.integrationslosung.RabbitGateway
+import com.kontofahren.integrationslosung.Routing
 import org.junit.Test
 
 class RabbitGatewayIntegration {
@@ -11,12 +12,12 @@ class RabbitGatewayIntegration {
     @Test
     fun basicPublish() {
         val obj = mapOf("hello" to "world")
-        rabbitGateway.publish(LOCATION_EXCHANGE, obj, EMPTY)
+        rabbitGateway.publish(Exchange.LOCATION_EXCHANGE, obj, Routing.EMPTY)
     }
 
     @Test
     fun basicConsume() {
-        rabbitGateway.consume(FRONTEND_LOCATION_UPDATE, {
+        rabbitGateway.consume(Queue.FRONTEND_LOCATION_UPDATE, {
             println(it)
             return@consume
         })

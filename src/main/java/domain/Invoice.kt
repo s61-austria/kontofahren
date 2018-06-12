@@ -5,6 +5,7 @@ import domain.enums.InvoiceState
 import utils.now
 import java.util.Date
 import java.util.UUID
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -33,13 +34,13 @@ data class Invoice(
     var createdFor: Date = now(),
     var meters: Double = 0.0
 ) {
-    @ManyToOne
+    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     lateinit var profile: Profile
 
-    @ManyToOne
+    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     lateinit var vehicle: Vehicle
 
-    @ManyToOne
+    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
     lateinit var country: Country
 
     @Id

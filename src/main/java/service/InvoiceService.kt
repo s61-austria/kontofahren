@@ -1,5 +1,8 @@
 package service
 
+import com.kontofahren.integrationslosung.Exchange
+import com.kontofahren.integrationslosung.RabbitGateway
+import com.kontofahren.integrationslosung.Routing
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Country
@@ -9,6 +12,7 @@ import domain.Vehicle
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import org.joda.time.DateTime
+import serializers.InvoiceGenerateSerializer
 import java.util.Date
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -19,6 +23,8 @@ class InvoiceService @Inject constructor(
     val userDao: UserDao,
     val vehicleService: VehicleService
 ) {
+
+    val rabbitGateway get() = RabbitGateway()
 
     fun allInvoices(): List<Invoice> = invoiceDao.allInvoices()
 
@@ -67,6 +73,19 @@ class InvoiceService @Inject constructor(
 
     fun generateVehiclesInvoices(country: Country, month: Date): List<Invoice> = vehicleService
         .allVehicles().mapNotNull { generateVehicleInvoice(it, country, month) }
+
+    fun generateVehiclesInvoicesMQ(country: Country, month: Date) {
+        vehicleService.allVehicles().map { generateVehicleInvoiceMQ(it, country, month) }
+    }
+
+    fun generateVehicleInvoiceMQ(
+        vehicle: Vehicle,
+        country: Country,
+        month: Date,
+        expirationDate: DateTime = DateTime.now().plusMonths(1)
+    ) {
+        rabbitGateway.publish(Exchange.INVOICE_EXCHANGE, InvoiceGenerateSerializer(vehicle, country, month.time, expirationDate.millis), Routing.EMPTY)
+    }
 
     fun generateVehicleInvoice(
         vehicle: Vehicle,
