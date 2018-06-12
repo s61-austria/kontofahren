@@ -1,12 +1,12 @@
 package rest
 
 import com.google.gson.Gson
+import com.kontofahren.integrationslosung.Exchange
+import com.kontofahren.integrationslosung.RabbitGateway
+import com.kontofahren.integrationslosung.Routing
 import domain.Location
 import domain.Point
 import logger
-import messaging.Exchange.LOCATION_EXCHANGE
-import messaging.RabbitGateway
-import messaging.Routing.EMPTY
 import serializers.LocationUpdateSerializer
 import service.LocationService
 import service.VehicleService
@@ -61,7 +61,7 @@ class LocationResource @Inject constructor(
 
         try {
             logger.info("Publishing location to MQ")
-            rabbitGateway.publish(LOCATION_EXCHANGE, locationUpdate, EMPTY)
+            rabbitGateway.publish(Exchange.LOCATION_EXCHANGE, locationUpdate, Routing.EMPTY)
             logger.info("Succesfully pushed to MQ")
         } catch (ex: Exception) {
             logger.error("Failed to publish location to exchange!", ex)

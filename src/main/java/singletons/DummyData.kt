@@ -2,12 +2,15 @@ package singletons
 
 import dao.CountryDao
 import dao.InvoiceDao
+import dao.LocationDao
 import dao.RateDao
 import dao.UserDao
 import dao.VehicleDao
 import domain.Country
 import domain.Invoice
 import domain.KontoUser
+import domain.Location
+import domain.Point
 import domain.Profile
 import domain.Rate
 import domain.Vehicle
@@ -15,6 +18,7 @@ import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import domain.enums.VehicleType
 import domain.enums.VignetteType
+import utils.now
 import utils.sha256
 import java.util.Date
 import javax.annotation.PostConstruct
@@ -53,6 +57,9 @@ class DummyData {
     lateinit var countryDao: CountryDao
 
     @Inject
+    lateinit var locationDao: LocationDao
+
+    @Inject
     lateinit var rateDao: RateDao
 
     private val country1 = Country("Austria")
@@ -76,6 +83,20 @@ class DummyData {
     private val vehicle2 = Vehicle("27343937", "A3-CD-6L", VehicleType.LKW, user2.profile).apply {
         rate = rate2
     }
+
+    val location1 = Location(vehicle1,
+        Point(51.457065, 5.476294), now())
+    val location2 = Location(vehicle1,
+        Point(51.456346, 5.477750), now())
+    val location3 = Location(vehicle1,
+        Point(51.453946, 5.480196), now())
+
+    val location4 = Location(vehicle2,
+        Point(51.457065, 5.476294), now())
+    val location5 = Location(vehicle2,
+        Point(51.456346, 5.477750), now())
+    val location6 = Location(vehicle2,
+        Point(51.453946, 5.480196), now())
 
     private val invoice1 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
     private val invoice2 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
@@ -110,6 +131,13 @@ class DummyData {
 
         vehicleDao.persistVehicle(vehicle1)
         vehicleDao.persistVehicle(vehicle2)
+
+        locationDao.createLocation(location1)
+        locationDao.createLocation(location2)
+        locationDao.createLocation(location3)
+        locationDao.createLocation(location4)
+        locationDao.createLocation(location5)
+        locationDao.createLocation(location6)
 
         invoiceDao.addInvoice(invoice1)
         invoiceDao.addInvoice(invoice2)

@@ -1,10 +1,10 @@
 package singletons
 
 import com.google.gson.Gson
+import com.kontofahren.integrationslosung.Queue
+import com.kontofahren.integrationslosung.RabbitGateway
 import domain.Activity
 import logger
-import messaging.Queue
-import messaging.RabbitGateway
 import serializers.LocationUpdateSerializer
 import service.ActivityService
 import service.LocationService

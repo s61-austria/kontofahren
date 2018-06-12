@@ -3,6 +3,7 @@ package domain
 import com.fasterxml.jackson.annotation.JsonIgnore
 import exceptions.KontoException
 import java.util.UUID
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -16,7 +17,7 @@ import javax.persistence.Table
 @Entity
 @Table(name = "profile")
 data class Profile(
-    @OneToOne
+    @OneToOne(cascade = arrayOf(CascadeType.ALL))
     var kontoUser: KontoUser
 ) {
 
