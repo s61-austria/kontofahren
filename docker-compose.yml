@@ -2,7 +2,15 @@ version: '3'
 volumes:
   database:
   rabbitmq:
-services: 
+  prometheus:
+services:
+  app:
+    build: government-docker
+    ports:
+      - 8080:8080
+      - 9990:9990
+    depends_on:
+      - "mq"
   db:
     image: mysql
     restart: always
@@ -28,3 +36,13 @@ services:
       RABBITMQ_DEFAULT_VHOST: vhost
     volumes:
       - rabbitmq:/var/lib/rabbitmq
+    depends_on:
+      - "db"
+  prometheus:
+    build: prometheus-firehose
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus:/prometheus
+    depends_on:
+      - "app"

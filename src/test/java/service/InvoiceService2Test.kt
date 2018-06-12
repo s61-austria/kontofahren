@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.s61.integration.connector.InternationalConnector
+import com.s61.integration.model.Countries.AUSTRIA
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Activity
@@ -61,7 +62,7 @@ class InvoiceService2Test {
         MockitoAnnotations.initMocks(this)
         Mockito.doNothing().`when`(connectorMock.publishStolenCar(any()))
         Mockito.doNothing().`when`(connectorMock.publishCar(any()))
-        Mockito.doNothing().`when`(connectorMock.publishInvoice(any()))
+        Mockito.doNothing().`when`(connectorMock.publishInvoice(any(), AUSTRIA))
         invoiceService = InvoiceService(invoiceDaoMock!!, userDaoMock!!, vehicleServiceMock!!, europeanMock)
     }
 
