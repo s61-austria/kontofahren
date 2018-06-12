@@ -1,8 +1,8 @@
 package rest
 
+import com.s61.integration.model.Countries.AUSTRIA
+import com.s61.integration.model.InternationalStolenCar
 import domain.enums.VehicleType
-import model.Car
-import model.Countries.AUSTRIA
 import service.VehicleService
 import singletons.EuropeanIntegration
 import utils.Open
@@ -97,9 +97,8 @@ class VehicleResource @Inject constructor(
             vehicle.isStolen = true
             vehicleService.updateVehicle(vehicle)
 
-            europeanIntegration.connection.publishStolenCar(Car(
+            europeanIntegration.connection.publishStolenCar(InternationalStolenCar(
                 "AT-${vehicle.licensePlate}",
-                AUSTRIA,
                 AUSTRIA,
                 true
             ))
@@ -121,9 +120,8 @@ class VehicleResource @Inject constructor(
         } else {
             vehicle.isStolen = false
             vehicleService.updateVehicle(vehicle)
-            europeanIntegration.connection.publishStolenCar(Car(
+            europeanIntegration.connection.publishStolenCar(InternationalStolenCar(
                 "AT-${vehicle.licensePlate}",
-                AUSTRIA,
                 AUSTRIA,
                 false
             ))

@@ -1,5 +1,7 @@
 package service
 
+import com.s61.integration.model.Countries
+import com.s61.integration.model.InternationalCar
 import dao.ProfileDao
 import dao.UserDao
 import dao.VehicleDao
@@ -8,8 +10,6 @@ import domain.Rate
 import domain.Vehicle
 import domain.enums.VehicleType
 import domain.enums.VignetteType
-import model.Car
-import model.Countries
 import singletons.EuropeanIntegrationPublisher
 import utils.Open
 import javax.ejb.Stateless
@@ -32,7 +32,7 @@ class VehicleService @Inject constructor(
         val vehicle: Vehicle = addVehicle(hardwareSerialNumber, vehicleType, licensePlate)
 
         europeanIntegration.publishCar(
-            Car("AT-${vehicle.licensePlate}", Countries.AUSTRIA, Countries.AUSTRIA, false)
+            InternationalCar("AT-${vehicle.licensePlate}", Countries.AUSTRIA, false)
         )
 
         return vehicle
@@ -77,4 +77,6 @@ class VehicleService @Inject constructor(
     fun getStolenVehicle() = vehicleDao.getStolenVehicle()
 
     fun updateVehicle(vehicle: Vehicle) = vehicleDao.merge(vehicle)
+
+    fun getVehicleByPlate(plate: String) = vehicleDao.getVehicleByPlate(plate)
 }

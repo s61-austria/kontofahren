@@ -49,4 +49,8 @@ class VehicleDao {
     }
 
     fun merge(vehicle: Vehicle) = entityManager.merge(vehicle)
+
+    fun getVehicleByPlate(plate: String) = entityManager.createQuery("SELECT v FROM Vehicle v where v.licensePlate like :plate", Vehicle::class.java)
+        .setParameter("plate", plate)
+        .singleResult
 }

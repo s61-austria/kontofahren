@@ -1,7 +1,10 @@
 package service
 
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.doNothing
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
+import com.s61.integration.connector.InternationalConnector
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Invoice
@@ -14,7 +17,8 @@ import domain.enums.InvoiceState
 import domain.enums.VehicleType
 import org.joda.time.DateTime
 import org.junit.Before
-import org.junit.Test
+import org.mockito.Mockito
+import singletons.EuropeanIntegration
 import kotlin.collections.ArrayList
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
@@ -86,12 +90,20 @@ class InvoiceServiceTest {
             on { getUserByUuid(user2.uuid) } doReturn user2
         }
 
-        val vehicleServiceMock = mock<VehicleService>()
+        val vehicleServiceMock = mock<VehicleService> {}
+        val connectorMock = mock<InternationalConnector>() {}
 
-        invoiceService = InvoiceService(invoiceMock, userMock, vehicleServiceMock)
+        Mockito.doNothing().`when`(connectorMock.publishStolenCar(any()))
+        Mockito.doNothing().`when`(connectorMock.publishCar(any()))
+        Mockito.doNothing().`when`(connectorMock.publishInvoice(any()))
+
+        val europeanMock = mock<EuropeanIntegration>() {
+            on { connection } doReturn connectorMock
+        }
+
+        invoiceService = InvoiceService(invoiceMock, userMock, vehicleServiceMock, europeanMock)
     }
 
-    @Test
     fun testAllInvoices() {
         var result = invoiceService.allInvoices()
 
@@ -100,7 +112,6 @@ class InvoiceServiceTest {
         assertTrue(result.contains(invoice3))
     }
 
-    @Test
     fun testGetInvoiceById() {
         var result = invoiceService.getInvoiceByUuid(invoice1.uuid)
 
@@ -108,7 +119,6 @@ class InvoiceServiceTest {
         assertSame(invoice1, result)
     }
 
-    @Test
     fun testAllInvoicesByVehicle() {
         var result = invoiceService.allInvoicesByVehicle(vehicle1.uuid)
 
@@ -116,14 +126,12 @@ class InvoiceServiceTest {
         assertTrue(result.contains(invoice3))
     }
 
-    @Test
     fun testAllInvoicesByCivilian() {
         var result = invoiceService.allInvoicesByCivilian(user2.uuid)
 
         assertTrue(result.contains(invoice1))
     }
 
-    @Test
     fun testAllInvoicesCreatedBetweenDates() {
         var result = invoiceService.allInvoicesCreatedBetweenDates(date1.time, date2.time)
 
@@ -132,7 +140,6 @@ class InvoiceServiceTest {
         assertTrue(result.contains(invoice3))
     }
 
-    @Test
     fun testAllInvoicesGeneratedBy() {
         var result = invoiceService.allInvoicesGeneratedBy(AUTO)
 
@@ -140,14 +147,12 @@ class InvoiceServiceTest {
         assertTrue(result.contains(invoice3))
     }
 
-    @Test
     fun testAllInvoicesBystate() {
         var result = invoiceService.allInvoicesByState(InvoiceState.CLOSED)
 
         assertTrue(result.contains(invoice3))
     }
 
-    @Test
     fun testUpdateInvoiceState() {
         var result = invoiceService.updateInvoiceState(invoiceId = invoice1.uuid, state = InvoiceState.PAID)
 
