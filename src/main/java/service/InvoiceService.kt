@@ -3,6 +3,7 @@ package service
 import com.kontofahren.integrationslosung.Exchange
 import com.kontofahren.integrationslosung.RabbitGateway
 import com.kontofahren.integrationslosung.Routing
+import com.s61.integration.model.Countries.IRELAND
 import com.s61.integration.model.InternationalInvoice
 import dao.InvoiceDao
 import dao.UserDao
@@ -128,7 +129,7 @@ class InvoiceService @Inject constructor(
             distance,
             invoice.expires,
             invoice.createdOn
-        ))
+        ), IRELAND)
 
         return invoice
     }
