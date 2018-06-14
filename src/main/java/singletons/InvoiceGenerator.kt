@@ -78,7 +78,7 @@ class InvoiceGenerator @Inject constructor(
             Date(month),
             distance
         ).apply {
-            this.totalPrice = vehicle.rate.kmPrice * distance
+            this.totalPrice = vehicle.rate.kmPrice * (distance / 1000)
             this.country = country
             this.vehicle = vehicle
         }
@@ -111,7 +111,7 @@ class InvoiceGenerator @Inject constructor(
             month,
             distance
         ).apply {
-            this.totalPrice = vehicle.rate.kmPrice * distance
+            this.totalPrice = vehicle.rate.kmPrice * (distance / 1000)
             this.country = country
             this.vehicle = vehicle
         }
