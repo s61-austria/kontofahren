@@ -78,7 +78,7 @@ class InvoiceService @Inject constructor(
 
     fun regenerateInvoiceMQ(uuid: String) {
         val invoice = invoiceDao.getInvoiceByUuid(uuid)
-        rabbitGateway.publish(Exchange.INVOICE_EXCHANGE, InvoiceGenerateSerializer(invoice.vehicle, invoice.country, invoice.createdFor.time, invoice.expires.time, uuid), Routing.EMPTY)
+        rabbitGateway.publish(Exchange.INVOICE_EXCHANGE, InvoiceGenerateSerializer(invoice.vehicle.uuid, invoice.country.uuid, invoice.createdFor.time, invoice.expires.time, uuid), Routing.EMPTY)
     }
 
     fun generateVehiclesInvoices(country: Country, month: Date): List<Invoice> = vehicleService
@@ -94,7 +94,7 @@ class InvoiceService @Inject constructor(
         month: Date,
         expirationDate: DateTime = DateTime.now().plusMonths(1)
     ) {
-        rabbitGateway.publish(Exchange.INVOICE_EXCHANGE, InvoiceGenerateSerializer(vehicle, country, month.time, expirationDate.millis, null), Routing.EMPTY)
+        rabbitGateway.publish(Exchange.INVOICE_EXCHANGE, InvoiceGenerateSerializer(vehicle.uuid, country.uuid, month.time, expirationDate.millis, null), Routing.EMPTY)
     }
 
     fun generateVehicleInvoice(

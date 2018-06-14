@@ -11,7 +11,9 @@ import domain.enums.InvoiceState
 import logger
 import org.joda.time.DateTime
 import serializers.InvoiceGenerateSerializer
+import service.CountryService
 import service.InvoiceService
+import service.VehicleService
 import utils.Open
 import java.util.Date
 import javax.annotation.PostConstruct
@@ -23,8 +25,10 @@ import javax.inject.Inject
 @Startup
 @Singleton
 class InvoiceGenerator @Inject constructor(
+    val invoiceService: InvoiceService,
+    val vehicleService: VehicleService,
     val invoiceDao: InvoiceDao,
-    val invoiceService: InvoiceService
+    val countryService: CountryService
 ) {
 
     val rabbitGateway by lazy { RabbitGateway() }
@@ -36,20 +40,23 @@ class InvoiceGenerator @Inject constructor(
     }
 
     fun generateInvoice(body: String) {
-        logger.info("Received request to generate invoice")
         val decoded = Gson().fromJson(body, InvoiceGenerateSerializer::class.java)
 
         if (decoded.invoiceUuid == null) {
+
+            logger.info("Received request to generate invoice")
             addInvoice(decoded)
         } else {
+
+            logger.info("Received request to regenerate invoice")
             val originalInvoice = invoiceService.getInvoiceByUuid(decoded.invoiceUuid!!) ?: throw Exception("Invoice was not found")
-            regenerateInvoice(decoded, originalInvoice)
+            regenerateInvoice(originalInvoice)
         }
     }
 
     fun addInvoice(decoded: InvoiceGenerateSerializer) {
-        val vehicle = decoded.vehicle
-        val country = decoded.country
+        val vehicle = vehicleService.getVehicleByUuid(decoded.vehicleUuid!!) ?: throw Exception("Vehicle is not found")
+        val country = countryService.getCountryByUUID(decoded.countryUuid!!) ?: throw Exception("Country is not found")
         val month = decoded.month
         val expirationDate = decoded.expirationDate
 
@@ -79,7 +86,7 @@ class InvoiceGenerator @Inject constructor(
         invoiceDao.addInvoice(invoice)
     }
 
-    fun regenerateInvoice(decoded: InvoiceGenerateSerializer, invoice: Invoice) {
+    fun regenerateInvoice(invoice: Invoice) {
 
         val vehicle = invoice.vehicle
         val country = invoice.country
@@ -111,6 +118,7 @@ class InvoiceGenerator @Inject constructor(
 
         invoice.meters = newInvoice.meters
         invoice.totalPrice = newInvoice.totalPrice
+        invoice.generationType = InvoiceGenerationType.MANUAL
 
         invoiceDao.updateInvoice(invoice)
     }

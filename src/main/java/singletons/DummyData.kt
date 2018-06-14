@@ -1,11 +1,13 @@
 package singletons
 
+import dao.ActivityDao
 import dao.CountryDao
 import dao.InvoiceDao
 import dao.LocationDao
 import dao.RateDao
 import dao.UserDao
 import dao.VehicleDao
+import domain.Activity
 import domain.Country
 import domain.Invoice
 import domain.KontoUser
@@ -62,6 +64,9 @@ class DummyData {
     @Inject
     lateinit var rateDao: RateDao
 
+    @Inject
+    lateinit var activityDao: ActivityDao
+
     private val country1 = Country("Austria")
 
     private val rate1 = Rate(VehicleType.LKW, VignetteType.ONE_YEAR, 0.22)
@@ -91,6 +96,10 @@ class DummyData {
     val location3 = Location(vehicle1,
         Point(51.453946, 5.480196), now())
 
+    val locations1: MutableList<Location> = mutableListOf(location1, location2, location3)
+
+    val activity1 = Activity(user1.profile, vehicle1).apply { this.locations = locations1 }
+
     val location4 = Location(vehicle2,
         Point(51.457065, 5.476294), now())
     val location5 = Location(vehicle2,
@@ -98,7 +107,11 @@ class DummyData {
     val location6 = Location(vehicle2,
         Point(51.453946, 5.480196), now())
 
-    private val invoice1 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
+    val locations2: MutableList<Location> = mutableListOf(location4, location5, location6)
+
+    val activity2 = Activity(user2.profile, vehicle2).apply { this.locations = locations2 }
+
+    private val invoice1 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1; this.totalPrice = 1.0 }
     private val invoice2 = Invoice(InvoiceGenerationType.MANUAL, InvoiceState.OPEN, Date(1522511765000), Date(1517500565000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
     private val invoice3 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
     private val invoice4 = Invoice(InvoiceGenerationType.AUTO, InvoiceState.OPEN, Date(1525103765000), Date(1519919765000), 0.0).apply { country = country1; profile = user1.profile; vehicle = vehicle1 }
@@ -132,12 +145,8 @@ class DummyData {
         vehicleDao.persistVehicle(vehicle1)
         vehicleDao.persistVehicle(vehicle2)
 
-        locationDao.createLocation(location1)
-        locationDao.createLocation(location2)
-        locationDao.createLocation(location3)
-        locationDao.createLocation(location4)
-        locationDao.createLocation(location5)
-        locationDao.createLocation(location6)
+        activityDao.createActivity(activity1)
+        activityDao.createActivity(activity2)
 
         invoiceDao.addInvoice(invoice1)
         invoiceDao.addInvoice(invoice2)
