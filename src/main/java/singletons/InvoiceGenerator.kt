@@ -39,16 +39,15 @@ class InvoiceGenerator @Inject constructor(
         logger.info("Received request to generate invoice")
         val decoded = Gson().fromJson(body, InvoiceGenerateSerializer::class.java)
 
-        if(decoded.invoiceUuid == null) {
+        if (decoded.invoiceUuid == null) {
             addInvoice(decoded)
         } else {
             val originalInvoice = invoiceService.getInvoiceByUuid(decoded.invoiceUuid!!) ?: throw Exception("Invoice was not found")
             regenerateInvoice(decoded, originalInvoice)
-
         }
     }
 
-    fun addInvoice(decoded: InvoiceGenerateSerializer){
+    fun addInvoice(decoded: InvoiceGenerateSerializer) {
         val vehicle = decoded.vehicle
         val country = decoded.country
         val month = decoded.month
