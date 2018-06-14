@@ -8,5 +8,6 @@ data class InvoiceGenerateSerializer (
     val vehicle: Vehicle,
     val country: Country,
     val month: Long,
-    val expirationDate: Long
+    val expirationDate: Long,
+    val invoiceUuid: String?
 ) : Serializable

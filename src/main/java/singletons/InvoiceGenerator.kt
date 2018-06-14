@@ -11,6 +11,7 @@ import domain.enums.InvoiceState
 import logger
 import org.joda.time.DateTime
 import serializers.InvoiceGenerateSerializer
+import service.InvoiceService
 import utils.Open
 import java.util.Date
 import javax.annotation.PostConstruct
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @Startup
 @Singleton
 class InvoiceGenerator @Inject constructor(
-    val invoiceDao: InvoiceDao
+    val invoiceDao: InvoiceDao,
+    val invoiceService: InvoiceService
 ) {
 
     val rabbitGateway by lazy { RabbitGateway() }
@@ -37,6 +39,16 @@ class InvoiceGenerator @Inject constructor(
         logger.info("Received request to generate invoice")
         val decoded = Gson().fromJson(body, InvoiceGenerateSerializer::class.java)
 
+        if(decoded.invoiceUuid == null) {
+            addInvoice(decoded)
+        } else {
+            val originalInvoice = invoiceService.getInvoiceByUuid(decoded.invoiceUuid!!) ?: throw Exception("Invoice was not found")
+            regenerateInvoice(decoded, originalInvoice)
+
+        }
+    }
+
+    fun addInvoice(decoded: InvoiceGenerateSerializer){
         val vehicle = decoded.vehicle
         val country = decoded.country
         val month = decoded.month
@@ -66,6 +78,42 @@ class InvoiceGenerator @Inject constructor(
         }
 
         invoiceDao.addInvoice(invoice)
+    }
+
+    fun regenerateInvoice(decoded: InvoiceGenerateSerializer, invoice: Invoice) {
+
+        val vehicle = invoice.vehicle
+        val country = invoice.country
+        val month = invoice.createdFor
+        val expirationDate = DateTime(invoice.expires)
+
+        val dateMonth = DateTime(month)
+
+        val points = invoice.vehicle.locations
+            .filter {
+                val date = DateTime(it.creationDate)
+                date.monthOfYear() == dateMonth.monthOfYear()
+            }
+            .map { it.point }
+
+        val distance = distance(points)
+
+        val newInvoice = Invoice(
+            InvoiceGenerationType.AUTO,
+            InvoiceState.OPEN,
+            expirationDate.toDate(),
+            month,
+            distance
+        ).apply {
+            this.totalPrice = vehicle.rate.kmPrice * distance
+            this.country = country
+            this.vehicle = vehicle
+        }
+
+        invoice.meters = newInvoice.meters
+        invoice.totalPrice = newInvoice.totalPrice
+
+        invoiceDao.updateInvoice(invoice)
     }
 
     fun distance(points: List<Point>) = points.zip(points.drop(1))
