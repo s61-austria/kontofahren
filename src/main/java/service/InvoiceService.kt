@@ -55,7 +55,7 @@ class InvoiceService @Inject constructor(
     fun allInvoicesByState(state: InvoiceState): List<Invoice> = invoiceDao.allInvoicesByStatus(state)
 
     fun updateInvoiceState(invoiceId: String, state: InvoiceState): Invoice? {
-        val invoice = invoiceDao.getInvoiceByUuid(invoiceId)
+        val invoice = invoiceDao.getInvoiceByUuid(invoiceId) ?: return null
 
         invoice.state = state
         invoiceDao.updateInvoice(invoice)
@@ -64,7 +64,7 @@ class InvoiceService @Inject constructor(
     }
 
     fun regenerateInvoice(uuid: String): Invoice? {
-        val invoice = invoiceDao.getInvoiceByUuid(uuid)
+        val invoice = invoiceDao.getInvoiceByUuid(uuid) ?: return null
         val newInvoice: Invoice = generateVehicleInvoice(invoice.vehicle, invoice.country,
             invoice.createdFor, DateTime(invoice.expires)) ?: return null
 
@@ -76,9 +76,10 @@ class InvoiceService @Inject constructor(
         return invoice
     }
 
-    fun regenerateInvoiceMQ(uuid: String) {
-        val invoice = invoiceDao.getInvoiceByUuid(uuid)
+    fun regenerateInvoiceMQ(uuid: String): Invoice? {
+        val invoice = invoiceDao.getInvoiceByUuid(uuid) ?: return null
         rabbitGateway.publish(Exchange.INVOICE_EXCHANGE, InvoiceGenerateSerializer(invoice.vehicle.uuid, invoice.country.uuid, invoice.createdFor.time, invoice.expires.time, uuid), Routing.EMPTY)
+        return invoice
     }
 
     fun generateVehiclesInvoices(country: Country, month: Date): List<Invoice> = vehicleService

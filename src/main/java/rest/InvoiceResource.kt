@@ -86,8 +86,9 @@ class InvoiceResource @Inject constructor(
     @Path("/regenerate/{uuid}")
     @Produces("application/json")
     fun regenerateInvoice(@PathParam("uuid") uuid: String): Response {
-        invoiceService.regenerateInvoiceMQ(uuid)
+        val regeneratedInvoice = invoiceService.regenerateInvoiceMQ(uuid)
+            ?: return Response.notModified().build()
 
-        return Response.ok("Invoice is being regenerated").build()
+        return Response.ok(regeneratedInvoice).build()
     }
 }
