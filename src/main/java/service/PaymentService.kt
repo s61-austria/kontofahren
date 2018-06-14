@@ -12,7 +12,7 @@ class PaymentService@Inject constructor(
 ) {
 
     fun createPayment(uuid: String): Invoice? {
-        val invoice = invoiceDao.getInvoiceByUuid(uuid)
+        val invoice = invoiceDao.getInvoiceByUuid(uuid) ?: return null
 
         if (invoice.totalPrice == 0.0)
             invoice.totalPrice = 5.0

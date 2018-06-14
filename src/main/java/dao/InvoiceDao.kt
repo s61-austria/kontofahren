@@ -3,6 +3,7 @@ package dao
 import domain.Invoice
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
+import logger
 import java.util.Date
 
 import javax.ejb.Stateless
@@ -15,10 +16,15 @@ class InvoiceDao {
     @PersistenceContext
     lateinit var em: EntityManager
 
-    fun getInvoiceByUuid(uuid: String): Invoice = em
-        .createQuery("SELECT i FROM Invoice i WHERE i.uuid = :uuid", Invoice::class.java)
-        .setParameter("uuid", uuid)
-        .singleResult
+    fun getInvoiceByUuid(uuid: String): Invoice? = try {
+        em
+            .createQuery("SELECT i FROM Invoice i WHERE i.uuid = :uuid", Invoice::class.java)
+            .setParameter("uuid", uuid)
+            .singleResult
+    } catch (e: Exception) {
+        logger.warn("Failed to retrieve invoice for id $uuid")
+        null
+    }
 
     fun allInvoices(): List<Invoice> = em.createNamedQuery("Invoice.allInvoices", Invoice::class.java).resultList
 

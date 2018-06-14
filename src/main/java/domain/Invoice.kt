@@ -3,6 +3,7 @@ package domain
 import domain.enums.InvoiceGenerationType
 import domain.enums.InvoiceState
 import utils.now
+import java.io.Serializable
 import java.util.Date
 import java.util.UUID
 import javax.persistence.CascadeType
@@ -33,14 +34,14 @@ data class Invoice(
     @Temporal(TemporalType.DATE)
     var createdFor: Date = now(),
     var meters: Double = 0.0
-) {
-    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
+) : Serializable {
+    @ManyToOne(cascade = arrayOf(CascadeType.MERGE))
     lateinit var profile: Profile
 
-    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
+    @ManyToOne(cascade = arrayOf(CascadeType.MERGE))
     lateinit var vehicle: Vehicle
 
-    @ManyToOne(cascade = arrayOf(CascadeType.ALL))
+    @ManyToOne(cascade = arrayOf(CascadeType.MERGE))
     lateinit var country: Country
 
     @Id

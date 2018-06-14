@@ -116,7 +116,7 @@ class InvoiceServiceTest {
     fun testGetInvoiceById() {
         var result = invoiceService.getInvoiceByUuid(invoice1.uuid)
 
-        assertEquals(invoice1.uuid, result.uuid)
+        assertEquals(invoice1.uuid, result?.uuid)
         assertSame(invoice1, result)
     }
 

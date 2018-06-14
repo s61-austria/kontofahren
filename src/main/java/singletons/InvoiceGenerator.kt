@@ -11,6 +11,9 @@ import domain.enums.InvoiceState
 import logger
 import org.joda.time.DateTime
 import serializers.InvoiceGenerateSerializer
+import service.CountryService
+import service.InvoiceService
+import service.VehicleService
 import utils.Open
 import java.util.Date
 import javax.annotation.PostConstruct
@@ -22,7 +25,10 @@ import javax.inject.Inject
 @Startup
 @Singleton
 class InvoiceGenerator @Inject constructor(
-    val invoiceDao: InvoiceDao
+    val invoiceService: InvoiceService,
+    val vehicleService: VehicleService,
+    val invoiceDao: InvoiceDao,
+    val countryService: CountryService
 ) {
 
     val rabbitGateway by lazy { RabbitGateway() }
@@ -34,11 +40,23 @@ class InvoiceGenerator @Inject constructor(
     }
 
     fun generateInvoice(body: String) {
-        logger.info("Received request to generate invoice")
         val decoded = Gson().fromJson(body, InvoiceGenerateSerializer::class.java)
 
-        val vehicle = decoded.vehicle
-        val country = decoded.country
+        if (decoded.invoiceUuid == null) {
+
+            logger.info("Received request to generate invoice")
+            addInvoice(decoded)
+        } else {
+
+            logger.info("Received request to regenerate invoice")
+            val originalInvoice = invoiceService.getInvoiceByUuid(decoded.invoiceUuid!!) ?: throw Exception("Invoice was not found")
+            regenerateInvoice(originalInvoice)
+        }
+    }
+
+    fun addInvoice(decoded: InvoiceGenerateSerializer) {
+        val vehicle = vehicleService.getVehicleByUuid(decoded.vehicleUuid!!) ?: throw Exception("Vehicle is not found")
+        val country = countryService.getCountryByUUID(decoded.countryUuid!!) ?: throw Exception("Country is not found")
         val month = decoded.month
         val expirationDate = decoded.expirationDate
 
@@ -60,12 +78,49 @@ class InvoiceGenerator @Inject constructor(
             Date(month),
             distance
         ).apply {
-            this.totalPrice = vehicle.rate.kmPrice * distance
+            this.totalPrice = vehicle.rate.kmPrice * (distance / 1000)
             this.country = country
             this.vehicle = vehicle
         }
 
         invoiceDao.addInvoice(invoice)
+    }
+
+    fun regenerateInvoice(invoice: Invoice) {
+
+        val vehicle = invoice.vehicle
+        val country = invoice.country
+        val month = invoice.createdFor
+        val expirationDate = DateTime(invoice.expires)
+
+        val dateMonth = DateTime(month)
+
+        val points = invoice.vehicle.locations
+            .filter {
+                val date = DateTime(it.creationDate)
+                date.monthOfYear() == dateMonth.monthOfYear()
+            }
+            .map { it.point }
+
+        val distance = distance(points)
+
+        val newInvoice = Invoice(
+            InvoiceGenerationType.AUTO,
+            InvoiceState.OPEN,
+            expirationDate.toDate(),
+            month,
+            distance
+        ).apply {
+            this.totalPrice = vehicle.rate.kmPrice * (distance / 1000)
+            this.country = country
+            this.vehicle = vehicle
+        }
+
+        invoice.meters = newInvoice.meters
+        invoice.totalPrice = newInvoice.totalPrice
+        invoice.generationType = InvoiceGenerationType.MANUAL
+
+        invoiceDao.updateInvoice(invoice)
     }
 
     fun distance(points: List<Point>) = points.zip(points.drop(1))
