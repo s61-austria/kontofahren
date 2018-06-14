@@ -21,7 +21,7 @@ class InvoiceDao {
             .createQuery("SELECT i FROM Invoice i WHERE i.uuid = :uuid", Invoice::class.java)
             .setParameter("uuid", uuid)
             .singleResult
-    } catch(e: Exception) {
+    } catch (e: Exception) {
         logger.warn("Failed to retrieve invoice for id $uuid")
         null
     }
