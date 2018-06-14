@@ -3,6 +3,8 @@ package service
 import com.kontofahren.integrationslosung.Exchange
 import com.kontofahren.integrationslosung.RabbitGateway
 import com.kontofahren.integrationslosung.Routing
+import com.s61.integration.model.Countries.IRELAND
+import com.s61.integration.model.InternationalInvoice
 import dao.InvoiceDao
 import dao.UserDao
 import domain.Country
@@ -10,9 +12,11 @@ import domain.Invoice
 import domain.Point
 import domain.Vehicle
 import domain.enums.InvoiceGenerationType
+import domain.enums.InvoiceGenerationType.AUTO
 import domain.enums.InvoiceState
 import org.joda.time.DateTime
 import serializers.InvoiceGenerateSerializer
+import singletons.EuropeanIntegration
 import java.util.Date
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -21,7 +25,8 @@ import javax.inject.Inject
 class InvoiceService @Inject constructor(
     val invoiceDao: InvoiceDao,
     val userDao: UserDao,
-    val vehicleService: VehicleService
+    val vehicleService: VehicleService,
+    val europeanIntegration: EuropeanIntegration
 ) {
 
     val rabbitGateway get() = RabbitGateway()
@@ -123,7 +128,32 @@ class InvoiceService @Inject constructor(
 
         invoiceDao.addInvoice(invoice)
 
+        europeanIntegration.connection.publishInvoice(InternationalInvoice(
+            "AT-${invoice.vehicle.licensePlate}",
+            invoice.totalPrice,
+            distance,
+            invoice.expires,
+            invoice.createdOn
+        ), IRELAND)
+
         return invoice
+    }
+
+    fun saveForeignInvoice(foreignInvoice: InternationalInvoice) {
+        val invoice = Invoice(AUTO)
+
+        // If it's our license plate, skip it
+        if (foreignInvoice.licencePlate.startsWith("AT")) return
+
+        val vehicle = vehicleService.getVehicleByPlate(foreignInvoice.licencePlate)
+
+        invoice.createdOn = foreignInvoice.createdDate
+        invoice.totalPrice = foreignInvoice.price
+        invoice.expires = foreignInvoice.dueByDate
+        invoice.meters = foreignInvoice.distance
+        invoice.vehicle = vehicle
+
+        invoiceDao.addInvoice(invoice)
     }
 
     fun distance(points: List<Point>) = points.zip(points.drop(1))
