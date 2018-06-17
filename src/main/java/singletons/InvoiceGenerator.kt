@@ -31,12 +31,16 @@ class InvoiceGenerator @Inject constructor(
     val countryService: CountryService
 ) {
 
-    val rabbitGateway by lazy { RabbitGateway() }
+    val rabbitGateway by lazy { try {
+        RabbitGateway()
+    } catch (e: Exception) {
+        null
+    } }
 
     @PostConstruct
     fun setup() {
         logger.info("Setting up Invoice Generator")
-        rabbitGateway.consume(Queue.INVOICE_GENERATION, { generateInvoice(it) })
+        rabbitGateway?.consume(Queue.INVOICE_GENERATION, { generateInvoice(it) })
     }
 
     fun generateInvoice(body: String) {

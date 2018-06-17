@@ -24,12 +24,16 @@ class LocationActivityTranslatorSingleton @Inject constructor(
     val locationService: LocationService,
     val activityService: ActivityService
 ) {
-    val rabbitGateway by lazy { RabbitGateway() }
+    val rabbitGateway by lazy { try {
+        RabbitGateway()
+    } catch (e: Exception) {
+        null
+    } }
 
     @PostConstruct
     fun setup() {
         logger.info("Setting up Location Activity Translator")
-        rabbitGateway.consume(Queue.LOCATION_TO_ACTIVITY, { locationToActivity(it) })
+        rabbitGateway?.consume(Queue.LOCATION_TO_ACTIVITY, { locationToActivity(it) })
     }
 
     fun locationToActivity(body: String) {
