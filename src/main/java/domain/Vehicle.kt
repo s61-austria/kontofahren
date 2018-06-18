@@ -50,7 +50,10 @@ data class Vehicle(
     var currentLocation: Location? = null
 
     @OneToMany(mappedBy = "vehicle", fetch = EAGER)
+    @JsonIgnore
     val locations: MutableSet<Location> = mutableSetOf()
+
+    var isStolen = false
 
     companion object {
         private val serialVersionUID = 1L

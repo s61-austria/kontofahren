@@ -30,7 +30,6 @@ class InvoiceResource @Inject constructor(
     fun allInvoices(): List<Invoice> {
         val startDate: Long = request.queryParameters.get("startDate")?.first()?.toLongOrNull() ?: 0
         val endDate: Long = request.queryParameters.get("endDate")?.first()?.toLongOrNull() ?: Date(3000, 1, 1).toInstant().toEpochMilli()
-
         return invoiceService.allInvoicesCreatedBetweenDates(startDate, endDate)
     }
 
@@ -87,7 +86,7 @@ class InvoiceResource @Inject constructor(
     @Path("/regenerate/{uuid}")
     @Produces("application/json")
     fun regenerateInvoice(@PathParam("uuid") uuid: String): Response {
-        val regeneratedInvoice = invoiceService.regenerateInvoice(uuid)
+        val regeneratedInvoice = invoiceService.regenerateInvoiceMQ(uuid)
             ?: return Response.notModified().build()
 
         return Response.ok(regeneratedInvoice).build()

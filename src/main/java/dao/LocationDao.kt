@@ -13,7 +13,10 @@ class LocationDao {
     @PersistenceContext
     lateinit var em: EntityManager
 
-    fun createLocation(location: Location) = em.persist(location)
+    fun createLocation(location: Location) {
+        em.merge(location)
+        em.merge(location.point)
+    }
     fun updateLocation(location: Location) = em.merge(location)
     fun getLocation(locationId: String): Location? = try {
         em.createQuery("select l from Location l WHERE l.uuid LIKE :uuid", Location::class.java)
